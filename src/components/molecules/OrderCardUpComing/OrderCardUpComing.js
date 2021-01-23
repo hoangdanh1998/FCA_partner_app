@@ -5,14 +5,14 @@ import {
   Card,
   CardItem,
   Text,
-  Body,
   List,
-  ListItem,
   Left,
   Right,
   Icon,
 } from "native-base";
 import { styles } from "./styles";
+import Header from '../../atoms/header';
+
 
 const OrderCardUpComing = (order) => {
   var sampleOrder = {
@@ -32,6 +32,7 @@ const OrderCardUpComing = (order) => {
   };
   return (
     <Container>
+      <Header/>
       <Content padder>
         <Card style={styles.card}>
           <CardItem header bordered>
