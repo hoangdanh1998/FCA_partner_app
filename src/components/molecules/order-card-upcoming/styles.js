@@ -1,8 +1,14 @@
 import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   card: {
-    // borderBottomColor: "black",
-    // fontSize: 100,
+    flex: 1,
+  },
+  cardHeader: {
+    flex: 1,
+  },
+  cardBody: {
+    width: "100%",
+    flexDirection: "row",
   },
   title: {
     fontWeight: "bold",
@@ -20,12 +26,14 @@ export const styles = StyleSheet.create({
     borderBottomColor: "#ffffff",
   },
   itemText: {
-    // textAlign: "left",
     fontSize: 20,
     color: "#000000",
   },
   icon: {
     color: "#000000",
     fontSize: 50,
+  },
+  list: {
+    width: "100%",
   },
 });
