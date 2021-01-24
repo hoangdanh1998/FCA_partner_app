@@ -11,7 +11,7 @@ import {
   Icon,
 } from "native-base";
 import { styles } from "./styles";
-import Header from '../../atoms/header';
+import MyHeader from '../../atoms/header/Header';
 
 
 const OrderCardUpComing = (order) => {
@@ -32,7 +32,7 @@ const OrderCardUpComing = (order) => {
   };
   return (
     <Container>
-      <Header/>
+      <MyHeader/>
       <Content padder>
         <Card style={styles.card}>
           <CardItem header bordered>
