@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
-import SearchBar from "../../components/atoms/SearchBar";
 import useResults from "../../hooks/useResults";
-import ResultsList from "../../components/molecules/ResultsList";
-import OrderCardUpComing from "../../components/molecules/order-card-upcoming/order-card-upcoming";
+import TabReady from '../../components/organisms/tab-ready/tab-ready';
+import { Container, Tab, Tabs } from "native-base";
+import { MyHeader } from '../../components/atoms/header/Header';
+import { styles } from './style'
 import OrderUpcoming from "../../components/organisms/order-upcoming/order-upcoming";
 
 const SearchScreen = () => {
@@ -17,7 +18,7 @@ const SearchScreen = () => {
     });
   };
 
-  var sampleOrderList = {
+  const sampleOrderList = {
     status: "to-do",
     orders: [
       {
@@ -236,10 +237,29 @@ const SearchScreen = () => {
       },
     ],
   };
+
   return (
-    <View style={{ flex: 1, flexDirection: "row" }}>
-      <OrderUpcoming orderList={sampleOrderList} />
-      <OrderUpcoming orderList={sampleDoingList} />
+    <View style={{ flex: 1 }}>
+      <Container>
+        <MyHeader />
+        <Tabs
+          style={styles.tabs}
+        >
+          <Tab heading="UPCOMING"
+            tabStyle={styles.tabs}
+          >
+            
+            <TabReady orderList={sampleOrderList} />
+          </Tab>
+          <Tab
+            heading="READY"
+            tabStyle={styles.tabs}
+          >
+            <TabReady orderList={sampleOrderList} />
+          </Tab>
+        </Tabs>
+
+      </Container>
     </View>
   );
 };
