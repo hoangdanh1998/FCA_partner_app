@@ -4,6 +4,11 @@ import SearchBar from "../../components/atoms/SearchBar";
 import useResults from "../../hooks/useResults";
 import ResultsList from "../../components/molecules/ResultsList";
 import OrderCardUpComing from "../../components/molecules/OrderCardUpComing/OrderCardUpComing";
+import OrderCardReady from '../../components/molecules/order-card-ready/OrderCardReady';
+import TabReady from '../../components/organisms/tab-ready/tab-ready';
+import { Container,Tab, Tabs} from "native-base";
+import {MyHeader} from '../../components/atoms/header/Header';
+import {styles} from './style'
 
 const SearchScreen = () => {
   const [errorMessage, results, searchApi] = useResults();
@@ -16,25 +21,136 @@ const SearchScreen = () => {
     });
   };
 
+  const sampleOrderList = {
+    status: "to-do",
+    orders: [
+      {
+        phone: "0987654321",
+        estTime: 10,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+          {
+            name: "Expresso",
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        phone: "0987654321",
+        estTime: 20,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+          {
+            name: "Expresso",
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        phone: "0987654321",
+        estTime: 30,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        phone: "0987654321",
+        estTime: 30,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        phone: "0987654321",
+        estTime: 30,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        phone: "0987654321",
+        estTime: 30,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        phone: "0987654321",
+        estTime: 30,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+          {
+            name: "Expresso",
+            quantity: 1,
+          },
+        ],
+      },
+      {
+        phone: "0987654321",
+        estTime: 30,
+        status: "preparation",
+        items: [
+          {
+            name: "Chocolate",
+            quantity: 1,
+          },
+          {
+            name: "Expresso",
+            quantity: 1,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <View style={{ flex: 1 }}>
-      {/* <SearchBar
-                term={term}
-                onTermChange={newTerm => setTerm(newTerm)}
-                onTermSubmit={() => searchApi(term)}
-            />
-            {errorMessage ? <Text>{errorMessage}</Text> : null}
-            <Text>We have found {results.length}</Text>
-            <ScrollView>
-                <ResultsList 
-                    results={filterResultsByPrice('$')} 
-                    title="Cost Effective" 
-                    
-                />
-                <ResultsList results={filterResultsByPrice('$$')} title="Bit Pricer" />
-                <ResultsList results={filterResultsByPrice('$')} title="Big Spender" />
-            </ScrollView> */}
-      <OrderCardUpComing />
+      <Container>
+        <MyHeader/>
+        <Tabs 
+          style={styles.tabs}
+        >
+          <Tab heading="UPCOMING"
+            tabStyle={styles.tabs}
+          >
+          </Tab>
+          <Tab 
+            heading="READY"
+            tabStyle={styles.tabs}
+          >
+            <TabReady orderList={sampleOrderList} />
+          </Tab>
+        </Tabs>
+        
+      </Container>
     </View>
   );
 };

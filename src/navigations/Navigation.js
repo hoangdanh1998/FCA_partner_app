@@ -11,7 +11,12 @@ export default function Navigation() {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen 
-                    name="Home"  
+                    name="Home"
+                    options ={
+                        {
+                            headerShown: false
+                        }
+                    } 
                     component={SearchScreen} />
                 <Stack.Screen name="Result" component={ResultShowScreen} />
             </Stack.Navigator>
