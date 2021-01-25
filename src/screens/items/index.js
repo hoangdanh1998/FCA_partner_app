@@ -1,22 +1,8 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
-import SearchBar from "../../components/atoms/SearchBar";
-import useResults from "../../hooks/useResults";
-import ResultsList from "../../components/molecules/ResultsList";
-import OrderCardUpComing from "../../components/molecules/order-card-upcoming/order-card-upcoming";
-import OrderUpcoming from "../../components/organisms/order-upcoming/order-upcoming";
-
-const SearchScreen = () => {
-  const [errorMessage, results, searchApi] = useResults();
-  const [term, setTerm] = useState("");
-
-  const filterResultsByPrice = (price) => {
-    //price === '$' or === '$$'' or === '$$$'
-    return results.filter((results) => {
-      return results.price === price;
-    });
-  };
-
+import { View } from "react-native";
+import { Switch, Text, Left, Right, Body } from "native-base";
+import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
+const HomeScreen = () => {
   var sampleOrderList = {
     status: "to-do",
     orders: [
@@ -237,11 +223,13 @@ const SearchScreen = () => {
     ],
   };
   return (
-    <View style={{ flex: 1, flexDirection: "row" }}>
-      <OrderUpcoming orderList={sampleOrderList} />
-      <OrderUpcoming orderList={sampleDoingList} />
+    <View style={{ flex: 1 }}>
+      <UpcomingTab
+        sampleOrderList={sampleOrderList}
+        sampleDoingList={sampleDoingList}
+      />
     </View>
   );
 };
 
-export default SearchScreen;
+export default HomeScreen;
