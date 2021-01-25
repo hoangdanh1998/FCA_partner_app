@@ -1,236 +1,52 @@
-import React, { useState } from "react";
-import { View } from "react-native";
-import { Switch, Text, Left, Right, Body } from "native-base";
-import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
-const HomeScreen = () => {
-  const sampleOrderList = {
-    status: "to-do",
-    orders: [
-      {
-        phone: "0987654321",
-        estTime: 10,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 20,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-    ],
-  };
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import SearchBar from '../../components/atoms/SearchBar';
+import useResults from '../../hooks/useResults';
+import ResultsList from '../../components/molecules/ResultsList';
 
-  const sampleDoingList = {
-    status: "doing",
-    orders: [
-      {
-        phone: "0987654321",
-        estTime: 10,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 20,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-          },
-        ],
-      },
-    ],
-  };
+const SearchScreen = () => {
 
-  return (
-    <View style={{ flex: 1 }}>
-      <UpcomingTab
-        sampleOrderList={sampleOrderList}
-        sampleDoingList={sampleDoingList}
-      />
-    </View>
-  );
+    const [errorMessage, results, searchApi] = useResults();
+    const [term, setTerm] = useState('');
+
+    const filterResultsByPrice = price => {
+        //price === '$' or === '$$'' or === '$$$'
+        return results.filter(results => {
+            return results.price === price;
+        });
+    };
+
+    return (
+        <View style = {{flex: 1}}>
+            <SearchBar
+                term={term}
+                onTermChange={newTerm => setTerm(newTerm)}
+                onTermSubmit={() => searchApi(term)}
+            />
+            {errorMessage ? <Text>{errorMessage}</Text> : null}
+            <Text>We have found {results.length}</Text>
+            <ScrollView>
+                <ResultsList 
+                    results={filterResultsByPrice('$')} 
+                    title="Cost Effective" 
+                    
+                />
+                <ResultsList results={filterResultsByPrice('$$')} title="Bit Pricer" />
+                <ResultsList results={filterResultsByPrice('$')} title="Big Spender" />
+            </ScrollView>
+
+
+        </View>
+    );
+
 };
 
-export default HomeScreen;
+const styles = StyleSheet.create({
+
+});
+
+
+export default SearchScreen;
+
+
+
