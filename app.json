@@ -3,7 +3,7 @@
     "name": "FCA_Partner",
     "slug": "FCA_Partner",
     "version": "1.0.0",
-    "orientation": "landscape",
+    "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "splash": {
       "image": "./src/assets/splash.png",
