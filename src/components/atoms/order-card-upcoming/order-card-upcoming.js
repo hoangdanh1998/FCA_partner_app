@@ -14,7 +14,7 @@ import { styles } from "./styles";
 const OrderCardUpComing = (props) => {
   var order = props.order;
   return (
-    <Content padder>
+    <Content>
       <Card style={styles.card}>
         <CardItem style={styles.cardHeader} header bordered>
           <Left>
@@ -37,7 +37,7 @@ const OrderCardUpComing = (props) => {
               style={styles.list}
               dataArray={order.items}
               renderRow={(item) => (
-                <CardItem>
+                <CardItem style={styles.list}>
                   <Left>
                     <Text style={styles.itemText}>{item.name}</Text>
                   </Left>

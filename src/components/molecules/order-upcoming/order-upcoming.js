@@ -18,7 +18,7 @@ const OrderUpcoming = (props) => {
   return (
     <Container>
       <Card>
-        <CardItem header bordered>
+        <CardItem header bordered style={{borderColor: '#603a18'}}>
           <Left />
           <Text style={styles.columnName}>{orderList.status}</Text>
           <Right />
@@ -26,7 +26,7 @@ const OrderUpcoming = (props) => {
       </Card>
       <Content padder>
         <List
-          style={{ flex: orderList.orders.length }}
+          // style={{ flex: orderList.orders.length }}
           dataArray={orderList.orders}
           renderRow={(order) => <OrderCardUpComing order={order} />}
         />

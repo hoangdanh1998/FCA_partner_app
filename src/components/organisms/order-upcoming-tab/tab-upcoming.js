@@ -228,7 +228,7 @@ const UpcomingTab = (props) => {
   const sampleOrderList = props.sampleOrderList;
   const sampleDoingList = props.sampleDoingList;
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
       <View style={styles.switch_view}>
         <Left></Left>
         <Body style={styles.switch_container}>

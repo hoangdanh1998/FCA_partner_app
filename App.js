@@ -4,7 +4,8 @@ import { StyleSheet} from 'react-native';
 import Navigation from './src/navigations/Navigation'
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-
+import { View } from 'native-base';
+import {MyHeader} from './src/components/atoms/header/Header';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -25,7 +26,12 @@ export default class App extends React.Component {
 
   render() {
     if(this.state.isReady){
-      return <Navigation/>
+      return (
+        <View style={{flex:1}}>
+          <MyHeader/>
+          <Navigation/>
+        </View>
+      );
     } else {
       return null;
     }
