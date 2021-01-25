@@ -1,24 +1,9 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
-import useResults from "../../hooks/useResults";
-import TabReady from '../../components/organisms/tab-ready/tab-ready';
-import { Container, Tab, Tabs } from "native-base";
-import { MyHeader } from '../../components/atoms/header/Header';
-import { styles } from './style'
-import OrderUpcoming from "../../components/organisms/order-upcoming/order-upcoming";
-
-const SearchScreen = () => {
-  const [errorMessage, results, searchApi] = useResults();
-  const [term, setTerm] = useState("");
-
-  const filterResultsByPrice = (price) => {
-    //price === '$' or === '$$'' or === '$$$'
-    return results.filter((results) => {
-      return results.price === price;
-    });
-  };
-
-  const sampleOrderList = {
+import { View } from "react-native";
+import { Switch, Text, Left, Right, Body } from "native-base";
+import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
+const HomeScreen = () => {
+  var sampleOrderList = {
     status: "to-do",
     orders: [
       {
@@ -240,28 +225,12 @@ const SearchScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Container>
-        <MyHeader />
-        <Tabs
-          style={styles.tabs}
-        >
-          <Tab heading="UPCOMING"
-            tabStyle={styles.tabs}
-          >
-            
-            <TabReady orderList={sampleOrderList} />
-          </Tab>
-          <Tab
-            heading="READY"
-            tabStyle={styles.tabs}
-          >
-            <TabReady orderList={sampleOrderList} />
-          </Tab>
-        </Tabs>
-
-      </Container>
+      <UpcomingTab
+        sampleOrderList={sampleOrderList}
+        sampleDoingList={sampleDoingList}
+      />
     </View>
   );
 };
 
-export default SearchScreen;
+export default HomeScreen;

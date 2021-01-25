@@ -10,7 +10,7 @@ import {
   Right,
 } from "native-base";
 import { styles } from "./styles";
-import OrderCardUpComing from "../../molecules/order-card-upcoming/order-card-upcoming";
+import OrderCardUpComing from "../../atoms/order-card-upcoming/order-card-upcoming";
 
 const OrderUpcoming = (props) => {
   var orderList = props.orderList;
