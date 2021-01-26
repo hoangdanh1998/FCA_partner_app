@@ -70,11 +70,12 @@ export default OrderCardReady = (props) => {
                                     >Total: 30000VND</Text>
                                 </Left>
                                 <Right>
+                                    
                                     <Text style={[
                                         styles.status_order,
                                         styles.title_font_size
                                         ]}>
-                                        arrived
+                                        {order.status == "arrived" ? order.status : ""}
                                     </Text>
                                 </Right>
                             </CardItem>
