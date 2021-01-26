@@ -15,7 +15,7 @@ import { PREPARING, READY, ORDER_STATUS } from "../../../constance/constance";
 const OrderCardUpComing = (props) => {
   var order = props.order;
   return (
-    <Content>
+    <Content padder>
       <Card style={styles.card}>
         <CardItem style={styles.cardHeader} header bordered>
           <Left>
@@ -38,7 +38,7 @@ const OrderCardUpComing = (props) => {
               style={styles.list}
               dataArray={order.items}
               renderRow={(item) => (
-                <CardItem style={styles.list}>
+                <CardItem>
                   <Left>
                     <Text style={styles.itemText}>{item.name}</Text>
                   </Left>

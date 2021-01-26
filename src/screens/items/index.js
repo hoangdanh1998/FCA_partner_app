@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Switch, Text, Left, Right, Body } from "native-base";
 import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
 const HomeScreen = () => {
-  const sampleOrderList = {
+  var sampleOrderList = {
     status: "to-do",
     orders: [
       {
@@ -113,7 +113,7 @@ const HomeScreen = () => {
     ],
   };
 
-  const sampleDoingList = {
+  var sampleDoingList = {
     status: "doing",
     orders: [
       {

@@ -7,12 +7,12 @@ import { styles } from './style';
 
 
 const TabReady = (props) => {
-    const orderList = props.sampleOrderList;
-    console.log('orderList', orderList);
+    var orderList = props.orderList;
     return (
         
             <Content padder>
                 <List
+                    style={{ flex: orderList.orders.length }}
                     dataArray={orderList.orders}
                     renderRow={(order) => <OrderCardReady order={order} />}
                 />
