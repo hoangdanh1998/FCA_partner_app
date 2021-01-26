@@ -10,6 +10,7 @@ import {
   Icon,
 } from "native-base";
 import { styles } from "./styles";
+import { PREPARING, READY, ORDER_STATUS } from "../../../constance/constance";
 
 const OrderCardUpComing = (props) => {
   var order = props.order;
@@ -53,9 +54,9 @@ const OrderCardUpComing = (props) => {
               button
               onPress={() => alert("This is Card Header")}
               android={
-                order.status == "acceptance"
-                  ? "md-arrow-forward"
-                  : "chevron-forward"
+                order.status == ORDER_STATUS.ACCEPT.toLocaleLowerCase()
+                  ? PREPARING
+                  : READY
               }
               name="arrow-forward"
               style={styles.icon}
