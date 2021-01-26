@@ -8,7 +8,7 @@ import { styles } from './style';
 
 const TabReady = (props) => {
     const orderList = props.sampleOrderList;
-    console.log('orderList', orderList);
+    // console.log('orderList', orderList);
     return (
         
             <Content padder>
