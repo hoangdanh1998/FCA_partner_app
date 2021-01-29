@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Content,
   Card,
@@ -10,9 +10,12 @@ import {
   Icon,
 } from "native-base";
 import { styles } from "./styles";
+import NewOrderModal from '../../molecules/new-order-modal/new-order-modal'
+
 
 const OrderCardUpComing = (props) => {
   var order = props.order;
+  
   return (
     <Content>
       <Card style={styles.card}>
