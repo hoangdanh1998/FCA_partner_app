@@ -6,6 +6,7 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { View } from 'native-base';
 import {MyHeader} from './src/components/atoms/header/Header';
+import CountdownTimer from './src/components/atoms/timer/timer'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class App extends React.Component {
         <View style={{flex:1}}>
           <MyHeader/>
           <Navigation/>
+          {/* <CountdownTimer/>  */}
         </View>
       );
     } else {
