@@ -29,36 +29,36 @@ const NewOrderModal = (props) => {
             >
                 <View style={[styles.centeredView, styles.containerView]}>
                     <View style={styles.modalView}>
-                        <CountdownTimer />
+                        <CountdownTimer 
+                            modalVisible={props.modalVisible}
+                            changeModalVisible={props.changeModalVisible}
+                        />
                         <View style={{ flexDirection:"row", justifyContent:"center", alignItems:"center", height: "20%"}}>
                             <Text
                                 style={styles.text}
                             >
-                                You have new order: 
+                                You have new order from customer 
                             </Text>
                         <Text
-                                style={[styles.text, styles.boldText]}  
+                                style={[styles.text, styles.boldText, {marginLeft:5}]}  
                             >
                                 {newOrder.phone}
                             </Text>
                         </View>          
-                        <Card style={styles.cardWidth}>
+                        <Card style={{width:"80%"}}>
                             <List
                                 style={styles.cardWidth}
                                 dataArray={newOrder.items}
                                 renderRow={(element) => (
-                                    <CardItem style={styles.cardWidth}>
-                                        <Left>
-                                            <Text style={styles.text}
+                                    <CardItem style={styles.buttonBody}>
+                                            <Text style={[styles.text, styles.nameItemLayout]}
                                             >
                                                 {element.name}
                                             </Text>
-                                        </Left>
-                                        <Right>
-                                            <Text style={styles.text}>
+                                        
+                                            <Text style={[styles.text]}>
                                                 {element.quantity}
                                             </Text>
-                                        </Right>
                                     </CardItem>
                                 )}
                             >
@@ -72,7 +72,7 @@ const NewOrderModal = (props) => {
                         >
                             <Text style={styles.textStyle}>Hide Modal</Text>
                         </TouchableHighlight> */}
-                        <Body style={styles.buttonBody}>
+                        <Body style={[styles.buttonBody,{marginTop:18}]}>
                             <TouchableHighlight
                                 style={{...styles.button, backgroundColor:"#B85450"}}
                                 onPress={() => {

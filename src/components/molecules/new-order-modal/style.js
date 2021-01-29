@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     },
 
     containerView: {
-        flex: 1,
+        flex: 1, 
     },
 
     modalView: {
@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        width:"50%",
+        width:"70%",
     },
     openButton: {
         backgroundColor: "#F194FF",
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
         width:"100%",
         flexDirection: "row",
         justifyContent:"space-around",
-        marginTop: 18,
+        
     },
     button: {
         width:150,
@@ -70,6 +70,10 @@ export const styles = StyleSheet.create({
     },
     boldText: {
         fontWeight: "bold"
-    }
+    },
+    nameItemLayout: {
+        flex:7,
+        
+    },
 
 });

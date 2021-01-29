@@ -10,6 +10,9 @@ const CountdownTimer = (props) => {
       duration={COUNTDOWN_TIMER}
       size={80}
       strokeWidth={5}
+      onComplete={() => {
+        { props.changeModalVisible(!props.modalVisible) };
+    }}
       colors={[
         ["#82B366", 0.4],
         ["#F7B801", 0.4],

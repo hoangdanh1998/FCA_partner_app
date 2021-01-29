@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Right, Content, List, Text, Card, CardItem, Left } from 'native-base';
 import OrderCardReady from '../../molecules/order-card-ready/OrderCardReady';
-import { styles } from './style';
+
 
 
 
