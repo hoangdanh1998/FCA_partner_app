@@ -10,7 +10,7 @@ import {
   Icon,
 } from "native-base";
 import { styles } from "./styles";
-import NewOrderModal from '../../molecules/new-order-modal/new-order-modal'
+
 
 
 const OrderCardUpComing = (props) => {

@@ -13,7 +13,7 @@ const SearchBar = () => {
                 style={styles.inputStyle} 
                 // value={props.term}
                 // onChangeText={newTerm => props.onTermChange(newTerm)}     
-                placeholder="Search by phone"
+                placeholder="Nhập số điện thoại khách hàng"
                 autoCorrect= {false}
                 autoCapitalize= 'none'
                 // onEndEditing = {props.onTermSubmit}
@@ -24,7 +24,7 @@ const SearchBar = () => {
                 rounded
                 style = {styles.button_style}>
                 <Text>
-                    Search
+                    Tìm kiếm
                 </Text>
             </Button>
         </Body>

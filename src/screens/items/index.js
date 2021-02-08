@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
+import {useSelector} from 'react-redux';
 import { Switch, Text, Left, Right, Body } from "native-base";
 import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
 const HomeScreen = () => {
@@ -14,10 +15,12 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -29,10 +32,12 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -44,6 +49,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -55,6 +61,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -66,6 +73,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -77,6 +85,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -88,10 +97,12 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -103,10 +114,12 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -124,10 +137,12 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -139,10 +154,12 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -154,6 +171,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -165,6 +183,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -176,6 +195,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -187,6 +207,7 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -198,10 +219,12 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
@@ -213,21 +236,25 @@ const HomeScreen = () => {
           {
             name: "Chocolate",
             quantity: 1,
+            price: 15000
           },
           {
             name: "Expresso",
             quantity: 1,
+            price: 15000
           },
         ],
       },
     ],
   };
 
+  const toDoOrderList = useSelector(state => state.orderList.filterToDoList)
+  const doingList = useSelector(state => state.orderList.filterDoingList)
   return (
     <View style={{ flex: 1 }}>
       <UpcomingTab
-        sampleOrderList={sampleOrderList}
-        sampleDoingList={sampleDoingList}
+        toDoOrderList={toDoOrderList}
+        doingList={doingList}
       />
     </View>
   );

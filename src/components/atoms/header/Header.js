@@ -3,8 +3,7 @@ import {  Header, Title, Button, Left, Right, Body } from "native-base";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { styles } from "./stytle";
 
-export const MyHeader = () => {
-    
+export const MyHeader = (props) => {
         return (
                 <Header 
                     noShadow
@@ -22,7 +21,9 @@ export const MyHeader = () => {
                         <Title >FCA Store</Title>
                     </Body>
                     <Right>
-                        <Button transparent>
+                        <Button 
+                            transparent
+                            onPress={() => props.navigation.navigate("QRCODE")}>
                             <Icon 
                                 name="qr-code" 
                                 style={styles.icon}
