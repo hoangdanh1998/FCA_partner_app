@@ -6,8 +6,13 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { View } from 'native-base';
 import {MyHeader} from './src/components/atoms/header/Header';
-import CountdownTimer from './src/components/atoms/timer/timer'
+import {createStore} from 'redux';
+import {rootReducer} from './src/redux/reducers/root-reducer';
+import {Provider} from 'react-redux'
+import HomeStackScreen from './src/navigations/home-stack-screen';
 
+
+const store = createStore(rootReducer);
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -28,11 +33,10 @@ export default class App extends React.Component {
   render() {
     if(this.state.isReady){
       return (
-        <View style={{flex:1}}>
-          <MyHeader/>
-          <Navigation/>
-          {/* <CountdownTimer/>  */}
-        </View>
+        <Provider store={store} styles={{flex:1}}>
+          {/* <HeaderStackScreen style={{backgroundColor:"red"}} /> */}
+          <HomeStackScreen/>
+        </Provider>
       );
     } else {
       return null;

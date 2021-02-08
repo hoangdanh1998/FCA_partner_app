@@ -52,7 +52,9 @@ export const styles = StyleSheet.create({
     },
 
     body_card_item: {
-        justifyContent: "flex-end"
+        justifyContent: "center",
+        width:"100%"
+
     },
     status_order: {
         color: "red",

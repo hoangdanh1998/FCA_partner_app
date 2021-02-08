@@ -37,7 +37,7 @@ const NewOrderModal = (props) => {
                             <Text
                                 style={styles.text}
                             >
-                                You have new order from customer 
+                                Bạn có một đơn hàng mới từ 
                             </Text>
                         <Text
                                 style={[styles.text, styles.boldText, {marginLeft:5}]}  
@@ -64,14 +64,6 @@ const NewOrderModal = (props) => {
                             >
                             </List>
                         </Card>
-                        {/* <TouchableHighlight
-                            style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                            onPress={() => {
-                                { props.changeModalVisible(!props.modalVisible) };
-                            }}
-                        >
-                            <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableHighlight> */}
                         <Body style={[styles.buttonBody,{marginTop:18}]}>
                             <TouchableHighlight
                                 style={{...styles.button, backgroundColor:"#B85450"}}
@@ -82,7 +74,7 @@ const NewOrderModal = (props) => {
                                 activeOpacity={0.9}
                             >
                                 <Text style={[styles.text, styles.textButton, styles.boldText]}>
-                                    Reject
+                                    Từ chối
                             </Text>
                             </TouchableHighlight>
                             <TouchableHighlight
@@ -94,7 +86,7 @@ const NewOrderModal = (props) => {
                                 style={styles.button}
                             >
                                 <Text style={[styles.text, styles.textButton, styles.boldText]}>
-                                    Accept
+                                    Tiếp nhận
                             </Text>
                             </TouchableHighlight>
                         </Body>
