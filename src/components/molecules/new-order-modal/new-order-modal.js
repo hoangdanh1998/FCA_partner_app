@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 import {
     Alert,
     Modal,
-    StyleSheet,
     Text,
     TouchableHighlight,
     View
 } from "react-native";
-import { Body, Button, Card, CardItem, Container, Left, List, Right } from 'native-base'
+import { Body, Card, CardItem, List } from 'native-base'
 import { styles } from './style'
 import CountdownTimer from '../../atoms/timer/timer'
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {setModalVisible} from '../../../redux/action/modal';
+import {useSelector, useDispatch} from 'react-redux';
+
 
 const NewOrderModal = (props) => {
 
     const newOrder = props.newOrder;
+    const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
+    const dispatch = useDispatch();
+
+    const modalVisibleHandler = () => {
+        dispatch(setModalVisible());
+    }
 
     return (
         <View style={[styles.centeredView, styles.containerView]}>
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={props.modalVisible}
+                visible={modalVisibleState}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
                 }}
@@ -30,8 +37,8 @@ const NewOrderModal = (props) => {
                 <View style={[styles.centeredView, styles.containerView]}>
                     <View style={styles.modalView}>
                         <CountdownTimer 
-                            modalVisible={props.modalVisible}
-                            changeModalVisible={props.changeModalVisible}
+                            modalVisible={modalVisibleState}
+                            changeModalVisible={modalVisibleHandler}
                         />
                         <View style={{ flexDirection:"row", justifyContent:"center", alignItems:"center", height: "20%"}}>
                             <Text
@@ -68,7 +75,7 @@ const NewOrderModal = (props) => {
                             <TouchableHighlight
                                 style={{...styles.button, backgroundColor:"#B85450"}}
                                 onPress={() => {
-                                    { props.changeModalVisible(!props.modalVisible) };
+                                    modalVisibleHandler()
                                 }}
                                 underlayColor={"#F8CECC"}
                                 activeOpacity={0.9}
@@ -79,7 +86,7 @@ const NewOrderModal = (props) => {
                             </TouchableHighlight>
                             <TouchableHighlight
                                 onPress={() => {
-                                    { props.changeModalVisible(!props.modalVisible) };
+                                    modalVisibleHandler
                                 }}
                                 underlayColor={"#D5E8D4"}
                                 activeOpacity={0.9}
@@ -98,8 +105,7 @@ const NewOrderModal = (props) => {
             <TouchableHighlight
                 style={styles.openButton}
                 onPress={() => {
-                    props.changeModalVisible(true);
-
+                    modalVisibleHandler()
                 }}
             >
                 <Text style={styles.textStyle}>Show Modal</Text>
