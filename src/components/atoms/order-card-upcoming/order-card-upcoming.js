@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Content,
   Card,
@@ -11,16 +11,19 @@ import {
 } from "native-base";
 import { styles } from "./styles";
 
+
+
 const OrderCardUpComing = (props) => {
   var order = props.order;
+  
   return (
     <Content>
       <Card style={styles.card}>
         <CardItem style={styles.cardHeader} header bordered>
           <Left>
-            <Text style={styles.title}>{order.phone}</Text>
+            <Text style={styles.title}>{order.customer.phone}</Text>
           </Left>
-          <Text
+          {/* <Text
             style={
               order.estTime <= 10
                 ? styles.lateEstimation
@@ -28,7 +31,7 @@ const OrderCardUpComing = (props) => {
             }
           >
             {order.estTime} mins
-          </Text>
+          </Text> */}
           <Right></Right>
         </CardItem>
         <CardItem style={styles.cardBody} body bordered>
@@ -36,6 +39,7 @@ const OrderCardUpComing = (props) => {
             <List
               style={styles.list}
               dataArray={order.items}
+              keyExtractor={order.items.id}
               renderRow={(item) => (
                 <CardItem style={styles.list}>
                   <Left>

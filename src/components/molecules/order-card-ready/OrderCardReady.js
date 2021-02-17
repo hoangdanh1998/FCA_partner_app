@@ -18,16 +18,16 @@ export default OrderCardReady = (props) => {
     var order = props.order;
 
     return (
-            <Content padder>
-                <Card style={styles.card}>
-                    <CardItem style={styles.cardHeader} header bordered>
-                        <Left>
-                            <Text style={[
-                                styles.title_font_weight,
-                                styles.title_font_size
-                                ]}>{order.phone}</Text>
-                        </Left>
-                        {/* <Text
+        <Content padder>
+            <Card style={styles.card}>
+                <CardItem style={styles.cardHeader} header bordered>
+                    <Left>
+                        <Text style={[
+                            styles.title_font_weight,
+                            styles.title_font_size
+                        ]}>{order.phone}</Text>
+                    </Left>
+                    {/* <Text
                             style={
                                 order.estTime <= 10
                                     ? styles.lateEstimation
@@ -36,10 +36,11 @@ export default OrderCardReady = (props) => {
                         >
                             {order.estTime} mins
                     </Text> */}
-                        <Right></Right>
-                    </CardItem>
-                    <CardItem style={styles.cardBody} body bordered>
-                        <Left>
+                    <Right></Right>
+                </CardItem>
+                <CardItem style={styles.cardBody} body bordered>
+                    <Left style={{flexDirection:"column"}}>
+                        <Left style={styles.cardBody}>
                             <List
                                 style={styles.list}
                                 dataArray={order.items}
@@ -48,47 +49,60 @@ export default OrderCardReady = (props) => {
                                         <Left>
                                             <Text style={styles.itemText}>{item.name}</Text>
                                         </Left>
-                                        <Right>
-                                            <Text style={styles.itemText}>{item.quantity}</Text>
+                                        <Right style={{ flexDirection: "row" }}>
+                                            <Left>
+                                                <Text style={styles.itemText}>{item.quantity}</Text>
+                                            </Left>
+                                            <Right>
+                                                <Text style={styles.itemText}>{item.price}</Text>
+                                            </Right>
                                         </Right>
                                     </CardItem>
                                 )}
                             />
-                            
                         </Left>
-                        <Body style={styles.body_card_item}>
-                            <CardItem
-                                style={styles.body_card_item}
-                            >
-                                <Left>
-                                    <Text
-                                    style={[
-                                        styles.title_font_size,
-                                        styles.title_font_weight
-                                    ]}
-                                    
-                                    >Total: 30000VND</Text>
-                                </Left>
-                                <Right>
-                                    <Text style={[
-                                        styles.status_order,
-                                        styles.title_font_size
-                                        ]}>
-                                        arrived
-                                    </Text>
-                                </Right>
-                            </CardItem>
-                        </Body>
-                        <Right>
-                            <Button
-                                style={styles.button}
-                                rounded>
-                                <Text>Send QR Code</Text>
-                            </Button>
-                        </Right>
-                    </CardItem>
-                </Card>
-            </Content>
+                        <Left style={styles.cardBody}>
+                        <CardItem>
+                                        <Left>
+                                            <Text style={[styles.itemText,styles.title_font_weight]}>Tổng cộng</Text>
+                                        </Left>
+                                        <Right style={{ flexDirection: "row" }}>
+                                            <Left>
+                                                <Text></Text>
+                                            </Left>
+                                            <Right>
+                                                <Text style={[styles.itemText,styles.title_font_weight]}>30000</Text>
+                                            </Right>
+                                        </Right>
+                                    </CardItem>
+                        </Left>
+                    </Left>
+
+                    <Body style={styles.body_card_item}>
+                        <CardItem
+                            style={styles.body_card_item}
+                        >
+                            
+                            <Right>
+                                <Text style={[
+                                    styles.status_order,
+                                    styles.title_font_size
+                                ]}>
+                                    {order.status == "arrived" ? "đã đến" : ""}
+                                </Text>
+                            </Right>
+                        </CardItem>
+                    </Body>
+                    <Right>
+                        <Button
+                            style={styles.button}
+                            rounded>
+                            <Text>Gửi mã QR</Text>
+                        </Button>
+                    </Right>
+                </CardItem>
+            </Card>
+        </Content>
     );
 
 }

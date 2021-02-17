@@ -1,12 +1,16 @@
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import { StyleSheet} from 'react-native';
-import Navigation from './src/navigations/Navigation'
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { View } from 'native-base';
-import {MyHeader} from './src/components/atoms/header/Header';
+import {createStore, applyMiddleware} from 'redux';
+import {rootReducer} from './src/redux/reducers/root-reducer';
+import {Provider} from 'react-redux'
+import HomeStackScreen from './src/navigations/home-stack-screen';
+import  ReduxThunk  from  'redux-thunk';
 
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,10 +31,9 @@ export default class App extends React.Component {
   render() {
     if(this.state.isReady){
       return (
-        <View style={{flex:1}}>
-          <MyHeader/>
-          <Navigation/>
-        </View>
+        <Provider store={store} styles={{flex:1}}>
+          <HomeStackScreen/>
+        </Provider>
       );
     } else {
       return null;
