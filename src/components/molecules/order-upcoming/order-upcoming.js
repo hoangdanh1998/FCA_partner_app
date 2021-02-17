@@ -26,6 +26,7 @@ const OrderUpcoming = (props) => {
       </Card>
       <Content padder>
         <List
+          keyExtractor={orderList.id}
           dataArray={orderList}
           renderRow={(order) => <OrderCardUpComing order={order} />}
         />
