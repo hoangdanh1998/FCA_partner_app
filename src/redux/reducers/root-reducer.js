@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import modalReducer from './modal';
-import ordersReducer from './orderList';
+import ordersReducer from './order-list';
 
 
 

@@ -8,6 +8,7 @@ const UpcomingTab = (props) => {
 
   const toDoOrderList = props.toDoOrderList;
   const doingList = props.doingList;
+  console.log("doingList", doingList);
   return (
     <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
       <View style={styles.switch_view}>
@@ -20,7 +21,7 @@ const UpcomingTab = (props) => {
       </View>
       <View style={styles.order_view}>
         <OrderUpcoming orderList={toDoOrderList} status="to-do"/>
-        <OrderUpcoming orderList={doingList} />
+        <OrderUpcoming orderList={doingList} status="doing"/>
       </View>
     </View>
   );

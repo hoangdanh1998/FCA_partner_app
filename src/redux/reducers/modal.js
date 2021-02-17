@@ -10,7 +10,6 @@ const modalReducer = (state = initialState, action) => {
             let modalVisible = state.modalVisible;
             return {modalVisible: !modalVisible};
         default:
-            console.log("123");
             return state;
     }
 

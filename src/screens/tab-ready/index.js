@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { View, Container } from 'native-base';
+import { useSelector, useDispatch } from 'react-redux';
+
 import TabReady from '../../components/organisms/tab-ready/tab-ready';
 import SearchBar from '../../components/atoms/search-bar/search-bar';
 import NewOrderModal from '../../components/molecules/new-order-modal/new-order-modal';
-import { useSelector, useDispatch } from 'react-redux';
-
+import {getAcceptOrderToday, getReadinessOrderToday} from '../../redux/action/order-list'
 
 
 
@@ -28,13 +29,20 @@ const TabReadyScreen = () => {
     };
     const orderList = useSelector(state => state.orderList.filterReadyList);
 
+    const dispatch = useDispatch();
+    
+
+    useEffect(() => {
+        dispatch(getReadinessOrderToday())
+    }, [dispatch]);
+
     return (
         <View style={{ flex: 1 }}>
             <SearchBar />
             <NewOrderModal
                 newOrder={newOrder}
             />
-                <TabReady toDoOrderList={orderList} />
+            <TabReady toDoOrderList={orderList} />
         </View>
     );
 }

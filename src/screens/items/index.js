@@ -1,255 +1,37 @@
-import React, { useState } from "react";
-import { View } from "react-native";
-import {useSelector} from 'react-redux';
-import { Switch, Text, Left, Right, Body } from "native-base";
+import React, { useState, useEffect } from "react";
+import { View, ActivityIndicator } from "react-native";
+import {useSelector, useDispatch} from 'react-redux';
 import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
+import { PRIMARY_COLOR } from "../../constance/constance";
+import { getAcceptOrderToday, getPreparationOrderToday } from "../../redux/action/order-list";
+import {styles} from './style'
 const HomeScreen = () => {
-  const sampleOrderList = {
-    status: "to-do",
-    orders: [
-      {
-        phone: "0987654321",
-        estTime: 10,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 20,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-    ],
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
+  const doingList = useSelector(state => state.orderList.filterDoingList);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadOrderList = async () => {
+      setIsLoading(true);
+      await dispatch(getAcceptOrderToday());
+      await dispatch(getPreparationOrderToday());
+      setIsLoading(false);
+    }
+    loadOrderList();
+  },[dispatch]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+      </View>
+    )
   };
 
-  const sampleDoingList = {
-    status: "doing",
-    orders: [
-      {
-        phone: "0987654321",
-        estTime: 10,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 20,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-      {
-        phone: "0987654321",
-        estTime: 30,
-        status: "preparation",
-        items: [
-          {
-            name: "Chocolate",
-            quantity: 1,
-            price: 15000
-          },
-          {
-            name: "Expresso",
-            quantity: 1,
-            price: 15000
-          },
-        ],
-      },
-    ],
-  };
-
-  const toDoOrderList = useSelector(state => state.orderList.filterToDoList)
-  const doingList = useSelector(state => state.orderList.filterDoingList)
   return (
     <View style={{ flex: 1 }}>
       <UpcomingTab
