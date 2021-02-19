@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   Content,
   Card,
@@ -10,12 +10,12 @@ import {
   Icon,
 } from "native-base";
 import { styles } from "./styles";
-
+import { SafeAreaView } from 'react-native'
 
 
 const OrderCardUpComing = (props) => {
   var order = props.order;
-  
+
   return (
     <Content>
       <Card style={styles.card}>
@@ -36,21 +36,24 @@ const OrderCardUpComing = (props) => {
         </CardItem>
         <CardItem style={styles.cardBody} body bordered>
           <Left>
-            <List
-              style={styles.list}
-              dataArray={order.items}
-              keyExtractor={order.items.id}
-              renderRow={(item) => (
-                <CardItem style={styles.list}>
-                  <Left>
-                    <Text style={styles.itemText}>{item.name}</Text>
-                  </Left>
-                  <Right>
-                    <Text style={styles.itemText}>{item.quantity}</Text>
-                  </Right>
-                </CardItem>
-              )}
-            />
+            
+              <List
+                style={styles.list}
+                dataArray={order.items}
+                keyExtractor={order.items.id}
+                renderRow={(item) => (
+                  <CardItem style={styles.list}>
+                    <Left>
+                      <Text style={styles.itemText}>{item.name}</Text>
+                    </Left>
+                    <Right>
+                      <Text style={styles.itemText}>{item.quantity}</Text>
+                    </Right>
+                  </CardItem>
+                )}
+              />
+            
+
           </Left>
           <Right>
             <Icon
