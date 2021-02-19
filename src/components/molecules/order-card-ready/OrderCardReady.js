@@ -12,6 +12,7 @@ import {
     List,
     Icon
 } from 'native-base';
+import { SafeAreaView } from 'react-native';
 import { styles } from './style';
 
 export default OrderCardReady = (props) => {
@@ -25,7 +26,7 @@ export default OrderCardReady = (props) => {
                         <Text style={[
                             styles.title_font_weight,
                             styles.title_font_size
-                        ]}>{order.phone}</Text>
+                        ]}>{order.customer.phone}</Text>
                     </Left>
                     {/* <Text
                             style={
@@ -41,8 +42,10 @@ export default OrderCardReady = (props) => {
                 <CardItem style={styles.cardBody} body bordered>
                     <Left style={{flexDirection:"column"}}>
                         <Left style={styles.cardBody}>
+                            
                             <List
                                 style={styles.list}
+                                keyExtractor={order.items.id}
                                 dataArray={order.items}
                                 renderRow={(item) => (
                                     <CardItem>
@@ -54,12 +57,14 @@ export default OrderCardReady = (props) => {
                                                 <Text style={styles.itemText}>{item.quantity}</Text>
                                             </Left>
                                             <Right>
-                                                <Text style={styles.itemText}>{item.price}</Text>
+                                                <Text style={styles.itemText}>{item.price * item.quantity}</Text>
                                             </Right>
                                         </Right>
                                     </CardItem>
                                 )}
                             />
+                            
+                            
                         </Left>
                         <Left style={styles.cardBody}>
                         <CardItem>
@@ -71,7 +76,7 @@ export default OrderCardReady = (props) => {
                                                 <Text></Text>
                                             </Left>
                                             <Right>
-                                                <Text style={[styles.itemText,styles.title_font_weight]}>30000</Text>
+                                                <Text style={[styles.itemText,styles.title_font_weight]}>{order.total}</Text>
                                             </Right>
                                         </Right>
                                     </CardItem>
