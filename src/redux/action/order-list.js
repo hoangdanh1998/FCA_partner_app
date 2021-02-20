@@ -20,7 +20,7 @@ export const getAcceptOrderToday = () => {
             });
 
             if (response.data.meta.status !== SUCCESS) {
-                throw new Error("Somthing went wrong");
+                throw new Error("Something went wrong");
             }
             
             dispatch({
