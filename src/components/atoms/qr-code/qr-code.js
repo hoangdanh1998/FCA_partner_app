@@ -24,7 +24,7 @@ export default function QRCode(props) {
         return <Text>Requesting for camera permission</Text>;
     }
     if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return <Text>Ứng dụng chưa có quyền truy cập camera</Text>;
     }
 
     return (

@@ -24,6 +24,7 @@ function HomeStackScreen() {
                 <HomeStack.Screen name="QRCODE" component={QRCode} />
                 <HomeStack.Screen name="SIGNUP" component={SignUp} />
             </HomeStack.Navigator>
+            
         </NavigationContainer>
 
     );

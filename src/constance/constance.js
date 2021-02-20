@@ -12,3 +12,6 @@ export const HEADER_FONT_SIZE = 20;
 export const COUNTDOWN_TIMER = 15;
 
 export const URL_API = "http://api-fca.xyz/api";
+
+//status api
+export const SUCCESS = "SUCCESS";
