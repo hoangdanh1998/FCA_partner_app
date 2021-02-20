@@ -1,4 +1,11 @@
-import { GET_ACCEPTANCE_ORDERS_TODAY, GET_PREPARATION_ORDERS_TODAY, GET_READINESS_ORDERS_TODAY } from "../action/order-list";
+import { 
+    GET_ACCEPTANCE_ORDERS_TODAY, 
+    GET_ORDER_AFTER_UPDATE, 
+    GET_PREPARATION_ORDERS_TODAY, 
+    GET_READINESS_ORDERS_TODAY, 
+    SEND_QR_CODE, 
+    SET_RECEPTION_ORDER 
+} from "../action/order-list";
 
 const initialState = {
     orderLists: [],
@@ -25,6 +32,25 @@ const ordersReducer = (state = initialState, action) => {
             const data = action.payload.data.data.orders;
 
             return {...state, filterReadyList: data};
+        }
+
+        case SET_RECEPTION_ORDER: {
+            
+            const id = action.payload;
+            const orderList = state.filterReadyList.filter((order) => {
+                return order.id != id;
+            })
+            
+            return {...state, filterReadyList: orderList};
+        }
+
+        case SEND_QR_CODE: {
+            return state;
+        }
+
+        case GET_ORDER_AFTER_UPDATE: {
+            
+            return state;
         }
 
         default:
