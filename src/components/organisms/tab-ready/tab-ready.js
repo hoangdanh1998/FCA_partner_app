@@ -5,7 +5,6 @@ import OrderCardReady from '../../molecules/order-card-ready/OrderCardReady';
 
 const TabReady = (props) => {
     const toDoOrderList = props.toDoOrderList;
-    // console.log('orderList', orderList);
     return (
         
             <Content padder>

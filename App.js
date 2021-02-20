@@ -8,7 +8,8 @@ import {rootReducer} from './src/redux/reducers/root-reducer';
 import {Provider} from 'react-redux'
 import HomeStackScreen from './src/navigations/home-stack-screen';
 import  ReduxThunk  from  'redux-thunk';
-
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default class App extends React.Component {
@@ -19,6 +20,14 @@ export default class App extends React.Component {
     };
   }
 
+  _handleNotification = notification => {
+    console.log({ notification })
+  };
+
+  _handleNotificationResponse = response => {
+    console.log({ response });
+  };
+
   async componentDidMount() {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
@@ -26,8 +35,13 @@ export default class App extends React.Component {
       ...Ionicons.font,
     });
     this.setState({ isReady: true });
-  }
 
+    registerForPushNotificationsAsync();
+    Notifications.addNotificationReceivedListener(this._handleNotification);
+    Notifications.setNotificationHandler
+    Notifications.addNotificationResponseReceivedListener(this._handleNotificationResponse);
+  }
+  
   render() {
     if(this.state.isReady){
       return (
@@ -41,8 +55,6 @@ export default class App extends React.Component {
   }
 }
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -51,3 +63,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+registerForPushNotificationsAsync = async () => {
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    console.log(finalStatus)
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Ứng dụng cần được cấp quyền thông báo để hoạt động!');
+      return;
+    }
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+};

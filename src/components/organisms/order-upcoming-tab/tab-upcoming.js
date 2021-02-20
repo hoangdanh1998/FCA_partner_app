@@ -8,7 +8,6 @@ const UpcomingTab = (props) => {
 
   const toDoOrderList = props.toDoOrderList;
   const doingList = props.doingList;
-  console.log("doingList", doingList);
   return (
     <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
       <View style={styles.switch_view}>
