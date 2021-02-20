@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import {useDispatch} from 'react-redux';
+import { setOrderStatus } from '../../../redux/action/order-list';
+import {OrderStatus} from '../../../constance/constance'
+
 
 export default function QRCode(props) {
-    console.log(props);
+    
+    const dispatch = useDispatch();
 
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -17,11 +22,12 @@ export default function QRCode(props) {
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        dispatch(setOrderStatus(data, OrderStatus.RECEPTION));
+        alert(data);
     };
 
     if (hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
+        return <Text>Hệ thống yêu cầu quyền truy cập máy ảnh</Text>;
     }
     if (hasPermission === false) {
         return <Text>Ứng dụng chưa có quyền truy cập camera</Text>;
@@ -33,7 +39,7 @@ export default function QRCode(props) {
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
             />
-            {scanned && props.navigation.navigate("HOME")}
+            {scanned && props.navigation.navigate("READY")}
         </View>
     );
 }
