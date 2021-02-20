@@ -7,10 +7,11 @@ import { ActivityIndicator } from 'react-native'
 import TabReady from '../../components/organisms/tab-ready/tab-ready';
 import SearchBar from '../../components/atoms/search-bar/search-bar';
 import NewOrderModal from '../../components/molecules/new-order-modal/new-order-modal';
-import { getReadinessOrderToday } from '../../redux/action/order-list';
+import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/action/order-list';
 import {styles} from './style';
-import { PRIMARY_COLOR } from '../../constance/constance';
+import { OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
 import { set } from 'react-native-reanimated';
+import {useIsFocused} from '@react-navigation/native';
 
 
 
@@ -34,10 +35,17 @@ const TabReadyScreen = () => {
     };
     const orderList = useSelector(state => state.orderList.filterReadyList);
 
+    const isFocused = useIsFocused();
+    const dispatch = useDispatch();
+
+    if(isFocused) {
+        dispatch(getOrderAfterUpdate(OrderStatus.READINESS));
+    }
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
 
-    const dispatch = useDispatch();
+    
 
     const loadOrderList = useCallback(async () => {
         setIsLoading(true);

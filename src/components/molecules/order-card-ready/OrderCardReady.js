@@ -12,11 +12,16 @@ import {
     List,
     Icon
 } from 'native-base';
-import { SafeAreaView } from 'react-native';
+import {useDispatch} from 'react-redux';
 import { styles } from './style';
+import { sendQRCode } from '../../../redux/action/order-list';
+import {withNavigation} from '@react-navigation/compat';
 
-export default OrderCardReady = (props) => {
+const OrderCardReady = (props) => {
     var order = props.order;
+    const dispatch = useDispatch();
+    console.log(props);
+
 
     return (
         <Content padder>
@@ -101,6 +106,10 @@ export default OrderCardReady = (props) => {
                     <Right>
                         <Button
                             style={styles.button}
+                            onPress={() => {
+                                dispatch(sendQRCode(order.id));
+                                props.navigation.navigate("QRCODE");
+                            }}
                             rounded>
                             <Text>Gửi mã QR</Text>
                         </Button>
@@ -110,4 +119,6 @@ export default OrderCardReady = (props) => {
         </Content>
     );
 
-}
+};
+
+export default withNavigation(OrderCardReady);
