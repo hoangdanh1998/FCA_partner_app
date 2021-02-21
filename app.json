@@ -25,6 +25,9 @@
         "backgroundColor": "#FFFFFF"
       }
     },
+    "notification": {
+      "icon": "./src/assets/icon.png"
+    },
     "web": {
       "favicon": "./src/assets/favicon.png"
     }
