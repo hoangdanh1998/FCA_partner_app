@@ -7,16 +7,46 @@ import { PRIMARY_COLOR } from "../../../constance/constance";
 import { getAcceptOrderToday, getPreparationOrderToday } from "../../../redux/action/order-list";
 import { styles } from "./styles";
 import ErrorModal from "../../atoms/error-modal";
+import * as Notifications from 'expo-notifications';
+import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
+import { setModalVisible } from "../../../redux/action/modal";
+
 
 const UpcomingTab = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
+  const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
+  const dispatch = useDispatch();
+  const [newOrder, setNewOrder] = useState({})
+
+  const modalVisibleHandler = () => {
+    dispatch(setModalVisible());
+}
+
+
   const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
   const doingList = useSelector(state => state.orderList.filterDoingList);
+//   const newOrder = {
+//     phone: "0987654321",
+//     estTime: 30,
+//     status: "acceptance",
+//     items: [
+//         {
+//             name: "Chocolate",
+//             quantity: 1,
+//             price: 15000
+//         },
+//         {
+//             name: "Expresso",
+//             quantity: 1,
+//             price: 15000
+//         },
+//     ]
+// };
 
-  const dispatch = useDispatch();
+
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -29,6 +59,14 @@ const UpcomingTab = () => {
     setIsLoading(false);
   },[dispatch, setError, setIsLoading])
 
+  const handleNotification = notification => {
+    setNewOrder(notification.request.content.data.order);
+    modalVisibleHandler();
+    
+}
+
+Notifications.addNotificationReceivedListener(handleNotification);
+  
   useEffect(() => {
     
     loadOrderList();
@@ -66,6 +104,7 @@ const UpcomingTab = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
+      {!modalVisibleState ? null : <NewOrderModal newOrder={newOrder}/>}
       <View style={styles.switch_view}>
         <Left></Left>
         <Body style={styles.switch_container}>
@@ -75,6 +114,7 @@ const UpcomingTab = () => {
         <Right />
       </View>
       <View style={styles.order_view}>
+        
         <OrderUpcoming orderList={toDoOrderList} status="to-do" />
         <OrderUpcoming orderList={doingList} status="doing" />
       </View>

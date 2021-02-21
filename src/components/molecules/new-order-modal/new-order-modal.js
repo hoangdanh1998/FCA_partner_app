@@ -23,6 +23,8 @@ const NewOrderModal = (props) => {
         dispatch(setModalVisible());
     }
 
+
+
     return (
         <View style={[styles.centeredView, styles.containerView]}>
             <Modal
@@ -49,7 +51,7 @@ const NewOrderModal = (props) => {
                         <Text
                                 style={[styles.text, styles.boldText, {marginLeft:5}]}  
                             >
-                                {newOrder.phone}
+                                {newOrder.customer.phone}
                             </Text>
                         </View>          
                         <Card style={{width:"80%"}}>
@@ -97,7 +99,6 @@ const NewOrderModal = (props) => {
                             </Text>
                             </TouchableHighlight>
                         </Body>
-
                     </View>
                 </View>
             </Modal>
