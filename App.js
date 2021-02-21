@@ -24,7 +24,7 @@ export default class App extends React.Component {
   }
 
   _handleNotification = notification => {
-    console.log({ notification })
+    console.log("notification of create order:", notification.request.content.data.order)
   };
 
   async componentDidMount() {
