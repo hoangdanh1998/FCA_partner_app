@@ -20,7 +20,6 @@ import {withNavigation} from '@react-navigation/compat';
 const OrderCardReady = (props) => {
     var order = props.order;
     const dispatch = useDispatch();
-    console.log(props);
 
 
     return (

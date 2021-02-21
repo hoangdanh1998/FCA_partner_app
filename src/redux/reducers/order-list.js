@@ -40,8 +40,6 @@ const ordersReducer = (state = initialState, action) => {
             const orderList = state.filterReadyList.filter((order) => {
                 return order.id != id;
             })
-            console.log("orderList", orderList.length);
-            console.log("id", id);
             
             return {...state, filterReadyList: orderList};
         }
