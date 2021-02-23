@@ -11,6 +11,8 @@ import { styles } from './style'
 import CountdownTimer from '../../atoms/timer/timer'
 import {setModalVisible} from '../../../redux/action/modal';
 import {useSelector, useDispatch} from 'react-redux';
+import { setOrderStatus } from "../../../redux/action/order-list";
+import { OrderStatus } from "../../../constance/constance";
 
 
 const NewOrderModal = (props) => {
@@ -18,6 +20,10 @@ const NewOrderModal = (props) => {
     const newOrder = props.newOrder;
     const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
     const dispatch = useDispatch();
+
+    const handleAcceptOrder = () => {
+        dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
+    }
 
     const modalVisibleHandler = () => {
         dispatch(setModalVisible());
@@ -88,7 +94,7 @@ const NewOrderModal = (props) => {
                             </TouchableHighlight>
                             <TouchableHighlight
                                 onPress={() => {
-                                    modalVisibleHandler
+                                    handleAcceptOrder()
                                 }}
                                 underlayColor={"#D5E8D4"}
                                 activeOpacity={0.9}
@@ -103,14 +109,14 @@ const NewOrderModal = (props) => {
                 </View>
             </Modal>
 
-            <TouchableHighlight
+            {/* <TouchableHighlight
                 style={styles.openButton}
                 onPress={() => {
                     modalVisibleHandler()
                 }}
-            >
+            > 
                 <Text style={styles.textStyle}>Show Modal</Text>
-            </TouchableHighlight>
+            </TouchableHighlight>*/}
         </View>
     );
 };

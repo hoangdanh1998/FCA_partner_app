@@ -4,6 +4,7 @@ import {
     GET_PREPARATION_ORDERS_TODAY, 
     GET_READINESS_ORDERS_TODAY, 
     SEND_QR_CODE, 
+    SET_ACCEPTANCE_ORDER, 
     SET_RECEPTION_ORDER 
 } from "../action/order-list";
 
@@ -42,6 +43,10 @@ const ordersReducer = (state = initialState, action) => {
             })
             
             return {...state, filterReadyList: orderList};
+        }
+
+        case SET_ACCEPTANCE_ORDER: {
+            return state;
         }
 
         case SEND_QR_CODE: {
