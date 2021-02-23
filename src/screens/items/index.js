@@ -6,8 +6,7 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <UpcomingTab
-      />
+      <UpcomingTab />
     </View>
   );
 };

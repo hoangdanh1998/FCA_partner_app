@@ -11,11 +11,20 @@ import {
 } from "native-base";
 import { styles } from "./styles";
 import { SafeAreaView } from 'react-native'
-
+import { listenOrder } from '../../../firebase/realtime-database/listener';
+import { useEffect } from 'react'
 
 const OrderCardUpComing = (props) => {
   var order = props.order;
-
+  const [timeRemain, setTimeRemain] = useState(0);
+  useEffect(() => {
+    (async () => {
+      listenOrder('145b224b-77e9-4c46-8e48-5f9b9d1e0ecf', (timeRemain) => {
+        setTimeRemain(timeRemain)
+      })
+    })();
+  }, [])
+    
   return (
     <Content>
       <Card style={styles.card}>
@@ -23,15 +32,15 @@ const OrderCardUpComing = (props) => {
           <Left>
             <Text style={styles.title}>{order.customer.phone}</Text>
           </Left>
-          {/* <Text
+          <Text
             style={
-              order.estTime <= 10
+              timeRemain <= 10
                 ? styles.lateEstimation
                 : styles.earlyEstimation
             }
           >
-            {order.estTime} mins
-          </Text> */}
+            {timeRemain} mins
+          </Text>
           <Right></Right>
         </CardItem>
         <CardItem style={styles.cardBody} body bordered>

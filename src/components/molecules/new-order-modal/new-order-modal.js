@@ -11,6 +11,7 @@ import { styles } from './style'
 import CountdownTimer from '../../atoms/timer/timer'
 import {setModalVisible} from '../../../redux/action/modal';
 import {useSelector, useDispatch} from 'react-redux';
+import { setTrackingOrder } from '../../../firebase/realtime-database/creator';
 import { setOrderStatus } from "../../../redux/action/order-list";
 import { OrderStatus } from "../../../constance/constance";
 
@@ -27,6 +28,11 @@ const NewOrderModal = (props) => {
 
     const modalVisibleHandler = () => {
         dispatch(setModalVisible());
+    }
+    
+    const handleAcceptOrder = () => {
+        console.log('handle accept')
+        setTrackingOrder(newOrder.id, 0);
     }
 
 
@@ -94,6 +100,7 @@ const NewOrderModal = (props) => {
                             </TouchableHighlight>
                             <TouchableHighlight
                                 onPress={() => {
+                                    modalVisibleHandler()
                                     handleAcceptOrder()
                                 }}
                                 underlayColor={"#D5E8D4"}

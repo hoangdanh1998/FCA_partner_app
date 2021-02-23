@@ -13,7 +13,9 @@ import * as Notifications from 'expo-notifications';
 import * as firebase from 'firebase';
 
 
+import { LogBox } from 'react-native';
 
+LogBox.ignoreAllLogs();
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default class App extends React.Component {
   constructor(props) {
@@ -113,22 +115,4 @@ function initializeFirebase() {
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
   }
-}
-
-function setupOrderListener(partnerId) {
-  console.log('in listener')
-  firebase.database().ref('partners' + partnerId).on('value', (snapshot) => {
-    const highscore = snapshot.val();
-    console.log("New high score: " + highscore);
-  });
-}
-
-function setPartner(orderId, time) {
-  console.log('set record')
-  let partners = firebase.database().ref('partners');
-  let partner = partners.child('myKey').child('orders').child('orderId')
-    .set({
-      id: 'orderId'
-    });
-  console.log(partner.getKey())
 }
