@@ -25,10 +25,6 @@ export default class App extends React.Component {
     };
   }
 
-  _handleNotification = notification => {
-    console.log("notification of create order:", notification.request.content.data.order)
-  };
-
   async componentDidMount() {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
@@ -38,17 +34,8 @@ export default class App extends React.Component {
     this.setState({ isReady: true });
 
     registerForPushNotificationsAsync();
-    Notifications.addNotificationReceivedListener(this._handleNotification);
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: true,
-      }),
-    })
+
     await initializeFirebase();
-    setPartner();
-    setupOrderListener();
 
   }
   
@@ -100,6 +87,15 @@ registerForPushNotificationsAsync = async () => {
       lightColor: '#FF231F7C',
     });
   }
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  })
+  console.log('app.js 98')
 };
 
 function initializeFirebase() {

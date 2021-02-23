@@ -10,7 +10,6 @@ import NewOrderModal from '../../components/molecules/new-order-modal/new-order-
 import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/action/order-list';
 import {styles} from './style';
 import { OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
-import { set } from 'react-native-reanimated';
 import {useIsFocused} from '@react-navigation/native';
 
 

@@ -20,7 +20,8 @@ const ordersReducer = (state = initialState, action) => {
         case GET_ACCEPTANCE_ORDERS_TODAY: {
             
             const data = action.payload.data.data.orders;
-            
+
+            console.log('setAcceptance ' + data.length)
             return {...state, filterToDoList: data};
         }
 
