@@ -12,12 +12,19 @@ import CountdownTimer from '../../atoms/timer/timer'
 import {setModalVisible} from '../../../redux/action/modal';
 import {useSelector, useDispatch} from 'react-redux';
 import { setTrackingOrder } from '../../../firebase/realtime-database/creator';
+import { setOrderStatus } from "../../../redux/action/order-list";
+import { OrderStatus } from "../../../constance/constance";
+
 
 const NewOrderModal = (props) => {
 
     const newOrder = props.newOrder;
     const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
     const dispatch = useDispatch();
+
+    const handleAcceptOrder = () => {
+        dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
+    }
 
     const modalVisibleHandler = () => {
         dispatch(setModalVisible());
@@ -109,14 +116,14 @@ const NewOrderModal = (props) => {
                 </View>
             </Modal>
 
-            <TouchableHighlight
+            {/* <TouchableHighlight
                 style={styles.openButton}
                 onPress={() => {
                     modalVisibleHandler()
                 }}
-            >
+            > 
                 <Text style={styles.textStyle}>Show Modal</Text>
-            </TouchableHighlight>
+            </TouchableHighlight>*/}
         </View>
     );
 };

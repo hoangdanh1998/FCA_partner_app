@@ -1,12 +1,17 @@
 import { OrderStatus, SUCCESS } from "../../constance/constance";
 import fca from "../../service/fca-api/fca";
 
-
+//Get
 export const GET_ACCEPTANCE_ORDERS_TODAY = "GET_ACCEPTANCE_ORDERS_TODAY";
 export const GET_PREPARATION_ORDERS_TODAY = "GET_PREPARATION_ORDERS_TODAY";
 export const GET_READINESS_ORDERS_TODAY = "GET_READINESS_ORDERS_TODAY";
-export const SET_RECEPTION_ORDER = "SET_RECEPTION_ORDER";
 export const GET_ORDER_AFTER_UPDATE = "GET_ORDER_AFTER_UPDATE";
+
+//Set
+export const SET_RECEPTION_ORDER = "SET_RECEPTION_ORDER";
+export const SET_ACCEPTANCE_ORDER = "SET_ACCEPTANCE_ORDER";
+
+
 export const SEND_QR_CODE = "SEND_QR_CODE";
 
 export const getAcceptOrderToday = () => {
@@ -14,8 +19,7 @@ export const getAcceptOrderToday = () => {
         try {
             const response = await fca.get('/order', {
                 params: {
-                    createdDate:"2021-02-06",
-                    // status: "ACCEPTANCE"
+                    status: OrderStatus.ACCEPTANCE
                 }
             });
 
@@ -39,8 +43,7 @@ export const getPreparationOrderToday = () => {
         try {
             const response = await fca.get('/order', {
                 params: {
-                    createdDate:"2021-02-06"
-                    
+                    status: OrderStatus.PREPARATION
                 }
             });
 
@@ -64,7 +67,6 @@ export const getReadinessOrderToday = () => {
         try {
             const response = await fca.get('/order', {
                 params: {
-                    createdDate: "2021-02-23",
                     status:OrderStatus.READINESS     
                 }
             });
@@ -91,11 +93,20 @@ export const setOrderStatus = (id, status) => {
             if (response.data.meta.status !== SUCCESS) {
                 throw new Error("Something went wrong");
             }
+            console.log("response set status:", response);
             
-            dispatch({
-                type: SET_RECEPTION_ORDER,
-                payload: id
-            })
+            if(status === OrderStatus.RECEPTION) {
+                dispatch({
+                    type: SET_RECEPTION_ORDER,
+                    payload: id
+                })
+            } else if (status === OrderStatus.ACCEPTANCE) {
+                dispatch({
+                    type: SET_ACCEPTANCE_ORDER,
+                    payload: id
+                })
+            }
+            
         } catch (error) {
             
             throw error;
