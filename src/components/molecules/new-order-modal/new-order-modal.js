@@ -9,54 +9,30 @@ import {
 import { Body, Card, CardItem, List } from 'native-base'
 import { styles } from './style'
 import CountdownTimer from '../../atoms/timer/timer'
-import {setModalVisible} from '../../../redux/action/modal';
-import {useSelector, useDispatch} from 'react-redux';
-import { setTrackingOrder } from '../../../firebase/realtime-database/creator';
-import { setOrderStatus } from "../../../redux/action/order-list";
-import { OrderStatus } from "../../../constance/constance";
+import { useDispatch } from 'react-redux';
 import { withNavigation } from '@react-navigation/compat'
 
 
 const NewOrderModal = (props) => {
-
-    const newOrder = props.newOrder;
-    const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
-    const dispatch = useDispatch();
-
-    const modalVisibleHandler = async () => {
-        await dispatch(setModalVisible());
-    }
-    
-    const handleAcceptOrder = () => {
-        console.log('handle accept')
-        dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
-        setTrackingOrder(newOrder.id, 0);
-        console.log(modalVisibleState)
-        modalVisibleHandler()
-        console.log(modalVisibleState);
-        props.navigation.navigate('HOME');
-    }
-
-
-
+    console.log('modal')
+    const { newOrder, visible, handleAcceptOrder, handleRejectOrder } = props;
+    // const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
     return (
-        <View style={[styles.centeredView, styles.containerView]}>
 
-            {
-                modalVisibleState ?
-                    (<Modal
+        <View style={[styles.centeredView, styles.containerView]}>
+            <Modal
                 animationType="slide"
                 transparent={true}
-                visible={modalVisibleState}
+                visible={visible}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
                 }}
             >
-                <View style={[styles.centeredView, styles.containerView]}>
+                {newOrder ? (<View style={[styles.centeredView, styles.containerView]}>
                     <View style={styles.modalView}>
                         <CountdownTimer 
-                            modalVisible={modalVisibleState}
-                            changeModalVisible={modalVisibleHandler}
+                            modalVisible={visible}
+                            onComplete={handleAcceptOrder}
                         />
                         <View style={{ flexDirection:"row", justifyContent:"center", alignItems:"center", height: "20%"}}>
                             <Text
@@ -67,7 +43,7 @@ const NewOrderModal = (props) => {
                         <Text
                                 style={[styles.text, styles.boldText, {marginLeft:5}]}  
                             >
-                                {newOrder.customer.phone}
+                                {newOrder?.customer?.phone}
                             </Text>
                         </View>          
                         <Card style={{width:"80%"}}>
@@ -93,7 +69,7 @@ const NewOrderModal = (props) => {
                             <TouchableHighlight
                                 style={{...styles.button, backgroundColor:"#B85450"}}
                                 onPress={() => {
-                                    modalVisibleHandler()
+                                    handleRejectOrder()
                                 }}
                                 underlayColor={"#F8CECC"}
                                 activeOpacity={0.9}
@@ -103,10 +79,7 @@ const NewOrderModal = (props) => {
                             </Text>
                             </TouchableHighlight>
                             <TouchableHighlight
-                                onPress={() => {
-                                    modalVisibleHandler()
-                                    handleAcceptOrder()
-                                }}
+                                onPress={() => { handleAcceptOrder() }}
                                 underlayColor={"#D5E8D4"}
                                 activeOpacity={0.9}
                                 style={styles.button}
@@ -118,20 +91,13 @@ const NewOrderModal = (props) => {
                         </Body>
                     </View>
                 </View>
-                    </Modal>)
-                    : null}
-            {/* <TouchableHighlight
-                style={styles.openButton}
-                onPress={() => {
-                    modalVisibleHandler()
-                }}
-            > 
-                <Text style={styles.textStyle}>Show Modal</Text>
-            </TouchableHighlight>*/}
+                ) : null}
+
+            </Modal>
         </View>
     );
 };
 
 
 
-export default withNavigation(NewOrderModal);
+export default NewOrderModal;

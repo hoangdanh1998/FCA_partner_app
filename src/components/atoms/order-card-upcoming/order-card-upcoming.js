@@ -19,7 +19,7 @@ const OrderCardUpComing = (props) => {
   const [timeRemain, setTimeRemain] = useState(0);
   useEffect(() => {
     (async () => {
-      listenOrder('145b224b-77e9-4c46-8e48-5f9b9d1e0ecf', (timeRemain) => {
+      listenOrder(order.id, (timeRemain) => {
         setTimeRemain(timeRemain)
       })
     })();

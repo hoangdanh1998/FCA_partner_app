@@ -9,24 +9,20 @@ import { styles } from "./styles";
 import ErrorModal from "../../atoms/error-modal";
 import * as Notifications from 'expo-notifications';
 import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
-import { setModalVisible } from "../../../redux/action/modal";
+import { setOrderStatus } from '../../../redux/action/order-list';
+import { OrderStatus } from '../../../constance/constance'
+import { setTrackingOrder } from '../../../firebase/realtime-database/creator'
+const UpcomingTab = (props) => {
 
-
-const UpcomingTab = () => {
+  const dispatch = useDispatch();
+  
+  const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
+  const doingList = useSelector(state => state.orderList.filterDoingList);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-
-  const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
-  const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
   const [newOrder, setNewOrder] = useState({})
-
-  const modalVisibleHandler = () => {
-    dispatch(setModalVisible());
-}
-
-  const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
-  const doingList = useSelector(state => state.orderList.filterDoingList);
 
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
@@ -40,35 +36,32 @@ const UpcomingTab = () => {
     setIsLoading(false);
   },[dispatch, setError, setIsLoading])
 
-  const handleNotification = notification => {
-    setNewOrder(notification.request.content.data.order);
-    modalVisibleHandler();
-    
-}
+  Notifications.addNotificationReceivedListener((notification) => {
+      // console.log('hello')
+      setNewOrder(notification.request.content.data.order);
+    setVisible(true)
+  });
 
-Notifications.addNotificationReceivedListener(handleNotification);
-  
+  const handleRejectOrder = () => {
+    console.log('handle reject')
+    dispatch(setOrderStatus(newOrder.id, OrderStatus.REJECTION));
+    setVisible(false);
+
+  }
+
+  const handleAcceptOrder = async () => {
+    console.log('handle accept')
+    await dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
+    setTrackingOrder(newOrder.id, 0);
+    setVisible(false)
+    await dispatch(getAcceptOrderToday());
+  }
   useEffect(() => {
-    
     loadOrderList();
   }, [dispatch, loadOrderList]);
 
   if (error) {
     return (
-      // <View style={styles.centered}>
-      //   <Text style={styles.error_message}>Hiện tại hệ thống đang gặp vấn đề</Text>
-      //   <TouchableHighlight
-      //     onPress={loadOrderList}
-      //     underlayColor={"#D5E8D4"}
-      //     activeOpacity={0.9}
-      //     style={styles.button}
-      //   >
-      //     <Text style={[styles.text, styles.textButton, styles.boldText]}>
-      //       Thử lại
-      //     </Text>
-      //   </TouchableHighlight>
-      // </View>
-
       <ErrorModal
         loadOrderList = {() => loadOrderList()}
       />
@@ -85,7 +78,7 @@ Notifications.addNotificationReceivedListener(handleNotification);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
-      {!modalVisibleState ? null : <NewOrderModal newOrder={newOrder}/>}
+      <NewOrderModal newOrder={newOrder} handleAcceptOrder={handleAcceptOrder} handleRejectOrder={handleRejectOrder} visible={visible} />
       <View style={styles.switch_view}>
         <Left></Left>
         <Body style={styles.switch_container}>

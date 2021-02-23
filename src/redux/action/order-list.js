@@ -27,6 +27,7 @@ export const getAcceptOrderToday = () => {
                 throw new Error("Something went wrong");
             }
             
+            console.log(response)
             dispatch({
                 type: GET_ACCEPTANCE_ORDERS_TODAY,
                 payload: response

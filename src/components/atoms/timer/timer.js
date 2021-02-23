@@ -4,6 +4,7 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { COUNTDOWN_TIMER } from "../../../../src/constance/constance";
 
 const CountdownTimer = (props) => {
+  const { onComplete } = props;
   return (
     <CountdownCircleTimer
       isPlaying
@@ -11,7 +12,7 @@ const CountdownTimer = (props) => {
       size={80}
       strokeWidth={5}
       onComplete={() => {
-        { props.changeModalVisible(!props.modalVisible) };
+        { onComplete() };
     }}
       colors={[
         ["#82B366", 0.4],
