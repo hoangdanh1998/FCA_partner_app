@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
     Container,
     Content,
@@ -16,11 +16,20 @@ import {useDispatch} from 'react-redux';
 import { styles } from './style';
 import { sendQRCode } from '../../../redux/action/order-list';
 import {withNavigation} from '@react-navigation/compat';
+import { listenOrder } from '../../../firebase/realtime-database/listener';
+import { useEffect } from 'react'
 
 const OrderCardReady = (props) => {
     var order = props.order;
     const dispatch = useDispatch();
-
+    const [timeRemain, setTimeRemain] = useState(0);
+    useEffect(() => {
+        (async () => {
+            listenOrder('145b224b-77e9-4c46-8e48-5f9b9d1e0ecf', (timeRemain) => {
+                setTimeRemain(timeRemain);
+            })
+        })();
+    }, [])
 
     return (
         <Content padder>
@@ -32,15 +41,15 @@ const OrderCardReady = (props) => {
                             styles.title_font_size
                         ]}>{order.customer.phone}</Text>
                     </Left>
-                    {/* <Text
+                    <Text
                             style={
-                                order.estTime <= 10
+                            timeRemain <= 10
                                     ? styles.lateEstimation
                                     : styles.earlyEstimation
                             }
                         >
-                            {order.estTime} mins
-                    </Text> */}
+                        {timeRemain} mins
+                    </Text>
                     <Right></Right>
                 </CardItem>
                 <CardItem style={styles.cardBody} body bordered>

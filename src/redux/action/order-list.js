@@ -45,7 +45,7 @@ export const getPreparationOrderToday = () => {
             });
 
             if (response.data.meta.status !== SUCCESS) {
-                throw new Error("Somthing went wrong");
+                throw new Error("Something went wrong");
             }
 
             dispatch({
@@ -64,13 +64,13 @@ export const getReadinessOrderToday = () => {
         try {
             const response = await fca.get('/order', {
                 params: {
-                    createdDate:"2021-02-06",
+                    createdDate: "2021-02-23",
                     status:OrderStatus.READINESS     
                 }
             });
 
             if (response.data.meta.status !== SUCCESS) {
-                throw new Error("Somthing went wrong");
+                throw new Error("Something went wrong");
             }
 
             dispatch({
@@ -89,7 +89,7 @@ export const setOrderStatus = (id, status) => {
         try {
             const response = await fca.put(`/order/${id}/status`, { status });
             if (response.data.meta.status !== SUCCESS) {
-                throw new Error("Somthing went wrong");
+                throw new Error("Something went wrong");
             }
             
             dispatch({
@@ -112,7 +112,8 @@ export const getOrderAfterUpdate = (status) => {
 
 export const sendQRCode = (id) => {
     return async dispatch => {
-        
+        console.log('id' + 'id')
+
         try {
             const response = await fca.post(`/order/${id}/send-qrcode`, { 
                 params: {
@@ -120,7 +121,7 @@ export const sendQRCode = (id) => {
                 }
             });
             if (response.data.meta.status !== SUCCESS) {
-                throw new Error("Somthing went wrong");
+                throw new Error("Something went wrong");
             }
             
             dispatch({
