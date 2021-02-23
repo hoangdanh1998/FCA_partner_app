@@ -14,6 +14,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import { setTrackingOrder } from '../../../firebase/realtime-database/creator';
 import { setOrderStatus } from "../../../redux/action/order-list";
 import { OrderStatus } from "../../../constance/constance";
+import { withNavigation } from '@react-navigation/compat'
 
 
 const NewOrderModal = (props) => {
@@ -22,31 +23,34 @@ const NewOrderModal = (props) => {
     const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
     const dispatch = useDispatch();
 
-    const handleAcceptOrder = () => {
-        dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
-    }
-
-    const modalVisibleHandler = () => {
-        dispatch(setModalVisible());
+    const modalVisibleHandler = async () => {
+        await dispatch(setModalVisible());
     }
     
     const handleAcceptOrder = () => {
         console.log('handle accept')
+        dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
         setTrackingOrder(newOrder.id, 0);
+        console.log(modalVisibleState)
+        modalVisibleHandler()
+        console.log(modalVisibleState);
+        props.navigation.navigate('HOME');
     }
 
 
 
     return (
         <View style={[styles.centeredView, styles.containerView]}>
-            <Modal
+
+            {
+                modalVisibleState ?
+                    (<Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisibleState}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
                 }}
-
             >
                 <View style={[styles.centeredView, styles.containerView]}>
                     <View style={styles.modalView}>
@@ -114,8 +118,8 @@ const NewOrderModal = (props) => {
                         </Body>
                     </View>
                 </View>
-            </Modal>
-
+                    </Modal>)
+                    : null}
             {/* <TouchableHighlight
                 style={styles.openButton}
                 onPress={() => {
@@ -130,4 +134,4 @@ const NewOrderModal = (props) => {
 
 
 
-export default NewOrderModal;
+export default withNavigation(NewOrderModal);

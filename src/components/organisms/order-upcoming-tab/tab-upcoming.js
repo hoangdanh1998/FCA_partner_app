@@ -25,27 +25,8 @@ const UpcomingTab = () => {
     dispatch(setModalVisible());
 }
 
-
   const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
   const doingList = useSelector(state => state.orderList.filterDoingList);
-//   const newOrder = {
-//     phone: "0987654321",
-//     estTime: 30,
-//     status: "acceptance",
-//     items: [
-//         {
-//             name: "Chocolate",
-//             quantity: 1,
-//             price: 15000
-//         },
-//         {
-//             name: "Expresso",
-//             quantity: 1,
-//             price: 15000
-//         },
-//     ]
-// };
-
 
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);

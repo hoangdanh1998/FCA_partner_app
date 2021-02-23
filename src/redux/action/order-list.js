@@ -93,7 +93,6 @@ export const setOrderStatus = (id, status) => {
             if (response.data.meta.status !== SUCCESS) {
                 throw new Error("Something went wrong");
             }
-            console.log("response set status:", response);
             
             if(status === OrderStatus.RECEPTION) {
                 dispatch({
