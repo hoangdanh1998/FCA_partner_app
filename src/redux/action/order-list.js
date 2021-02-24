@@ -10,6 +10,10 @@ export const GET_ORDER_AFTER_UPDATE = "GET_ORDER_AFTER_UPDATE";
 //Set
 export const SET_RECEPTION_ORDER = "SET_RECEPTION_ORDER";
 export const SET_ACCEPTANCE_ORDER = "SET_ACCEPTANCE_ORDER";
+export const SET_PREPARATION_ORDER = "SET_PREPARATION_ORDER";
+export const SET_READINESS_ORDER = "SET_READINESS_ORDER";
+
+
 
 
 export const SEND_QR_CODE = "SEND_QR_CODE";
@@ -94,6 +98,7 @@ export const setOrderStatus = (id, status) => {
             if (response.data.meta.status !== SUCCESS) {
                 throw new Error("Something went wrong");
             }
+            // console.log(response);
             
             if(status === OrderStatus.RECEPTION) {
                 dispatch({
@@ -103,6 +108,16 @@ export const setOrderStatus = (id, status) => {
             } else if (status === OrderStatus.ACCEPTANCE) {
                 dispatch({
                     type: SET_ACCEPTANCE_ORDER,
+                    payload: id
+                })
+            } else if (status === OrderStatus.PREPARATION) {
+                dispatch({
+                    type: SET_PREPARATION_ORDER,
+                    payload: id
+                })
+            } else if (status === OrderStatus.READINESS) {
+                dispatch({
+                    type: SET_READINESS_ORDER,
                     payload: id
                 })
             }

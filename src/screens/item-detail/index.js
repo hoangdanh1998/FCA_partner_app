@@ -4,38 +4,38 @@ import yelp from '../../service/yelp-api/yelp';
 
 
 const ResultShowScreen = ({route}) => {
-    const id = route.params?.id;
-    const [result, setResult] = useState(null);
+    // const id = route.params?.id;
+    // const [result, setResult] = useState(null);
 
-    const getResult = async id => {
-        const response = await yelp.get(`/${id}`);
-        setResult(response.data);
-    };
+    // const getResult = async id => {
+    //     const response = await yelp.get(`/${id}`);
+    //     setResult(response.data);
+    // };
 
-    useEffect(() => {
-        getResult(id);
-    }, [])
+    // useEffect(() => {
+    //     getResult(id);
+    // }, [])
 
-    if (!result) {
-        return null;
-    }
+    // if (!result) {
+    //     return null;
+    // }
 
-    return (
-        <View>
-            <Text>{result.name}</Text>
-            <FlatList 
-                horizontal
-                data= {result.photos}
-                keyExtractor = {photo => photo}
-                style = {styles.listPhoto}
-                renderItem = {({item}) => {
-                    return (
-                        <Image style={styles.image} source = {{uri: item}}/>
-                    );
-                }}
-            />
-        </View>
-    );
+    // return (
+    //     <View>
+    //         <Text>{result.name}</Text>
+    //         <FlatList 
+    //             horizontal
+    //             data= {result.photos}
+    //             keyExtractor = {photo => photo}
+    //             style = {styles.listPhoto}
+    //             renderItem = {({item}) => {
+    //                 return (
+    //                     <Image style={styles.image} source = {{uri: item}}/>
+    //                 );
+    //             }}
+    //         />
+    //     </View>
+    // );
 };
 
 const styles = StyleSheet.create({

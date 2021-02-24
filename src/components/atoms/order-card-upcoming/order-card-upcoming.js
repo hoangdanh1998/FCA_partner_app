@@ -10,20 +10,28 @@ import {
   Icon,
 } from "native-base";
 import { styles } from "./styles";
-import { SafeAreaView } from 'react-native'
 import { listenOrder } from '../../../firebase/realtime-database/listener';
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react';
+import { setOrderStatus } from "../../../redux/action/order-list";
+import { OrderStatus } from "../../../constance/constance";
+import {useDispatch} from 'react-redux'
+import {withNavigation} from '@react-navigation/compat'
+
 
 const OrderCardUpComing = (props) => {
   var order = props.order;
   const [timeRemain, setTimeRemain] = useState(0);
-  useEffect(() => {
-    (async () => {
-      listenOrder(order.id, (timeRemain) => {
-        setTimeRemain(timeRemain)
-      })
-    })();
-  }, [])
+  // useEffect(() => {
+  //   // (async () => {
+  //   //   listenOrder(order.id, (timeRemain) => {
+  //   //     setTimeRemain(timeRemain)
+  //   //   })
+  //   // })();
+  // }, [])
+
+  const dispatch = useDispatch();
+  const handleUpdateStatus = props.handleUpdateStatus ;
+  
     
   return (
     <Content>
@@ -67,7 +75,7 @@ const OrderCardUpComing = (props) => {
           <Right>
             <Icon
               button
-              onPress={() => alert("This is Card Header")}
+              onPress={() => handleUpdateStatus(props.status, order.id)}
               android={
                 order.status == "acceptance"
                   ? "md-arrow-forward"
@@ -83,4 +91,4 @@ const OrderCardUpComing = (props) => {
   );
 };
 
-export default OrderCardUpComing;
+export default withNavigation(OrderCardUpComing);

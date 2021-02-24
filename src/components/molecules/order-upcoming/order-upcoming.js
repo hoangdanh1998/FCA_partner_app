@@ -14,6 +14,8 @@ import OrderCardUpComing from "../../atoms/order-card-upcoming/order-card-upcomi
 import { SafeAreaView} from 'react-native'
 
 const OrderUpcoming = (props) => {
+
+  // console.log("props of order card up comming",props);
   var orderList = props.orderList;
   if (orderList.length === 0) {
     return (
@@ -46,7 +48,7 @@ const OrderUpcoming = (props) => {
           <List
             keyExtractor={orderList.id}
             dataArray={orderList}
-            renderRow={(order) => <OrderCardUpComing order={order} />}
+            renderRow={(order) => <OrderCardUpComing order={order} status = {props.status} handleUpdateStatus={props.handleUpdateStatus}/>}
           />
 
 

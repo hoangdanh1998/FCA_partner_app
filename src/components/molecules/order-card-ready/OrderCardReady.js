@@ -23,13 +23,13 @@ const OrderCardReady = (props) => {
     var order = props.order;
     const dispatch = useDispatch();
     const [timeRemain, setTimeRemain] = useState(0);
-    useEffect(() => {
-        (async () => {
-            listenOrder(order.id, (timeRemain) => {
-                setTimeRemain(timeRemain);
-            })
-        })();
-    }, [])
+    // useEffect(() => {
+    //     (async () => {
+    //         listenOrder(order.id, (timeRemain) => {
+    //             setTimeRemain(timeRemain);
+    //         })
+    //     })();
+    // }, [])
 
     return (
         <Content padder>
@@ -48,7 +48,7 @@ const OrderCardReady = (props) => {
                                     : styles.earlyEstimation
                             }
                         >
-                        {timeRemain} mins
+                        {order.status == "arrived" ? "" : `${timeRemain} mins`}
                     </Text>
                     <Right></Right>
                 </CardItem>

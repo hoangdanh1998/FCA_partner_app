@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, ActivityIndicator, TouchableHighlight } from "react-native";
 import { Switch, Text, Left, Right, Body } from "native-base";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useMemo } from 'react-redux';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { PRIMARY_COLOR } from "../../../constance/constance";
-import { getAcceptOrderToday, getPreparationOrderToday } from "../../../redux/action/order-list";
+import { getAcceptOrderToday, getOrderAfterUpdate, getPreparationOrderToday } from "../../../redux/action/order-list";
 import { styles } from "./styles";
 import ErrorModal from "../../atoms/error-modal";
 import * as Notifications from 'expo-notifications';
@@ -12,10 +12,13 @@ import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
 import { setOrderStatus } from '../../../redux/action/order-list';
 import { OrderStatus } from '../../../constance/constance'
 import { setTrackingOrder } from '../../../firebase/realtime-database/creator'
+import { useIsFocused } from '@react-navigation/native';
+
+
 const UpcomingTab = (props) => {
 
   const dispatch = useDispatch();
-  
+
   const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
   const doingList = useSelector(state => state.orderList.filterDoingList);
 
@@ -23,10 +26,12 @@ const UpcomingTab = (props) => {
   const [error, setError] = useState();
   const [visible, setVisible] = useState(false);
   const [newOrder, setNewOrder] = useState({})
+  const isFocused = useIsFocused();
 
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
     try {
+      setError();
       await dispatch(getAcceptOrderToday());
       await dispatch(getPreparationOrderToday());
     } catch (error) {
@@ -34,20 +39,36 @@ const UpcomingTab = (props) => {
     }
 
     setIsLoading(false);
-  },[dispatch, setError, setIsLoading])
+  }, [dispatch, setError, setIsLoading])
+
+  // React.useMemo(() => {
+  //   dispatch(getOrderAfterUpdate(OrderStatus.PREPARATION));
+  // }, [doingList])
 
   Notifications.addNotificationReceivedListener((notification) => {
-      // console.log('hello')
-      setNewOrder(notification.request.content.data.order);
+    // console.log('hello')
+    setNewOrder(notification.request.content.data.order);
     setVisible(true)
   });
 
   const handleRejectOrder = () => {
-    console.log('handle reject')
+    // console.log('handle reject')
     dispatch(setOrderStatus(newOrder.id, OrderStatus.REJECTION));
     setVisible(false);
 
   }
+
+  const handleUpdateStatus = useCallback(
+    async (status, id) => {
+      // console.log("todo");
+      if (status === "to-do") {
+        await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+      } else {
+        await dispatch(setOrderStatus(id, OrderStatus.READINESS));
+      }
+
+    }
+  )
 
   const handleAcceptOrder = async () => {
     console.log('handle accept')
@@ -63,7 +84,7 @@ const UpcomingTab = (props) => {
   if (error) {
     return (
       <ErrorModal
-        loadOrderList = {() => loadOrderList()}
+        loadOrderList={() => loadOrderList()}
       />
     )
   }
@@ -88,9 +109,9 @@ const UpcomingTab = (props) => {
         <Right />
       </View>
       <View style={styles.order_view}>
-        
-        <OrderUpcoming orderList={toDoOrderList} status="to-do" />
-        <OrderUpcoming orderList={doingList} status="doing" />
+
+        <OrderUpcoming handleUpdateStatus = {handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
+        <OrderUpcoming handleUpdateStatus = {handleUpdateStatus} orderList={doingList} status="doing" />
       </View>
     </View>
   );

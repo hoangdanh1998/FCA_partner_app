@@ -14,7 +14,7 @@ import { withNavigation } from '@react-navigation/compat'
 
 
 const NewOrderModal = (props) => {
-    console.log('modal')
+    // console.log('modal')
     const { newOrder, visible, handleAcceptOrder, handleRejectOrder } = props;
     // const modalVisibleState = useSelector(state => state.modalVisible.modalVisible);
     return (
