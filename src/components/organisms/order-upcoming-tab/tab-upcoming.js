@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, ActivityIndicator, TouchableHighlight } from "react-native";
-import { Switch, Text, Left, Right, Body } from "native-base";
+import { Switch, Text, Left, Right, Body, Toast } from "native-base";
 import { useSelector, useDispatch, useMemo } from 'react-redux';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
-import { PRIMARY_COLOR } from "../../../constance/constance";
+import { PRIMARY_COLOR, TOAST_SUCCESS_MESSAGE, TOAST_FAIL_MESSAGE } from "../../../constance/constance";
 import { getAcceptOrderToday, getOrderAfterUpdate, getPreparationOrderToday } from "../../../redux/action/order-list";
 import { styles } from "./styles";
 import ErrorModal from "../../atoms/error-modal";
@@ -60,13 +60,26 @@ const UpcomingTab = (props) => {
 
   const handleUpdateStatus = useCallback(
     async (status, id) => {
-      // console.log("todo");
-      if (status === "to-do") {
-        await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
-      } else {
-        await dispatch(setOrderStatus(id, OrderStatus.READINESS));
-      }
+      try {
+        if (status === "to-do") {
+          await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+        } else {
+          await dispatch(setOrderStatus(id, OrderStatus.READINESS));
+        }
+        Toast.show({
+          text: TOAST_SUCCESS_MESSAGE,
+          buttonText: "OK",
+          type: "success"
+        })
 
+      } catch (error) {
+        Toast.show({
+          text: TOAST_FAIL_MESSAGE,
+          buttonText: "OK",
+          type: "warning"
+        })
+      }
+      // console.log("todo");
     }
   )
 
@@ -110,8 +123,8 @@ const UpcomingTab = (props) => {
       </View>
       <View style={styles.order_view}>
 
-        <OrderUpcoming handleUpdateStatus = {handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
-        <OrderUpcoming handleUpdateStatus = {handleUpdateStatus} orderList={doingList} status="doing" />
+        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
+        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
       </View>
     </View>
   );

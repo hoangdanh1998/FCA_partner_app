@@ -30,3 +30,8 @@ export const OrderStatus = {
     RECEPTION: "RECEPTION",
     WAIT: "WAIT",
 };
+
+///message
+
+export const TOAST_SUCCESS_MESSAGE = "Cập nhật thành công";
+export const TOAST_FAIL_MESSAGE = "Cập nhật thất bại";
