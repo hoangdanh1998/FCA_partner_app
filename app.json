@@ -4,11 +4,11 @@
     "slug": "FCA_Partner",
     "version": "1.0.0",
     "orientation": "landscape",
-    "icon": "./src/assets/icon.png",
+    "icon": "./assets/fast-coffee-img-logo.png",
     "splash": {
-      "image": "./src/assets/splash.png",
+      "image": "./assets/fast-coffee-img-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#e6d7ab"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,15 +21,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "foregroundImage": "./assets/fast-coffee-img-logo.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "notification": {
-      "icon": "./src/assets/icon.png"
+      "icon": "./assets/fast-coffee-img-logo.png"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "./assets/fast-coffee-img-logo.png"
     }
   }
 }
