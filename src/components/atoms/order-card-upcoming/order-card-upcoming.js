@@ -11,28 +11,50 @@ import {
 } from "native-base";
 import { styles } from "./styles";
 import { listenOrder } from '../../../firebase/realtime-database/listener';
-import { useEffect, useCallback } from 'react';
-import { setOrderStatus } from "../../../redux/action/order-list";
-import { OrderStatus } from "../../../constance/constance";
-import {useDispatch} from 'react-redux'
-import {withNavigation} from '@react-navigation/compat'
+import { useEffect } from 'react';
+
+
+
 
 
 const OrderCardUpComing = (props) => {
-  var order = props.order;
-  const [timeRemain, setTimeRemain] = useState(0);
-  // useEffect(() => {
-  //   // (async () => {
-  //   //   listenOrder(order.id, (timeRemain) => {
-  //   //     setTimeRemain(timeRemain)
-  //   //   })
-  //   // })();
-  // }, [])
 
-  const dispatch = useDispatch();
-  const handleUpdateStatus = props.handleUpdateStatus ;
-  
+  const handleUpdateStatus = props.handleUpdateStatus;
+  const order = props.order;
+
+  const [timeRemain, setTimeRemain] = useState(0);
+  useEffect(() => {
+    (async () => {
+      listenOrder(order.id, (timeRemain) => {
+        handleUpdateStatusWithTime(timeRemain);
+        setTimeRemain(timeRemain);
+      })
+    })();
+  }, [])
+
+
+  const handleUpdateStatusWithTime = (timeRemain) => {
     
+    if (props.status == "to-do") {
+      if(timeRemain === 0){
+        
+        return;
+      }
+      timeRemain += "";
+      const arrTimeString = timeRemain.split(" ");
+      console.log("arr of status with time", arrTimeString);
+      const time = parseInt(arrTimeString[0]);
+      console.log("Time: ", time);
+      if (time <= 7) {
+        console.log(123);
+        handleUpdateStatus(props.status, order.id);
+      }
+    }
+
+  }
+
+
+
   return (
     <Content>
       <Card style={styles.card}>
@@ -53,24 +75,22 @@ const OrderCardUpComing = (props) => {
         </CardItem>
         <CardItem style={styles.cardBody} body bordered>
           <Left>
-            
-              <List
-                style={styles.list}
-                dataArray={order.items}
-                keyExtractor={order.items.id}
-                renderRow={(item) => (
-                  <CardItem style={styles.list}>
-                    <Left>
-                      <Text style={styles.itemText}>{item.name}</Text>
-                    </Left>
-                    <Right>
-                      <Text style={styles.itemText}>{item.quantity}</Text>
-                    </Right>
-                  </CardItem>
-                )}
-              />
-            
 
+            <List
+              style={styles.list}
+              dataArray={order.items}
+              keyExtractor={order.items.id}
+              renderRow={(item) => (
+                <CardItem style={styles.list}>
+                  <Left>
+                    <Text style={styles.itemText}>{item.name}</Text>
+                  </Left>
+                  <Right>
+                    <Text style={styles.itemText}>{item.quantity}</Text>
+                  </Right>
+                </CardItem>
+              )}
+            />
           </Left>
           <Right>
             <Icon
@@ -91,4 +111,4 @@ const OrderCardUpComing = (props) => {
   );
 };
 
-export default withNavigation(OrderCardUpComing);
+export default OrderCardUpComing;
