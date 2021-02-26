@@ -112,7 +112,7 @@ const UpcomingTab = (props) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
-      <NewOrderModal newOrder={newOrder} handleAcceptOrder={handleAcceptOrder} handleRejectOrder={handleRejectOrder} visible={visible} />
+      {visible ? <NewOrderModal newOrder={newOrder} handleAcceptOrder={handleAcceptOrder} handleRejectOrder={handleRejectOrder} visible={visible} /> : null }
       <View style={styles.switch_view}>
         <Left></Left>
         <Body style={styles.switch_container}>
