@@ -42,11 +42,11 @@ const OrderCardUpComing = (props) => {
       }
       timeRemain += "";
       const arrTimeString = timeRemain.split(" ");
-      console.log("arr of status with time", arrTimeString);
+      
       const time = parseInt(arrTimeString[0]);
-      console.log("Time: ", time);
+      
       if (time <= 7) {
-        console.log(123);
+        
         handleUpdateStatus(props.status, order.id);
       }
     }
