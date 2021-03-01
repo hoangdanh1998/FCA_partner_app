@@ -1,21 +1,8 @@
-import React, { useState } from "react";
-import {
-  Content,
-  Card,
-  CardItem,
-  Text,
-  List,
-  Left,
-  Right,
-  Icon,
-} from "native-base";
-import { styles } from "./styles";
+import { Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
+import React, { useEffect, useState } from "react";
+import { TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/realtime-database/listener';
-import { useEffect } from 'react';
-
-
-
-
+import { styles } from "./styles";
 
 const OrderCardUpComing = (props) => {
 
@@ -45,15 +32,12 @@ const OrderCardUpComing = (props) => {
       console.log("arr of status with time", arrTimeString);
       const time = parseInt(arrTimeString[0]);
       console.log("Time: ", time);
-      if (time <= 7) {
-        console.log(123);
+      if (time <= TimeRemainTo.PREPARATION) {
         handleUpdateStatus(props.status, order.id);
       }
     }
 
   }
-
-
 
   return (
     <Content>
@@ -69,7 +53,7 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {timeRemain} mins
+            {timeRemain}
           </Text>
           <Right></Right>
         </CardItem>

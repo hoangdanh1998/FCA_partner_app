@@ -1,6 +1,10 @@
 export const PRIMARY_COLOR = "#fcf7e1";
 export const BACKGROUND_COLOR = "#603a18";
 
+export const TimeRemainTo = {
+  PREPARATION: 7,
+  ARRIVAL: 2,
+}
 /**
  * font size
  */

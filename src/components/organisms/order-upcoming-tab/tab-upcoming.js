@@ -11,7 +11,6 @@ import * as Notifications from 'expo-notifications';
 import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
 import { setOrderStatus } from '../../../redux/action/order-list';
 import { OrderStatus } from '../../../constance/constance'
-import { setTrackingOrder } from '../../../firebase/realtime-database/creator'
 import { useIsFocused } from '@react-navigation/native';
 
 
@@ -46,13 +45,11 @@ const UpcomingTab = (props) => {
   // }, [doingList])
 
   Notifications.addNotificationReceivedListener((notification) => {
-    // console.log('hello')
     setNewOrder(notification.request.content.data.order);
     setVisible(true)
   });
 
   const handleRejectOrder = () => {
-    // console.log('handle reject')
     dispatch(setOrderStatus(newOrder.id, OrderStatus.REJECTION));
     setVisible(false);
 
@@ -86,7 +83,6 @@ const UpcomingTab = (props) => {
   const handleAcceptOrder = async () => {
     console.log('handle accept')
     await dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
-    setTrackingOrder(newOrder.id, 0);
     setVisible(false)
     await dispatch(getAcceptOrderToday());
   }
