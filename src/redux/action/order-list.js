@@ -16,6 +16,8 @@ export const SET_READINESS_ORDER = "SET_READINESS_ORDER";
 export const SET_ARRIVAL_ORDER = "SET_ARRIVAL_ORDER";
 
 
+export const SEARCH_READY_LIST = "SEARCH_READY_LIST";
+
 
 
 export const SEND_QR_CODE = "SEND_QR_CODE";
@@ -194,5 +196,12 @@ export const sendQRCode = (id) => {
         } catch (error) {
             throw error;
         }        
+    }
+}
+
+export const searchReadyList = (numberPhone) => {
+    return {
+        type: SEARCH_READY_LIST,
+        payload: numberPhone
     }
 }

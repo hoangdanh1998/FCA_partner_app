@@ -44,14 +44,11 @@ const OrderUpcoming = (props) => {
         </CardItem>
       </Card>
       <Content padder>
-
           <List
             keyExtractor={orderList.id}
             dataArray={orderList}
             renderRow={(order) => <OrderCardUpComing order={order} status = {props.status} handleUpdateStatus={props.handleUpdateStatus}/>}
           />
-
-
       </Content>
     </Container>
   );

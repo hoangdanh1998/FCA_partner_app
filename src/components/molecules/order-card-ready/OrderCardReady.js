@@ -20,7 +20,8 @@ import { listenOrder } from '../../../firebase/realtime-database/listener';
 import { useEffect } from 'react'
 
 const OrderCardReady = (props) => {
-    var order = props.order;
+    var order = props.order?.item;
+    console.log("order card", order);
     const dispatch = useDispatch();
     const [timeRemain, setTimeRemain] = useState(0);
     // useEffect(() => {
@@ -58,7 +59,7 @@ const OrderCardReady = (props) => {
                             
                             <List
                                 style={styles.list}
-                                keyExtractor={order.items.id}
+                                // keyExtractor={order.items.id}
                                 dataArray={order.items}
                                 renderRow={(item) => (
                                     <CardItem>

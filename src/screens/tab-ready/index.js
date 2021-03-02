@@ -7,7 +7,7 @@ import { ActivityIndicator, Text } from 'react-native'
 import TabReady from '../../components/organisms/tab-ready/tab-ready';
 import SearchBar from '../../components/atoms/search-bar/search-bar';
 import NewOrderModal from '../../components/molecules/new-order-modal/new-order-modal';
-import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/action/order-list';
+import { getOrderAfterUpdate, getReadinessOrderToday, searchReadyList } from '../../redux/action/order-list';
 import {styles} from './style';
 import { EMPTY_LIST_MESSAGE, OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
 import {useIsFocused} from '@react-navigation/native';
@@ -33,6 +33,8 @@ const TabReadyScreen = () => {
         ]
     };
     const orderList = useSelector(state => state.orderList.filterReadyList);
+    const searchOrderList = useSelector(state => state.orderList.filterSearchOrderList);
+    console.log("filter ", searchOrderList);
 
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
@@ -44,7 +46,10 @@ const TabReadyScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
 
-    
+    const handleSearchOrderList = (phone) => {
+        dispatch(searchReadyList(phone));
+        
+    }
 
     const loadOrderList = useCallback(async () => {
         setIsLoading(true);
@@ -59,7 +64,8 @@ const TabReadyScreen = () => {
 
     useEffect(() => {
         
-        loadOrderList();
+        // loadOrderList();
+        dispatch(getOrderAfterUpdate())
 
     }, [dispatch, loadOrderList]);
 
@@ -81,11 +87,11 @@ const TabReadyScreen = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: "#ffff" }}>
-            <SearchBar />
+            <SearchBar handleSearchOrderList = {handleSearchOrderList}/>
             {/* <NewOrderModal
                 newOrder={newOrder}
             /> */}
-            <TabReady toDoOrderList={orderList} />
+            <TabReady toDoOrderList={searchOrderList} />
         </View>
     );
 }
