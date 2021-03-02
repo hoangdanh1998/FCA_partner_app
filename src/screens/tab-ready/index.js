@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { View } from 'native-base';
 import { useSelector, useDispatch } from 'react-redux';
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, Text } from 'react-native'
 
 
 import TabReady from '../../components/organisms/tab-ready/tab-ready';
@@ -9,7 +9,7 @@ import SearchBar from '../../components/atoms/search-bar/search-bar';
 import NewOrderModal from '../../components/molecules/new-order-modal/new-order-modal';
 import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/action/order-list';
 import {styles} from './style';
-import { OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
+import { EMPTY_LIST_MESSAGE, OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
 import {useIsFocused} from '@react-navigation/native';
 
 
@@ -71,9 +71,16 @@ const TabReadyScreen = () => {
         )
     };
 
+    if (orderList.length === 0) {
+        return (
+            <View style={{flex: 1}, styles.centered}>
+                <Text style ={styles.message}>{EMPTY_LIST_MESSAGE}</Text>
+            </View>
+        )
+    }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: "#ffff" }}>
             <SearchBar />
             {/* <NewOrderModal
                 newOrder={newOrder}

@@ -1,5 +1,6 @@
 import { 
     GET_ACCEPTANCE_ORDERS_TODAY, 
+    GET_ARRIVAL_ORDER_TODAY, 
     GET_ORDER_AFTER_UPDATE, 
     GET_PREPARATION_ORDERS_TODAY, 
     GET_READINESS_ORDERS_TODAY, 
@@ -14,7 +15,8 @@ const initialState = {
     orderLists: [],
     filterToDoList: [],
     filterDoingList: [],
-    filterReadyList: []
+    filterReadyList: [],
+    filterArrivalList: []
 };
 
 const ordersReducer = (state = initialState, action) => {
@@ -33,9 +35,15 @@ const ordersReducer = (state = initialState, action) => {
         }
 
         case GET_READINESS_ORDERS_TODAY: {
-            const data = action.payload.data.data.orders;
+            const data = [...action.responseReady.data.data.orders, ...action.responseArrival.data.data.orders];
 
             return {...state, filterReadyList: data};
+        }
+
+        case GET_ARRIVAL_ORDER_TODAY: {
+            const data = action.payload.data.data.orders;
+
+            return {...state, filterArrivalList: data};
         }
 
         case SET_RECEPTION_ORDER: {
