@@ -22,17 +22,18 @@ const TabReady = (props) => {
     })
 
     return (
-            // <View style={{flex: 1}}>
-            //     {/* <List> */}
-            //     <FlatList
-            //         // keyExtractor={(item) => item.index}
-            //         data={tmp}
-            //         renderItem = {(item) => <OrderCardReady order = {item}/>}
-            //     />
-            //     {/* </List> */}
+            <View style={{flex: 1}}>
+                {/* <List> */}
+                <FlatList
+                    // keyExtractor={(item) => item.index}
+                    data={tmp}
+                    renderItem = {(item) => <OrderCardReady order = {item}/>}
+                    refreshing = {true}
+                />
+                {/* </List> */}
                 
-            // </View>
-                handle()
+            </View>
+                
 
 
     );
