@@ -6,6 +6,8 @@ export const BACKGROUND_COLOR = "#603a18";
  */
 export const HEADER_FONT_SIZE = 20;
 
+export const TITLE_FONT_SIZE = 18;
+
 /**
  * timer
  */

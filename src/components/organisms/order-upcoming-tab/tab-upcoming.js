@@ -12,6 +12,7 @@ import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
 import { setOrderStatus } from '../../../redux/action/order-list';
 import { OrderStatus } from '../../../constance/constance'
 import { setTrackingOrder } from '../../../firebase/realtime-database/creator'
+import InitOrderModal from '../../molecules/modal/index';
 import { useIsFocused } from '@react-navigation/native';
 
 
@@ -94,39 +95,47 @@ const UpcomingTab = (props) => {
     loadOrderList();
   }, [dispatch, loadOrderList]);
 
-  if (error) {
-    return (
-      <ErrorModal
-        loadOrderList={() => loadOrderList()}
-      />
-    )
-  }
+  // if (error) {
+  //   return (
+  //     <ErrorModal
+  //       loadOrderList={() => loadOrderList()}
+  //     />
+      
+  //   )
+  // }
 
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={PRIMARY_COLOR} />
-      </View>
-    )
-  };
+  // if (isLoading) {
+  //   return (
+  //     <View style={styles.centered}>
+  //       <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+  //     </View>
+  //   )
+  // };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
-      <NewOrderModal newOrder={newOrder} handleAcceptOrder={handleAcceptOrder} handleRejectOrder={handleRejectOrder} visible={visible} />
-      <View style={styles.switch_view}>
-        <Left></Left>
-        <Body style={styles.switch_container}>
-          <Switch style={styles.switch} />
-          <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
-        </Body>
-        <Right />
-      </View>
-      <View style={styles.order_view}>
+    // <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
+    //   <NewOrderModal
+    //     newOrder={newOrder}
+    //     handleAcceptOrder={handleAcceptOrder}
+    //     handleRejectOrder={handleRejectOrder}
+    //     visible={visible}
+    //   />
+      
+    //   <View style={styles.switch_view}>
+    //     <Left></Left>
+    //     <Body style={styles.switch_container}>
+    //       <Switch style={styles.switch} />
+    //       <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
+    //     </Body>
+    //     <Right />
+    //   </View>
+    //   <View style={styles.order_view}>
 
-        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
-        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
-      </View>
-    </View>
+    //     <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
+    //     <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
+    //   </View>
+    // </View>
+    <InitOrderModal />
   );
 };
 
