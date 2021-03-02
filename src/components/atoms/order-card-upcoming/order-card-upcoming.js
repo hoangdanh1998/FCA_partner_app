@@ -1,7 +1,7 @@
 import { Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
 import { TimeRemainTo } from '../../../constance/constance';
-import { listenOrder } from '../../../firebase/realtime-database/listener';
+import { listenOrder } from '../../../firebase/firebase-realtime';
 import { styles } from "./styles";
 
 const OrderCardUpComing = (props) => {
