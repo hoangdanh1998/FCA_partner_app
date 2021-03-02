@@ -1,23 +1,9 @@
+import { withNavigation } from '@react-navigation/compat';
+import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useState } from "react";
-import {
-    Container,
-    Content,
-    Text,
-    Left,
-    Body,
-    Right,
-    Button,
-    Card,
-    CardItem,
-    List,
-    Icon
-} from 'native-base';
-import {useDispatch} from 'react-redux';
-import { styles } from './style';
+import { useDispatch } from 'react-redux';
 import { sendQRCode } from '../../../redux/action/order-list';
-import {withNavigation} from '@react-navigation/compat';
-import { listenOrder } from '../../../firebase/realtime-database/listener';
-import { useEffect } from 'react'
+import { styles } from './style';
 
 const OrderCardReady = (props) => {
     var order = props.order;

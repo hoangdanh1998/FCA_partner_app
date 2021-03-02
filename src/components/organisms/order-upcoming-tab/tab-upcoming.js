@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { View, ActivityIndicator, TouchableHighlight } from "react-native";
-import { Switch, Text, Left, Right, Body, Toast } from "native-base";
-import { useSelector, useDispatch, useMemo } from 'react-redux';
-import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
-import { PRIMARY_COLOR, TOAST_SUCCESS_MESSAGE, TOAST_FAIL_MESSAGE } from "../../../constance/constance";
-import { getAcceptOrderToday, getOrderAfterUpdate, getPreparationOrderToday } from "../../../redux/action/order-list";
-import { styles } from "./styles";
-import ErrorModal from "../../atoms/error-modal";
-import * as Notifications from 'expo-notifications';
-import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
-import { setOrderStatus } from '../../../redux/action/order-list';
-import { OrderStatus } from '../../../constance/constance'
 import { useIsFocused } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
+import { Body, Left, Right, Switch, Text, Toast } from "native-base";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
+import { OrderStatus, PRIMARY_COLOR, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
+import { listenInComingOrder } from '../../../firebase/firebase-realtime';
+import { getAcceptOrderToday, getPreparationOrderToday, setOrderStatus } from "../../../redux/action/order-list";
+import ErrorModal from "../../atoms/error-modal";
+import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
+import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
+import { styles } from "./styles";
+
 
 
 const UpcomingTab = (props) => {
@@ -88,6 +88,11 @@ const UpcomingTab = (props) => {
   }
   useEffect(() => {
     loadOrderList();
+    (() => {
+      listenInComingOrder('0440ef59-6c90-4630-8be4-553533e45591', (listOrder) => {
+        Object.values(listOrder)
+      })
+    })();
   }, [dispatch, loadOrderList]);
 
   if (error) {
