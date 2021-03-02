@@ -1,10 +1,8 @@
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from '../screens/items';
-import TabReadyScreen from '../screens/tab-ready';
-import QRCode from '../components/atoms/qr-code/qr-code';
+import React from 'react';
 import { MyHeader } from '../components/atoms/header/Header';
+import QRCode from '../components/atoms/qr-code/qr-code';
 
 const HeaderStack = createStackNavigator();
 

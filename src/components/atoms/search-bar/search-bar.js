@@ -1,24 +1,18 @@
-import React, {useState} from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { Body, Button, Text } from 'native-base';
+import React from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {Button, Text, Body} from 'native-base';
-import {BACKGROUND_COLOR, HEADER_FONT_SIZE} from '../../../constance/constance'
+import { BACKGROUND_COLOR, HEADER_FONT_SIZE } from '../../../constance/constance';
 
 const SearchBar = (props) => {
-    const [phone, setPhone] = useState('');
-    const handelSearchReadyList = (phone) => {
-        setPhone(phone);
-        props.handleSearchOrderList(phone);
-    }
+    const { handelSearchReadyList } = props;
     return (
         <View style={styles.view_background}>
             <View style={styles.background}>
             <Icon name="search1"  style = {styles.iconStyle}/>
             <TextInput 
-                style={styles.inputStyle} 
-                value={phone}
-                onChangeText={phone => {
-                    console.log(phone)
+                    style={styles.inputStyle} 
+                    onChangeText={phone => {
                     handelSearchReadyList(phone)}
                 }     
                 placeholder="Nhập số điện thoại khách hàng"
