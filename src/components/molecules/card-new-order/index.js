@@ -1,43 +1,49 @@
-import { Body, Card, CardItem, Content, Left } from 'native-base';
-import React from 'react'
-import { View, Text, FlatList, TouchableHighlight } from 'react-native';
-import CountdownTimer from '../timer/timer';
-import { styles } from './style'
+import { Body, Card, CardItem, Content } from 'native-base';
+import React from 'react';
+import { FlatList, Text, TouchableHighlight, View } from 'react-native';
+import CountdownTimer from '../../atoms/timer/timer';
+import { styles } from './style';
 
 
 const NewOrderCard = (props) => {
 
-    console.log("props new order modal", props.order);
-    const order = props.order
+    const order = props.order;
+
+
+    const handleRejectOrder = () => {
+        console.log('handle reject')
+        dispatch(setOrderStatus(newOrder.id, OrderStatus.REJECTION));
+    }
+
+    const handleAcceptOrder = async () => {
+        console.log('handle accept')
+        await dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
+    }
 
     return (
         <Content style={[styles.container]} >
             <Card style={{ width: "100%", flexDirection: "row", justifyContent: "space-evenly" }}>
-                <CardItem style={{ flex: 1 }}>
-                    <CountdownTimer modalVisible={props.visible} />
+                <CardItem style={{ flex: 2 }}>
+                    <CountdownTimer modalVisible={props.visible} onComplete={handleAcceptOrder} />
                 </CardItem>
-                <CardItem style={{ flex: 4 }}>
+                <CardItem style={{ flex: 6 }}>
                     <Body style={{ alignItems: "center" }}>
                         <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", height: "20%" }}>
-                            <Text
-                                style={styles.text}
-                            >
+                            <Text style={styles.text}>
                                 Bạn có một đơn hàng mới từ
                             </Text>
-                            <Text
-                                style={[styles.text, styles.boldText, { marginLeft: 5 }]}
-                            >
+                            <Text style={[styles.text, styles.boldText, { marginLeft: 5 }]}>
                                 {order.customer?.phone}
                             </Text>
                         </View>
                         <FlatList
                             data={order.items}
                             keyExtractor={item => item.id}
-                            style={{  width: "100%" }}
+                            style={{ width: "100%" }}
                             renderItem={({ item }) => (
-                                <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%", marginVertical: 5,}}>
-                                    <Text style={[styles.text, styles.borderItem, { width: "60%"}]}>{item.name}</Text>
-                                    <Text style={[styles.text, {...styles.borderItem, width:"10%", textAlign: "center"}]}>{item.quantity}</Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%", marginVertical: 5, }}>
+                                    <Text style={[styles.text, styles.borderItem, { width: "60%" }]}>{item.name}</Text>
+                                    <Text style={[styles.text, { ...styles.borderItem, width: "10%", textAlign: "center" }]}>{item.quantity}</Text>
                                 </View>
                             )}
                         />

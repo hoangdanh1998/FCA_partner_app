@@ -11,7 +11,7 @@ import * as Notifications from 'expo-notifications';
 import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
 import { setOrderStatus } from '../../../redux/action/order-list';
 import { OrderStatus } from '../../../constance/constance'
-import { setTrackingOrder } from '../../../firebase/realtime-database/creator'
+
 import InitOrderModal from '../../molecules/modal/index';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -27,6 +27,7 @@ const UpcomingTab = (props) => {
   const [error, setError] = useState();
   const [visible, setVisible] = useState(false);
   const [newOrder, setNewOrder] = useState({})
+  const [listInitOrder, setListInitOrder] = useState([]);
   const isFocused = useIsFocused();
 
   const loadOrderList = useCallback(async () => {
@@ -52,12 +53,7 @@ const UpcomingTab = (props) => {
     setVisible(true)
   });
 
-  const handleRejectOrder = () => {
-    // console.log('handle reject')
-    dispatch(setOrderStatus(newOrder.id, OrderStatus.REJECTION));
-    setVisible(false);
-
-  }
+  
 
   const handleUpdateStatus = useCallback(
     async (status, id) => {
@@ -84,13 +80,7 @@ const UpcomingTab = (props) => {
     }
   )
 
-  const handleAcceptOrder = async () => {
-    console.log('handle accept')
-    await dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
-    setTrackingOrder(newOrder.id, 0);
-    setVisible(false)
-    await dispatch(getAcceptOrderToday());
-  }
+ 
   useEffect(() => {
     loadOrderList();
   }, [dispatch, loadOrderList]);
@@ -135,7 +125,7 @@ const UpcomingTab = (props) => {
     //     <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
     //   </View>
     // </View>
-    <InitOrderModal />
+    <InitOrderModal visible={visible} handleAcceptAll={() => { }} setVisible={setVisible} />
   );
 };
 
