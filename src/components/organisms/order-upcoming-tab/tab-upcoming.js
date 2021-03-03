@@ -6,7 +6,8 @@ import { ActivityIndicator, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { OrderStatus, PRIMARY_COLOR, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
 import { listenInComingOrder } from '../../../firebase/firebase-realtime';
-import { getAcceptOrderToday, getPreparationOrderToday, setOrderStatus } from "../../../redux/action/order-list";
+import { AUTO_ACCEPT_ORDER } from '../../../redux/action-types/action';
+import { getAcceptOrderToday, getPreparationOrderToday, setOrderStatus } from "../../../redux/actions/order-list";
 import ErrorModal from "../../atoms/error-modal";
 import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
@@ -20,7 +21,7 @@ const UpcomingTab = (props) => {
 
   const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
   const doingList = useSelector(state => state.orderList.filterDoingList);
-
+  const autoAcceptOrder = useSelector(state => state.behavior.autoAcceptOrder)
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [visible, setVisible] = useState(false);
@@ -80,6 +81,7 @@ const UpcomingTab = (props) => {
     }
   )
 
+  console.log(autoAcceptOrder)
   const handleAcceptOrder = async () => {
     console.log('handle accept')
     await dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
@@ -117,7 +119,12 @@ const UpcomingTab = (props) => {
       <View style={styles.switch_view}>
         <Left></Left>
         <Body style={styles.switch_container}>
-          <Switch style={styles.switch} />
+          <Switch style={styles.switch} onValueChange={(value) => {
+            dispatch({
+              type: AUTO_ACCEPT_ORDER,
+              payload: { autoAcceptOrder: value }
+            })
+          }} value={autoAcceptOrder} />
           <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
         </Body>
         <Right />

@@ -1,4 +1,4 @@
-import { modalVisible, VISIBLE } from "../action/modal";
+import { modalVisible, VISIBLE } from "../actions/modal";
 
 const initialState = {
     modalVisible: false

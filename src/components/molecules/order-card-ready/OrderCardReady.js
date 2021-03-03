@@ -2,7 +2,7 @@ import { withNavigation } from '@react-navigation/compat';
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
-import { sendQRCode } from '../../../redux/action/order-list';
+import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from './style';
 
 const OrderCardReady = (props) => {

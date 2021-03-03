@@ -1,0 +1,1 @@
+export const AUTO_ACCEPT_ORDER = 'AUTO_ACCEPT_ORDER';
