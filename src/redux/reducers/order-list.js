@@ -6,13 +6,17 @@ import {
     GET_READINESS_ORDERS_TODAY,
     SEND_QR_CODE,
     SET_ACCEPTANCE_ORDER,
-    SET_PREPARATION_ORDER,
+
+
+
+    SET_LIST_INIT_ORDER, SET_PREPARATION_ORDER,
     SET_READINESS_ORDER,
     SET_RECEPTION_ORDER
 } from "../actions/order-list";
 
 const initialState = {
     orderLists: [],
+    listInitOrder: [],
     filterToDoList: [],
     filterDoingList: [],
     filterReadyList: [],
@@ -20,11 +24,12 @@ const initialState = {
 };
 
 const ordersReducer = (state = initialState, action) => {
+    console.log('orderlist reducer: ' + action.type)
     switch (action.type) {
         case GET_ACCEPTANCE_ORDERS_TODAY: {
             
             const data = action.payload.data.data.orders;
-
+            console.log('length: ' + data.length)
             // console.log('setAcceptance ' + data.length)
             return {...state, filterToDoList: data};
         }
@@ -101,6 +106,11 @@ const ordersReducer = (state = initialState, action) => {
         case GET_ORDER_AFTER_UPDATE: {
             
             return state;
+        }
+
+        case SET_LIST_INIT_ORDER: {
+
+            return { ...state, listInitOrder: action.payload.listInit };
         }
 
         default:

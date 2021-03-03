@@ -1,11 +1,11 @@
-import { modalVisible, VISIBLE } from "../actions/modal";
+import { VISIBLE } from "../actions/modal";
 
 const initialState = {
     modalVisible: false
 }
 
 const modalReducer = (state = initialState, action) => {
-    console.log(action.type)
+    console.log('modal reducer: ' + action.type)
     switch (action.type) {
         case VISIBLE:
             let modalVisible = state.modalVisible;

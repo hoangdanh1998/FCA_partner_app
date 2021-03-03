@@ -1,21 +1,23 @@
 import { withNavigation } from '@react-navigation/compat';
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
+import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from './style';
+import {OrderStatus} from '../../../constance/constance'
 
 const OrderCardReady = (props) => {
     var order = props.order;
     const dispatch = useDispatch();
     const [timeRemain, setTimeRemain] = useState(0);
-    // useEffect(() => {
-    //     (async () => {
-    //         listenOrder(order.id, (timeRemain) => {
-    //             setTimeRemain(timeRemain);
-    //         })
-    //     })();
-    // }, [])
+    useEffect(() => {
+        (async () => {
+            listenOrder(order.id, (timeRemain) => {
+                setTimeRemain(timeRemain);
+            })
+        })();
+    }, [])
 
     return (
         <Content padder>
@@ -34,7 +36,7 @@ const OrderCardReady = (props) => {
                                     : styles.earlyEstimation
                             }
                         >
-                        {order.status == "arrived" ? "" : `${timeRemain} mins`}
+                        {order.status == OrderStatus.ARRIVAL ? "" : `${timeRemain}`}
                     </Text>
                     <Right></Right>
                 </CardItem>

@@ -1,15 +1,13 @@
 import { useIsFocused } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
 import { Body, Left, Right, Switch, Text, Toast } from "native-base";
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
-import { OrderStatus, PRIMARY_COLOR, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
+import { OrderStatus, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
 import { listenInComingOrder } from '../../../firebase/firebase-realtime';
 import { AUTO_ACCEPT_ORDER } from '../../../redux/action-types/action';
-import { getAcceptOrderToday, getPreparationOrderToday, setOrderStatus } from "../../../redux/actions/order-list";
-import ErrorModal from "../../atoms/error-modal";
-import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
+import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER } from "../../../redux/actions/order-list";
+import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { styles } from "./styles";
 
@@ -21,7 +19,8 @@ const UpcomingTab = (props) => {
 
   const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
   const doingList = useSelector(state => state.orderList.filterDoingList);
-  const autoAcceptOrder = useSelector(state => state.behavior.autoAcceptOrder)
+  const autoAcceptOrder = useSelector(state => state.behavior.autoAcceptOrder);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [visible, setVisible] = useState(false);
@@ -32,8 +31,9 @@ const UpcomingTab = (props) => {
     setIsLoading(true);
     try {
       setError();
-      await dispatch(getAcceptOrderToday());
-      await dispatch(getPreparationOrderToday());
+      dispatch(getAcceptOrderToday());
+      dispatch(getPreparationOrderToday());
+      dispatch(getReadinessOrderToday())
     } catch (error) {
       setError(error.message);
     }
@@ -45,16 +45,12 @@ const UpcomingTab = (props) => {
   //   dispatch(getOrderAfterUpdate(OrderStatus.PREPARATION));
   // }, [doingList])
 
-  Notifications.addNotificationReceivedListener((notification) => {
-    setNewOrder(notification.request.content.data.order);
-    setVisible(true)
-  });
+  // Notifications.addNotificationReceivedListener((notification) => {
+  //   setNewOrder(notification.request.content.data.order);
+  //   setVisible(true)
+  // });
 
-  const handleRejectOrder = () => {
-    dispatch(setOrderStatus(newOrder.id, OrderStatus.REJECTION));
-    setVisible(false);
-
-  }
+  
 
   const handleUpdateStatus = useCallback(
     async (status, id) => {
@@ -81,42 +77,44 @@ const UpcomingTab = (props) => {
     }
   )
 
-  console.log(autoAcceptOrder)
-  const handleAcceptOrder = async () => {
-    console.log('handle accept')
-    await dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
-    setVisible(false)
-    await dispatch(getAcceptOrderToday());
-  }
+ 
   useEffect(() => {
     loadOrderList();
     (() => {
-      listenInComingOrder('0440ef59-6c90-4630-8be4-553533e45591', (listOrder) => {
-        Object.values(listOrder)
+      listenInComingOrder('0440ef59-6c90-4630-8be4-553533e45591', (listInitOrder) => {
+        if (listInitOrder) {
+          const listInit = Object.values(listInitOrder);
+          if (listInit.length > 0) { setVisible(true) }
+          dispatch({ type: SET_LIST_INIT_ORDER, payload: { listInit } })
+        } else {
+          setVisible(false);
+          loadOrderList();
+        }
       })
     })();
   }, [dispatch, loadOrderList]);
 
-  if (error) {
-    return (
-      <ErrorModal
-        loadOrderList={() => loadOrderList()}
-      />
-    )
-  }
+  // if (error) {
+  //   return (
+  //     <ErrorModal
+  //       loadOrderList={() => loadOrderList()}
+  //     />
+      
+  //   )
+  // }
 
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={PRIMARY_COLOR} />
-      </View>
-    )
-  };
+  // if (isLoading) {
+  //   return (
+  //     <View style={styles.centered}>
+  //       <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+  //     </View>
+  //   )
+  // };
 
   return (
     <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
-      {visible ? <NewOrderModal newOrder={newOrder} handleAcceptOrder={handleAcceptOrder} handleRejectOrder={handleRejectOrder} visible={visible} /> : null }
       <View style={styles.switch_view}>
+        <InitOrderModal visible={visible} handleAcceptAllOrder={() => { console.log('accept all order') }} setVisible={setVisible} />
         <Left></Left>
         <Body style={styles.switch_container}>
           <Switch style={styles.switch} onValueChange={(value) => {

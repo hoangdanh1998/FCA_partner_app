@@ -24,9 +24,16 @@ export default function QRCode(props) {
         setScanned(true);
         try {
             await dispatch(setOrderStatus(data, OrderStatus.RECEPTION));
+            props.navigation.navigate("READY") 
             Alert.alert(TITLE_ALERT,ALERT_SUCCESS_MESSAGE);
         } catch (error) {
             Alert.alert(TITLE_ALERT,ALERT_FAIL_MESSAGE);
+            await new Promise((resolve) => {
+                return setTimeout(() => {
+                    resolve()
+                }, 3000);
+            })
+            setScanned(false);
         }
         
         
@@ -45,7 +52,7 @@ export default function QRCode(props) {
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
             />
-            {scanned && props.navigation.navigate("READY")}
+
         </View>
     );
 }

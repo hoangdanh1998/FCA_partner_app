@@ -35,7 +35,6 @@ const TabReadyScreen = () => {
 
 
 
-
     const handelSearchReadyList = (phone) => {
         const resultList = readyList.filter((order) => {
             return order.customer.phone.search(phone) != -1;
@@ -45,10 +44,10 @@ const TabReadyScreen = () => {
     }
 
     useEffect(() => {
-        loadOrderList();
+        // loadOrderList();
         console.log(readyList)
         setSearchList(readyList);
-    }, [dispatch, loadOrderList]);
+    }, [dispatch, readyList]);
 
 
     if (readyList.length === 0) {

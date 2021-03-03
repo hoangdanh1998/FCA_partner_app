@@ -10,6 +10,8 @@ export const TimeRemainTo = {
  */
 export const HEADER_FONT_SIZE = 20;
 
+export const TITLE_FONT_SIZE = 18;
+
 /**
  * timer
  */
