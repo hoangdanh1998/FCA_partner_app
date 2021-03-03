@@ -1,28 +1,35 @@
-import { 
-    GET_ACCEPTANCE_ORDERS_TODAY, 
-    GET_ORDER_AFTER_UPDATE, 
-    GET_PREPARATION_ORDERS_TODAY, 
-    GET_READINESS_ORDERS_TODAY, 
-    SEND_QR_CODE, 
-    SET_ACCEPTANCE_ORDER, 
-    SET_PREPARATION_ORDER, 
-    SET_READINESS_ORDER, 
-    SET_RECEPTION_ORDER 
-} from "../action/order-list";
+import {
+    GET_ACCEPTANCE_ORDERS_TODAY,
+    GET_ARRIVAL_ORDER_TODAY,
+    GET_ORDER_AFTER_UPDATE,
+    GET_PREPARATION_ORDERS_TODAY,
+    GET_READINESS_ORDERS_TODAY,
+    SEND_QR_CODE,
+    SET_ACCEPTANCE_ORDER,
+
+
+
+    SET_LIST_INIT_ORDER, SET_PREPARATION_ORDER,
+    SET_READINESS_ORDER,
+    SET_RECEPTION_ORDER
+} from "../actions/order-list";
 
 const initialState = {
     orderLists: [],
+    listInitOrder: [],
     filterToDoList: [],
     filterDoingList: [],
-    filterReadyList: []
+    filterReadyList: [],
+    filterArrivalList: []
 };
 
 const ordersReducer = (state = initialState, action) => {
+    console.log('orderlist reducer: ' + action.type)
     switch (action.type) {
         case GET_ACCEPTANCE_ORDERS_TODAY: {
             
             const data = action.payload.data.data.orders;
-
+            console.log('length: ' + data.length)
             // console.log('setAcceptance ' + data.length)
             return {...state, filterToDoList: data};
         }
@@ -33,9 +40,15 @@ const ordersReducer = (state = initialState, action) => {
         }
 
         case GET_READINESS_ORDERS_TODAY: {
-            const data = action.payload.data.data.orders;
+            const data = [...action.responseReady.data.data.orders, ...action.responseArrival.data.data.orders];
 
             return {...state, filterReadyList: data};
+        }
+
+        case GET_ARRIVAL_ORDER_TODAY: {
+            const data = action.payload.data.data.orders;
+
+            return {...state, filterArrivalList: data};
         }
 
         case SET_RECEPTION_ORDER: {
@@ -93,6 +106,11 @@ const ordersReducer = (state = initialState, action) => {
         case GET_ORDER_AFTER_UPDATE: {
             
             return state;
+        }
+
+        case SET_LIST_INIT_ORDER: {
+
+            return { ...state, listInitOrder: action.payload.listInit };
         }
 
         default:

@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { View, ActivityIndicator, TouchableHighlight } from "react-native";
-import { Switch, Text, Left, Right, Body, Toast } from "native-base";
-import { useSelector, useDispatch, useMemo } from 'react-redux';
-import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
-import { PRIMARY_COLOR, TOAST_SUCCESS_MESSAGE, TOAST_FAIL_MESSAGE } from "../../../constance/constance";
-import { getAcceptOrderToday, getOrderAfterUpdate, getPreparationOrderToday } from "../../../redux/action/order-list";
-import { styles } from "./styles";
-import ErrorModal from "../../atoms/error-modal";
-import * as Notifications from 'expo-notifications';
-import NewOrderModal from "../../molecules/new-order-modal/new-order-modal";
-import { setOrderStatus } from '../../../redux/action/order-list';
-import { OrderStatus } from '../../../constance/constance'
-
-import InitOrderModal from '../../molecules/modal/index';
 import { useIsFocused } from '@react-navigation/native';
+import { Body, Left, Right, Switch, Text, Toast } from "native-base";
+import React, { useCallback, useEffect, useState } from "react";
+import { View } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
+import { OrderStatus, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
+import { listenInComingOrder } from '../../../firebase/firebase-realtime';
+import { AUTO_ACCEPT_ORDER } from '../../../redux/action-types/action';
+import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER } from "../../../redux/actions/order-list";
+import InitOrderModal from '../../molecules/modal/index';
+import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
+import { styles } from "./styles";
+
 
 
 const UpcomingTab = (props) => {
@@ -22,20 +19,21 @@ const UpcomingTab = (props) => {
 
   const toDoOrderList = useSelector(state => state.orderList.filterToDoList);
   const doingList = useSelector(state => state.orderList.filterDoingList);
+  const autoAcceptOrder = useSelector(state => state.behavior.autoAcceptOrder);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [visible, setVisible] = useState(false);
   const [newOrder, setNewOrder] = useState({})
-  const [listInitOrder, setListInitOrder] = useState([]);
   const isFocused = useIsFocused();
 
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
     try {
       setError();
-      await dispatch(getAcceptOrderToday());
-      await dispatch(getPreparationOrderToday());
+      dispatch(getAcceptOrderToday());
+      dispatch(getPreparationOrderToday());
+      dispatch(getReadinessOrderToday())
     } catch (error) {
       setError(error.message);
     }
@@ -47,11 +45,10 @@ const UpcomingTab = (props) => {
   //   dispatch(getOrderAfterUpdate(OrderStatus.PREPARATION));
   // }, [doingList])
 
-  Notifications.addNotificationReceivedListener((notification) => {
-    // console.log('hello')
-    setNewOrder(notification.request.content.data.order);
-    setVisible(true)
-  });
+  // Notifications.addNotificationReceivedListener((notification) => {
+  //   setNewOrder(notification.request.content.data.order);
+  //   setVisible(true)
+  // });
 
   
 
@@ -83,6 +80,18 @@ const UpcomingTab = (props) => {
  
   useEffect(() => {
     loadOrderList();
+    (() => {
+      listenInComingOrder('0440ef59-6c90-4630-8be4-553533e45591', (listInitOrder) => {
+        if (listInitOrder) {
+          const listInit = Object.values(listInitOrder);
+          if (listInit.length > 0) { setVisible(true) }
+          dispatch({ type: SET_LIST_INIT_ORDER, payload: { listInit } })
+        } else {
+          setVisible(false);
+          loadOrderList();
+        }
+      })
+    })();
   }, [dispatch, loadOrderList]);
 
   // if (error) {
@@ -103,29 +112,27 @@ const UpcomingTab = (props) => {
   // };
 
   return (
-    // <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
-    //   <NewOrderModal
-    //     newOrder={newOrder}
-    //     handleAcceptOrder={handleAcceptOrder}
-    //     handleRejectOrder={handleRejectOrder}
-    //     visible={visible}
-    //   />
-      
-    //   <View style={styles.switch_view}>
-    //     <Left></Left>
-    //     <Body style={styles.switch_container}>
-    //       <Switch style={styles.switch} />
-    //       <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
-    //     </Body>
-    //     <Right />
-    //   </View>
-    //   <View style={styles.order_view}>
+    <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
+      <View style={styles.switch_view}>
+        <InitOrderModal visible={visible} handleAcceptAllOrder={() => { console.log('accept all order') }} setVisible={setVisible} />
+        <Left></Left>
+        <Body style={styles.switch_container}>
+          <Switch style={styles.switch} onValueChange={(value) => {
+            dispatch({
+              type: AUTO_ACCEPT_ORDER,
+              payload: { autoAcceptOrder: value }
+            })
+          }} value={autoAcceptOrder} />
+          <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
+        </Body>
+        <Right />
+      </View>
+      <View style={styles.order_view}>
 
-    //     <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
-    //     <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
-    //   </View>
-    // </View>
-    <InitOrderModal visible={visible} handleAcceptAll={() => { }} setVisible={setVisible} />
+        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
+        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
+      </View>
+    </View>
   );
 };
 

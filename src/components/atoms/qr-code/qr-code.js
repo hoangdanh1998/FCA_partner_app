@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import {useDispatch} from 'react-redux';
-import { setOrderStatus } from '../../../redux/action/order-list';
-import {OrderStatus} from '../../../constance/constance'
+import React, { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { ALERT_FAIL_MESSAGE, ALERT_SUCCESS_MESSAGE, OrderStatus, TITLE_ALERT } from '../../../constance/constance';
+import { setOrderStatus } from '../../../redux/actions/order-list';
 
 
 export default function QRCode(props) {
@@ -20,10 +20,23 @@ export default function QRCode(props) {
         })();
     }, []);
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = async ({ type, data }) => {
         setScanned(true);
-        dispatch(setOrderStatus(data, OrderStatus.RECEPTION));
-        alert(data);
+        try {
+            await dispatch(setOrderStatus(data, OrderStatus.RECEPTION));
+            props.navigation.navigate("READY") 
+            Alert.alert(TITLE_ALERT,ALERT_SUCCESS_MESSAGE);
+        } catch (error) {
+            Alert.alert(TITLE_ALERT,ALERT_FAIL_MESSAGE);
+            await new Promise((resolve) => {
+                return setTimeout(() => {
+                    resolve()
+                }, 3000);
+            })
+            setScanned(false);
+        }
+        
+        
     };
 
     if (hasPermission === null) {
@@ -39,7 +52,7 @@ export default function QRCode(props) {
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
             />
-            {scanned && props.navigation.navigate("READY")}
+
         </View>
     );
 }

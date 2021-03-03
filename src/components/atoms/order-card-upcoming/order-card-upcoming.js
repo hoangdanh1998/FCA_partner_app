@@ -1,38 +1,44 @@
-import React, { useState } from "react";
-import {
-  Content,
-  Card,
-  CardItem,
-  Text,
-  List,
-  Left,
-  Right,
-  Icon,
-} from "native-base";
+import { Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
+import React, { useEffect, useState } from "react";
+import { TimeRemainTo } from '../../../constance/constance';
+import { listenOrder } from '../../../firebase/firebase-realtime';
 import { styles } from "./styles";
-import { listenOrder } from '../../../firebase/realtime-database/listener';
-import { useEffect, useCallback } from 'react';
-import { setOrderStatus } from "../../../redux/action/order-list";
-import { OrderStatus } from "../../../constance/constance";
-import {useDispatch} from 'react-redux'
-import {withNavigation} from '@react-navigation/compat'
-
 
 const OrderCardUpComing = (props) => {
-  var order = props.order;
-  const [timeRemain, setTimeRemain] = useState(0);
-  // useEffect(() => {
-  //   // (async () => {
-  //   //   listenOrder(order.id, (timeRemain) => {
-  //   //     setTimeRemain(timeRemain)
-  //   //   })
-  //   // })();
-  // }, [])
 
-  const dispatch = useDispatch();
-  const handleUpdateStatus = props.handleUpdateStatus ;
-  
+  const handleUpdateStatus = props.handleUpdateStatus;
+  const order = props.order;
+
+  const [timeRemain, setTimeRemain] = useState(0);
+  useEffect(() => {
+    (async () => {
+      listenOrder(order.id, (timeRemain) => {
+        handleUpdateStatusWithTime(timeRemain);
+        setTimeRemain(timeRemain);
+      })
+    })();
+  }, [])
+
+
+  const handleUpdateStatusWithTime = (timeRemain) => {
     
+    if (props.status == "to-do") {
+      if(timeRemain === 0){
+        
+        return;
+      }
+      timeRemain += "";
+      const arrTimeString = timeRemain.split(" ");
+      
+      const time = parseInt(arrTimeString[0]);
+      console.log("Time: ", time);
+      if (time <= TimeRemainTo.PREPARATION) {
+        handleUpdateStatus(props.status, order.id);
+      }
+    }
+
+  }
+
   return (
     <Content>
       <Card style={styles.card}>
@@ -47,30 +53,28 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {timeRemain} mins
+            {timeRemain}
           </Text>
           <Right></Right>
         </CardItem>
         <CardItem style={styles.cardBody} body bordered>
           <Left>
-            
-              <List
-                style={styles.list}
-                dataArray={order.items}
-                keyExtractor={order.items.id}
-                renderRow={(item) => (
-                  <CardItem style={styles.list}>
-                    <Left>
-                      <Text style={styles.itemText}>{item.name}</Text>
-                    </Left>
-                    <Right>
-                      <Text style={styles.itemText}>{item.quantity}</Text>
-                    </Right>
-                  </CardItem>
-                )}
-              />
-            
 
+            <List
+              style={styles.list}
+              dataArray={order.items}
+              keyExtractor={order.items.id}
+              renderRow={(item) => (
+                <CardItem style={styles.list}>
+                  <Left>
+                    <Text style={styles.itemText}>{item.name}</Text>
+                  </Left>
+                  <Right>
+                    <Text style={styles.itemText}>{item.quantity}</Text>
+                  </Right>
+                </CardItem>
+              )}
+            />
           </Left>
           <Right>
             <Icon
@@ -91,4 +95,4 @@ const OrderCardUpComing = (props) => {
   );
 };
 
-export default withNavigation(OrderCardUpComing);
+export default OrderCardUpComing;

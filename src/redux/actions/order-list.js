@@ -6,13 +6,15 @@ export const GET_ACCEPTANCE_ORDERS_TODAY = "GET_ACCEPTANCE_ORDERS_TODAY";
 export const GET_PREPARATION_ORDERS_TODAY = "GET_PREPARATION_ORDERS_TODAY";
 export const GET_READINESS_ORDERS_TODAY = "GET_READINESS_ORDERS_TODAY";
 export const GET_ORDER_AFTER_UPDATE = "GET_ORDER_AFTER_UPDATE";
+export const GET_ARRIVAL_ORDER_TODAY = "GET_ARRIVAL_ORDER_TODAY";
 
 //Set
 export const SET_RECEPTION_ORDER = "SET_RECEPTION_ORDER";
 export const SET_ACCEPTANCE_ORDER = "SET_ACCEPTANCE_ORDER";
 export const SET_PREPARATION_ORDER = "SET_PREPARATION_ORDER";
 export const SET_READINESS_ORDER = "SET_READINESS_ORDER";
-
+export const SET_ARRIVAL_ORDER = "SET_ARRIVAL_ORDER";
+export const SET_LIST_INIT_ORDER = "SET_LIST_INIT_ORDER";
 
 
 
@@ -31,7 +33,7 @@ export const getAcceptOrderToday = () => {
                 throw new Error("Something went wrong");
             }
             
-            console.log(response)
+            
             dispatch({
                 type: GET_ACCEPTANCE_ORDERS_TODAY,
                 payload: response
@@ -70,9 +72,40 @@ export const getPreparationOrderToday = () => {
 export const getReadinessOrderToday = () => {
     return async dispatch => {
         try {
-            const response = await fca.get('/order', {
+            const responseReady = await fca.get('/order', {
                 params: {
                     status:OrderStatus.READINESS     
+                }
+            });
+
+            const responseArrival = await fca.get('/order', {
+                params: {
+                    status:OrderStatus.ARRIVAL     
+                }
+            });
+
+            if (responseReady.data.meta.status !== SUCCESS || responseArrival.data.meta.status !== SUCCESS) {
+                throw new Error("Something went wrong");
+            }
+
+            dispatch({
+                type: GET_READINESS_ORDERS_TODAY,
+                responseArrival: responseArrival,
+                responseReady: responseReady
+            })
+        } catch (error) {
+            // throw error;
+            console.error(error);
+        }        
+    }
+};
+
+export const getArrivalOrderToday = () => {
+    return async dispatch => {
+        try {
+            const response = await fca.get('/order', {
+                params: {
+                    status:OrderStatus.ARRIVAL     
                 }
             });
 
@@ -81,7 +114,7 @@ export const getReadinessOrderToday = () => {
             }
 
             dispatch({
-                type: GET_READINESS_ORDERS_TODAY,
+                type: GET_ARRIVAL_ORDER_TODAY,
                 payload: response
             })
         } catch (error) {
@@ -118,6 +151,11 @@ export const setOrderStatus = (id, status) => {
             } else if (status === OrderStatus.READINESS) {
                 dispatch({
                     type: SET_READINESS_ORDER,
+                    payload: id
+                })
+            } else if (status === OrderStatus.ARRIVAL) {
+                dispatch({
+                    type: SET_ARRIVAL_ORDER,
                     payload: id
                 })
             }

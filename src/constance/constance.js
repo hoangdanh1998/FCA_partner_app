@@ -1,6 +1,10 @@
 export const PRIMARY_COLOR = "#fcf7e1";
 export const BACKGROUND_COLOR = "#603a18";
 
+export const TimeRemainTo = {
+  PREPARATION: 7,
+  ARRIVAL: 2,
+}
 /**
  * font size
  */
@@ -32,7 +36,16 @@ export const OrderStatus = {
   WAIT: "WAIT",
 };
 
-///message
+///message toast
 
 export const TOAST_SUCCESS_MESSAGE = "Cập nhật thành công";
 export const TOAST_FAIL_MESSAGE = "Cập nhật thất bại";
+
+//message alert
+export const TITLE_ALERT = "Thông báo";
+export const ALERT_SUCCESS_MESSAGE = "Xác nhận đơn hàng thành công";
+export const ALERT_FAIL_MESSAGE = "Xác nhận đơn hàng thất bại";
+
+
+export const EMPTY_LIST_MESSAGE = "Hiện tại chưa có đơn hàng nào";
+

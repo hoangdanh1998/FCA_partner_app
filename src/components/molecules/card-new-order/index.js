@@ -1,6 +1,9 @@
 import { Body, Card, CardItem, Content } from 'native-base';
 import React from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { setOrderStatus } from '../../../redux/actions/order-list';
+import {OrderStatus} from '../../../constance/constance';
 import CountdownTimer from '../../atoms/timer/timer';
 import { styles } from './style';
 
@@ -8,16 +11,16 @@ import { styles } from './style';
 const NewOrderCard = (props) => {
 
     const order = props.order;
-
+    dispatch = useDispatch();
 
     const handleRejectOrder = () => {
         console.log('handle reject')
-        dispatch(setOrderStatus(newOrder.id, OrderStatus.REJECTION));
+        dispatch(setOrderStatus(order.id, OrderStatus.REJECTION));
     }
 
     const handleAcceptOrder = async () => {
         console.log('handle accept')
-        await dispatch(setOrderStatus(newOrder.id, OrderStatus.ACCEPTANCE));
+        dispatch(setOrderStatus(order.id, OrderStatus.ACCEPTANCE));
     }
 
     return (

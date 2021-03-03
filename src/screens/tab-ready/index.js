@@ -1,50 +1,26 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import { useIsFocused } from '@react-navigation/native';
 import { View } from 'native-base';
-import { useSelector, useDispatch } from 'react-redux';
-import { ActivityIndicator } from 'react-native'
-
-
-import TabReady from '../../components/organisms/tab-ready/tab-ready';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Text } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import SearchBar from '../../components/atoms/search-bar/search-bar';
-import NewOrderModal from '../../components/molecules/new-order-modal/new-order-modal';
-import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/action/order-list';
-import {styles} from './style';
-import { OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
-import {useIsFocused} from '@react-navigation/native';
-
-
-
+import TabReady from '../../components/organisms/tab-ready/tab-ready';
+import { EMPTY_LIST_MESSAGE, OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
+import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/actions/order-list';
+import { styles } from './style';
 const TabReadyScreen = () => {
-    const newOrder = {
-        phone: "0987654321",
-        estTime: 30,
-        status: "acceptance",
-        items: [
-            {
-                name: "Chocolate",
-                quantity: 1,
-                price: 15000
-            },
-            {
-                name: "Expresso",
-                quantity: 1,
-                price: 15000
-            },
-        ]
-    };
-    const orderList = useSelector(state => state.orderList.filterReadyList);
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchList, setSearchList] = useState([])
+    const [error, setError] = useState();
+
+    const readyList = useSelector(state => state.orderList.filterReadyList);
     const isFocused = useIsFocused();
     const dispatch = useDispatch();
-
+    
     if(isFocused) {
         dispatch(getOrderAfterUpdate(OrderStatus.READINESS));
     }
-
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
-
-    
 
     const loadOrderList = useCallback(async () => {
         setIsLoading(true);
@@ -53,16 +29,35 @@ const TabReadyScreen = () => {
         } catch (error) {
             setError(error.message);
         }
-        
         setIsLoading(false);
     }, [dispatch,setIsLoading]);
 
+
+
+
+    const handelSearchReadyList = (phone) => {
+        const resultList = readyList.filter((order) => {
+            return order.customer.phone.search(phone) != -1;
+        })
+
+        setSearchList(resultList);
+    }
+
     useEffect(() => {
-        
-        loadOrderList();
+        // loadOrderList();
+        console.log(readyList)
+        setSearchList(readyList);
+    }, [dispatch, readyList]);
 
-    }, [dispatch, loadOrderList]);
 
+    if (readyList.length === 0) {
+        return (
+            <View style={{ flex: 1 }, styles.centered}>
+                <Text style={styles.message}>{EMPTY_LIST_MESSAGE}</Text>
+            </View>
+        )
+    }
+    
     if (isLoading) {
         return (
             <View style={styles.centered}>
@@ -70,15 +65,10 @@ const TabReadyScreen = () => {
             </View>
         )
     };
-
-
     return (
-        <View style={{ flex: 1 }}>
-            <SearchBar />
-            {/* <NewOrderModal
-                newOrder={newOrder}
-            /> */}
-            <TabReady toDoOrderList={orderList} />
+        <View style={{ flex: 1, backgroundColor: "#ffff" }}>
+            <SearchBar handelSearchReadyList={handelSearchReadyList} />
+            <TabReady toDoOrderList={searchList} />
         </View>
     );
 }
