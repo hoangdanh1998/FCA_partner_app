@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import {useDispatch} from 'react-redux';
-import { setOrderStatus } from '../../../redux/action/order-list';
-import {ALERT_FAIL_MESSAGE, ALERT_SUCCESS_MESSAGE, OrderStatus, TITLE_ALERT} from '../../../constance/constance'
+import React, { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { ALERT_FAIL_MESSAGE, ALERT_SUCCESS_MESSAGE, OrderStatus, TITLE_ALERT } from '../../../constance/constance';
+import { setOrderStatus } from '../../../redux/actions/order-list';
 
 
 export default function QRCode(props) {

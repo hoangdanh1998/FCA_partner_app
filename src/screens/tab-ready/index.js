@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SearchBar from '../../components/atoms/search-bar/search-bar';
 import TabReady from '../../components/organisms/tab-ready/tab-ready';
 import { EMPTY_LIST_MESSAGE, OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
-import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/action/order-list';
+import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/actions/order-list';
 import { styles } from './style';
 const TabReadyScreen = () => {
 
