@@ -10,7 +10,9 @@ export const MyHeader = (props) => {
                     style={styles.header}
                 >
                     <Left>
-                        <Button transparent>
+                        <Button transparent
+                            onPress={() => props.navigation.navigate("DRAWER")}
+                        >
                             <Icon 
                                 name="menu" 
                                 style={styles.icon}

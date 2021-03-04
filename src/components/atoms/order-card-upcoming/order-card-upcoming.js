@@ -1,6 +1,6 @@
 import { Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
-import { TimeRemainTo } from '../../../constance/constance';
+import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { styles } from "./styles";
 
@@ -22,7 +22,7 @@ const OrderCardUpComing = (props) => {
 
   const handleUpdateStatusWithTime = (timeRemain) => {
     
-    if (props.status == "to-do") {
+    if (props.status == "to-do" && order.status === OrderStatus.ACCEPTANCE) {
       if(timeRemain === 0){
         
         return;
