@@ -11,6 +11,7 @@ import  ReduxThunk  from  'redux-thunk';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as firebase from 'firebase';
+import LoginNavigation from './src/navigations/login-navigation'
 
 
 import { LogBox } from 'react-native';
@@ -43,7 +44,7 @@ export default class App extends React.Component {
     if(this.state.isReady){
       return (
         <Provider store={store} styles={{flex:1}}>
-          <HomeStackScreen/>
+          <LoginNavigation/>
         </Provider>
       );
     } else {
