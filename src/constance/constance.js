@@ -36,6 +36,12 @@ export const OrderStatus = {
   WAIT: "WAIT",
 };
 
+//name of navigation
+
+export const nameOfNavigation = {
+  LOGIN_NAVIGATION: "LOGIN"
+}
+
 ///message toast
 
 export const TOAST_SUCCESS_MESSAGE = "Cập nhật thành công";

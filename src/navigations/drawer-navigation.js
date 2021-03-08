@@ -9,7 +9,7 @@ const Drawer = createDrawerNavigator();
 const MenuDrawer = () => {
     return (
         <Drawer.Navigator>
-            <Drawer.Screen name="LOGIN" component={Login} />
+            {/* <Drawer.Screen name="LOGIN" component={Login} /> */}
             <Drawer.Screen name="REGISTER" component={Register} />
         </Drawer.Navigator>
     );

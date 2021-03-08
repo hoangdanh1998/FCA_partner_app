@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import accountReducer from './account';
 import behaviorReducer from './behavior';
 import modalReducer from './modal';
 import ordersReducer from './order-list';
@@ -10,4 +11,5 @@ export const rootReducer = combineReducers({
     orderList: ordersReducer,
     modalVisible: modalReducer,
     behavior: behaviorReducer,
+    account: accountReducer
 });
