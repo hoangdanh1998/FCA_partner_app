@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     },
     inputForm: {
         flexDirection: "row",
-        width: "20%",
+        width: "25%",
         
         borderBottomWidth: 1,
         borderBottomColor: BACKGROUND_COLOR,
@@ -62,10 +62,20 @@ export const styles = StyleSheet.create({
     },
 
     buttonBody: {
-        width:"20%",
+        width:"25%",
         flexDirection: "row",
         justifyContent:"space-between",
-        marginTop: 15
+        marginTop: 10
         
+    },
+
+    errorMessage: {
+        color: "red",
+        marginTop: 20
+    },
+    centered: {
+        flex: 1,
+        alignItems:"center",
+        justifyContent: "center"
     },
 })

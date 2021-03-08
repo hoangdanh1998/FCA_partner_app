@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     View,
     Text,
@@ -11,22 +11,39 @@ import {
     SafeAreaView,
     TouchableOpacity,
     TouchableHighlight,
-    ImageBackground
+    ImageBackground,
+    ActivityIndicator,
+    BackHandler
 } from 'react-native';
 import { styles } from './style';
 import Feather from 'react-native-vector-icons/Feather'
 import { BACKGROUND_COLOR, PRIMARY_COLOR } from '../../constance/constance';
+import { useDispatch } from 'react-redux'
+import { login } from '../../redux/actions/account';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const Login = (props) => {
+
+    // console.log("pros login page", props);
+
+    const dispatch = useDispatch();
 
 
-const Login = () => {
-
-    const [data, setData] = React.useState({
+    const [data, setData] = useState({
         numberPhone: '',
         password: '',
         secureTextEntry: true,
+        error: false,
+        isLoading: false
     });
 
-
+    const storeToken = async (token) => {
+        try {
+            await AsyncStorage.setItem('@storage_Token', token)
+        } catch (e) {
+            console.error("error of store token", e);
+        }
+    };
     const handleChangePhone = (phone) => {
         setData(
             {
@@ -43,12 +60,48 @@ const Login = () => {
         })
     }
 
+    const handleLogin = async (phone, password) => {
+        try {
+            setData({
+                ...data,
+                error: false,
+                isLoading: true
+            })
+
+            await dispatch(login(phone, password));
+
+            // props.navigation.navigate("HOME_STACK");
+
+        } catch (error) {
+            setData({
+                ...data,
+                error: true,
+
+            })
+        }
+
+        setData({
+            ...data,
+            isLoading: false,
+
+        })
+    }
+
     const updateSecureTextEntry = () => {
         setData({
             ...data,
             secureTextEntry: !data.secureTextEntry
         });
     }
+
+    if (data.isLoading) {
+        return (
+            <View style={styles.centered}>
+                <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+            </View>
+        )
+    }
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -66,7 +119,7 @@ const Login = () => {
                                 source={require("../../assets/logo-tablet.png")} />
                             <View style={styles.form}>
 
-                                <View style={{ ...styles.inputForm, marginTop: 25}}>
+                                <View style={{ ...styles.inputForm, marginTop: 25 }}>
                                     <Feather
                                         name="phone"
                                         color={BACKGROUND_COLOR}
@@ -75,13 +128,13 @@ const Login = () => {
                                     <TextInput
                                         placeholder="Số điện thoại"
                                         placeholderTextColor="#666666"
-                                        style={[styles.textInput, styles.titleText, { color: '#05375a', marginRight:15 }]}
+                                        style={[styles.textInput, styles.titleText, { color: '#05375a', marginRight: 15 }]}
                                         autoCapitalize="none"
-                                        keyboardType = "phone-pad"
-                                        onChangeText = {(val) => handleChangePhone(val)}
+                                        keyboardType="phone-pad"
+                                        onChangeText={(val) => handleChangePhone(val)}
                                     />
                                 </View>
-                                <View style={{ ...styles.inputForm, marginTop: 15 }}>
+                                <View style={{ ...styles.inputForm, marginTop: 20 }}>
                                     <Feather
                                         name="lock"
                                         color={BACKGROUND_COLOR}
@@ -93,7 +146,7 @@ const Login = () => {
                                         style={[styles.textInput, styles.titleText, { color: '#05375a' }]}
                                         autoCapitalize="none"
                                         secureTextEntry={data.secureTextEntry ? true : false}
-                                        onChangeText = {(val) => handleChangePassword(val)}
+                                        onChangeText={(val) => handleChangePassword(val)}
                                     />
                                     <TouchableOpacity
                                         onPress={updateSecureTextEntry}
@@ -113,6 +166,12 @@ const Login = () => {
                                         }
                                     </TouchableOpacity>
                                 </View>
+
+                            </View>
+                            <View>
+                                {data.error ?
+                                    <Text style={[styles.titleText, styles.errorMessage,]}>Số điện thoại hoặc mật khẩu không hợp lệ</Text>
+                                    : null}
                             </View>
                             <View style={styles.buttonBody}>
                                 <TouchableHighlight
@@ -140,9 +199,10 @@ const Login = () => {
                                 </TouchableHighlight>
                             </View>
                             <TouchableHighlight
-                                style={{ ...styles.button, marginTop: 15}}
+                                style={{ ...styles.button, marginTop: 15 }}
                                 underlayColor={PRIMARY_COLOR}
                                 activeOpacity={0.9}
+                                onPress={() => handleLogin(data.numberPhone, data.password)}
                             >
                                 <Text style={[styles.text, styles.textButton, styles.boldText]}>
                                     Đăng nhập
