@@ -95,7 +95,6 @@ registerForPushNotificationsAsync = async () => {
       shouldSetBadge: true,
     }),
   })
-  console.log('app.js 98')
 };
 
 function initializeFirebase() {

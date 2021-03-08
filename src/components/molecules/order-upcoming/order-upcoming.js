@@ -1,20 +1,21 @@
-import React from "react";
 import {
-  Container,
-  Content,
   Card,
-  CardItem,
-  Text,
-  List,
-  Left,
-  Right,
+  CardItem, Container,
+  Content,
+
+
+
+
+  Left, List,
+
+  Right, Text
 } from "native-base";
-import { styles } from "./styles";
+import React from "react";
 import OrderCardUpComing from "../../atoms/order-card-upcoming/order-card-upcoming";
-import { SafeAreaView} from 'react-native'
+import { styles } from "./styles";
 
 const OrderUpcoming = (props) => {
-
+  const { updateTimeRemain, handleUpdateStatus, status } = props;
   // console.log("props of order card up comming",props);
   var orderList = props.orderList;
   if (orderList.length === 0) {
@@ -48,7 +49,7 @@ const OrderUpcoming = (props) => {
           <List
             keyExtractor={orderList.id}
             dataArray={orderList}
-            renderRow={(order) => <OrderCardUpComing order={order} status = {props.status} handleUpdateStatus={props.handleUpdateStatus}/>}
+          renderRow={(order) => <OrderCardUpComing updateTimeRemain={updateTimeRemain} order={order} handleUpdateStatus={handleUpdateStatus} />}
           />
 
 

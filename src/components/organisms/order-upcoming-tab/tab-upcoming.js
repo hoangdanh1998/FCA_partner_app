@@ -9,6 +9,7 @@ import { AUTO_ACCEPT_ORDER } from '../../../redux/action-types/action';
 import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER } from "../../../redux/actions/order-list";
 import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
+import { SET_TIME_REMAIN } from './../../../redux/actions/order-list';
 import { styles } from "./styles";
 
 
@@ -27,6 +28,10 @@ const UpcomingTab = (props) => {
   const [newOrder, setNewOrder] = useState({})
   const isFocused = useIsFocused();
 
+  toDoOrderList.sort((current, next) => {
+    return +current.timeRemain - +next.timeRemain
+  })
+
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -40,6 +45,8 @@ const UpcomingTab = (props) => {
 
     setIsLoading(false);
   }, [dispatch, setError, setIsLoading])
+
+
 
   // React.useMemo(() => {
   //   dispatch(getOrderAfterUpdate(OrderStatus.PREPARATION));
@@ -55,10 +62,11 @@ const UpcomingTab = (props) => {
   const handleUpdateStatus = useCallback(
     async (status, id) => {
       try {
-        if (status === "to-do") {
-          await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
-        } else {
-          await dispatch(setOrderStatus(id, OrderStatus.READINESS));
+        console.log({ status })
+        if (status === OrderStatus.ACCEPTANCE) {
+          dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+        } else if (status === OrderStatus.PREPARATION) {
+          dispatch(setOrderStatus(id, OrderStatus.READINESS));
         }
         Toast.show({
           text: TOAST_SUCCESS_MESSAGE,
@@ -73,11 +81,8 @@ const UpcomingTab = (props) => {
           type: "warning"
         })
       }
-      // console.log("todo");
     }
   )
-
- 
   useEffect(() => {
     loadOrderList();
     (() => {
@@ -92,7 +97,7 @@ const UpcomingTab = (props) => {
         }
       })
     })();
-  }, [dispatch, loadOrderList]);
+  }, []);
 
   // if (error) {
   //   return (
@@ -129,8 +134,21 @@ const UpcomingTab = (props) => {
       </View>
       <View style={styles.order_view}>
 
-        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
-        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
+        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} updateTimeRemain={(order) => {
+          dispatch({
+            type: SET_TIME_REMAIN,
+            payload: order,
+          })
+        }}
+          orderList={toDoOrderList} status="to-do" />
+        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList}
+          updateTimeRemain={(order) => {
+            dispatch({
+              type: SET_TIME_REMAIN,
+              payload: order,
+            })
+          }}
+          status="doing" />
       </View>
     </View>
   );

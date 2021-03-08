@@ -13,8 +13,8 @@ const OrderCardReady = (props) => {
     const [timeRemain, setTimeRemain] = useState(0);
     useEffect(() => {
         (async () => {
-            listenOrder(order.id, (timeRemain) => {
-                setTimeRemain(timeRemain);
+            listenOrder(order.id, (order) => {
+                setTimeRemain(order.timeRemain);
             })
         })();
     }, [])

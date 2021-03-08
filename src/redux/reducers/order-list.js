@@ -6,12 +6,10 @@ import {
     GET_READINESS_ORDERS_TODAY,
     SEND_QR_CODE,
     SET_ACCEPTANCE_ORDER,
-
-
-
     SET_LIST_INIT_ORDER, SET_PREPARATION_ORDER,
     SET_READINESS_ORDER,
-    SET_RECEPTION_ORDER
+
+    SET_RECEPTION_ORDER, SET_TIME_REMAIN
 } from "../actions/order-list";
 
 const initialState = {
@@ -24,13 +22,11 @@ const initialState = {
 };
 
 const ordersReducer = (state = initialState, action) => {
-    console.log('orderlist reducer: ' + action.type)
     switch (action.type) {
         case GET_ACCEPTANCE_ORDERS_TODAY: {
             
-            const data = action.payload.data.data.orders;
-            console.log('length: ' + data.length)
-            // console.log('setAcceptance ' + data.length)
+            const data = action.payload;
+
             return {...state, filterToDoList: data};
         }
 
@@ -63,8 +59,7 @@ const ordersReducer = (state = initialState, action) => {
 
         case SET_PREPARATION_ORDER: {
             const id = action.payload;
-            let doingList = state.filterDoingList.map((order)=>order);
-            // console.log("filterDoingList: ", doingList);
+            let doingList = state.filterDoingList.map((order) => order);
             const orderList = state.filterToDoList.filter((order) => {
                 if(order.id === id){
                     doingList.push(order);
@@ -72,16 +67,14 @@ const ordersReducer = (state = initialState, action) => {
                 return order.id != id;
             })
 
-            
-            // console.log("filterTodoList: ", orderList);
+
             
             return {...state, filterToDoList: orderList, filterDoingList: doingList };
         }
 
         case SET_READINESS_ORDER: {
             const id = action.payload;
-            let readyList = state.filterReadyList.map((order)=>order);
-            // console.log("filterDoingList: ", doingList);
+            let readyList = state.filterReadyList.map((order) => order);
             const orderList = state.filterDoingList.filter((order) => {
                 if(order.id === id){
                     readyList.push(order);
@@ -89,8 +82,7 @@ const ordersReducer = (state = initialState, action) => {
                 return order.id != id;
             })
 
-            
-            // console.log("filterTodoList: ", orderList);
+
             
             return {...state, filterDoingList: orderList, filterReadyList: readyList };
         }
@@ -111,6 +103,28 @@ const ordersReducer = (state = initialState, action) => {
         case SET_LIST_INIT_ORDER: {
 
             return { ...state, listInitOrder: action.payload.listInit };
+        }
+
+        case SET_TIME_REMAIN: {
+            const orderUpdateTimeRemain = action.payload;
+            const acceptanceList = [...state.filterToDoList];
+            acceptanceList.forEach((order) => {
+                console.log('current: ' + order.id)
+                console.log('next   : ' + orderUpdateTimeRemain.id)
+                if (order.id === orderUpdateTimeRemain.id) {
+                    console.log(order.timeRemain + ' true ' + orderUpdateTimeRemain.timeRemain)
+
+                    order['timeRemain'] = orderUpdateTimeRemain.timeRemain;
+                }
+            })
+            acceptanceList.sort((current, next) => {
+                return +current.timeRemain - +next.timeRemain
+            })
+            for (const order of acceptanceList) {
+                console.log('o ' + order.timeRemain)
+            }
+            console.log('Update time remain reducer')
+            return { ...state, filterToDoList: acceptanceList };
         }
 
         default:

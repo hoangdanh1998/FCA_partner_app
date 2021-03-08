@@ -4,36 +4,38 @@ import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { styles } from "./styles";
 
+
 const OrderCardUpComing = (props) => {
 
   const handleUpdateStatus = props.handleUpdateStatus;
+  const updateTimeRemain = props.updateTimeRemain;
   const order = props.order;
 
   const [timeRemain, setTimeRemain] = useState(0);
   useEffect(() => {
     (async () => {
-      listenOrder(order.id, (timeRemain) => {
-        handleUpdateStatusWithTime(timeRemain);
-        setTimeRemain(timeRemain);
+      listenOrder(order.id, (order) => {
+        console.log(order.timeRemain)
+        setTimeRemain(order.timeRemain);
+        handleUpdateStatusWithTime(order);
       })
     })();
   }, [])
 
-
-  const handleUpdateStatusWithTime = (timeRemain) => {
-    
-    if (props.status == "to-do" && order.status === OrderStatus.ACCEPTANCE) {
-      if(timeRemain === 0){
-        
+  const handleUpdateStatusWithTime = (orderListened) => {
+    let myTime = orderListened.timeRemain;
+    if (order.status === OrderStatus.ACCEPTANCE) {
+      if (myTime === 0) {
         return;
       }
-      timeRemain += "";
-      const arrTimeString = timeRemain.split(" ");
-      
-      const time = parseInt(arrTimeString[0]);
-      console.log("Time: ", time);
+      myTime += "";
+      const arrTimeString = myTime.split(" ");
+      const time = +arrTimeString[0];
+      order[`timeRemain`] = time;
       if (time <= TimeRemainTo.PREPARATION) {
-        handleUpdateStatus(props.status, order.id);
+        handleUpdateStatus(order.status, order.id);
+      } else {
+        updateTimeRemain(order)
       }
     }
 
@@ -79,7 +81,7 @@ const OrderCardUpComing = (props) => {
           <Right>
             <Icon
               button
-              onPress={() => handleUpdateStatus(props.status, order.id)}
+              onPress={() => handleUpdateStatus(order.status, order.id)}
               android={
                 order.status == "acceptance"
                   ? "md-arrow-forward"

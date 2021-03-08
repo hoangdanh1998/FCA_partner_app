@@ -15,6 +15,7 @@ export const SET_PREPARATION_ORDER = "SET_PREPARATION_ORDER";
 export const SET_READINESS_ORDER = "SET_READINESS_ORDER";
 export const SET_ARRIVAL_ORDER = "SET_ARRIVAL_ORDER";
 export const SET_LIST_INIT_ORDER = "SET_LIST_INIT_ORDER";
+export const SET_TIME_REMAIN = "SET_TIME_REMAIN";
 
 
 
@@ -22,6 +23,7 @@ export const SEND_QR_CODE = "SEND_QR_CODE";
 
 export const getAcceptOrderToday = () => {
     return async dispatch => {
+        console.log('call api')
         try {
             const response = await fca.get('/order', {
                 params: {
@@ -33,10 +35,11 @@ export const getAcceptOrderToday = () => {
                 throw new Error("Something went wrong");
             }
             
-            
+            const orders = response.data.data.orders;
+
             dispatch({
                 type: GET_ACCEPTANCE_ORDERS_TODAY,
-                payload: response
+                payload: orders,
             })
         } catch (error) {
             throw error;
@@ -131,7 +134,6 @@ export const setOrderStatus = (id, status) => {
             if (response.data.meta.status !== SUCCESS) {
                 throw new Error("Something went wrong");
             }
-            // console.log(response);
             
             if(status === OrderStatus.RECEPTION) {
                 dispatch({

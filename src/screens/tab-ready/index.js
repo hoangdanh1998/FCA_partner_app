@@ -45,7 +45,6 @@ const TabReadyScreen = () => {
 
     useEffect(() => {
         // loadOrderList();
-        console.log(readyList)
         setSearchList(readyList);
     }, [dispatch, readyList]);
 
