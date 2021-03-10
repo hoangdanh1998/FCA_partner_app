@@ -36,7 +36,7 @@ const NewOrderCard = (props) => {
                                 Bạn có một đơn hàng mới từ
                             </Text>
                             <Text style={[styles.text, styles.boldText, { marginLeft: 5 }]}>
-                                {order.customer?.phone}
+                                {order.customer.account?.phone}
                             </Text>
                         </View>
                         <FlatList
