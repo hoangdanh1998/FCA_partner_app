@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from 'react'
-import {
-    View,
-    Text,
-    Image,
-    TextInput,
-    KeyboardAvoidingView,
-    TouchableWithoutFeedback,
-    Keyboard,
-    ScrollView,
-    SafeAreaView,
-    TouchableOpacity,
-    TouchableHighlight,
-    ImageBackground,
-    ActivityIndicator,
-    BackHandler
-} from 'react-native';
-import { styles } from './style';
-import Feather from 'react-native-vector-icons/Feather'
-import { BACKGROUND_COLOR, PRIMARY_COLOR } from '../../constance/constance';
-import { useDispatch } from 'react-redux'
-import { login } from '../../redux/actions/account';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import {
+    ActivityIndicator, Image,
+
+    KeyboardAvoidingView,
+
+
+
+    SafeAreaView, ScrollView, Text,
+
+    TextInput,
+
+
+
+
+
+
+    TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View
+} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import { useDispatch } from 'react-redux';
+import { BACKGROUND_COLOR, PRIMARY_COLOR } from '../../constance/constance';
+import { login } from '../../redux/actions/account';
+import { styles } from './style';
 
 const Login = (props) => {
 
@@ -132,6 +134,7 @@ const Login = (props) => {
                                         style={[styles.textInput, styles.titleText, { color: '#05375a', marginRight: 15 }]}
                                         autoCapitalize="none"
                                         keyboardType="phone-pad"
+                                        defaultValue={data.numberPhone}
                                         onChangeText={(val) => handleChangePhone(val)}
                                     />
                                 </View>
@@ -146,6 +149,7 @@ const Login = (props) => {
                                         placeholderTextColor="#666666"
                                         style={[styles.textInput, styles.titleText, { color: '#05375a' }]}
                                         autoCapitalize="none"
+                                        defaultValue={data.password}
                                         secureTextEntry={data.secureTextEntry ? true : false}
                                         onChangeText={(val) => handleChangePassword(val)}
                                     />

@@ -43,6 +43,7 @@ const accountReducer = (state = initialState, action) => {
         case RESTORE_TOKEN:
             return { ...state, token: action.payload.token, partner: action.payload.partner, isLoading: false };
         case SIGN_OUT:
+            removeToken();
             return { ...state, isSignOut: true, partner: null, token: null };
         case FINISH_LOADING:
             console.log("change isloading");

@@ -1,9 +1,9 @@
+import { Body, Button, Header, Left, Right, Title } from "native-base";
 import React from "react";
-import { Header, Title, Button, Left, Right, Body } from "native-base";
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
-import { styles } from "./stytle";
 import { useSelector } from 'react-redux';
+import { styles } from "./stytle";
 
 
 export const MyHeader = (props) => {
@@ -51,7 +51,7 @@ export const MyHeader = (props) => {
                 }
 
             <Body style={styles.title_header}>
-                <Title >{partner.name}</Title>
+                <Title >{partner?.name}</Title>
             </Body>
             <Right>
                 <Button
