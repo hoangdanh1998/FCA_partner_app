@@ -20,11 +20,15 @@ export const SET_LIST_INIT_ORDER = "SET_LIST_INIT_ORDER";
 
 export const SEND_QR_CODE = "SEND_QR_CODE";
 
-export const getAcceptOrderToday = () => {
+
+export const getAcceptOrderToday = (partnerId) => {
     return async dispatch => {
+
+
         try {
             const response = await fca.get('/order', {
                 params: {
+                    partnerId,
                     status: OrderStatus.ACCEPTANCE
                 }
             });
@@ -45,11 +49,12 @@ export const getAcceptOrderToday = () => {
     }
 };
 
-export const getPreparationOrderToday = () => {
+export const getPreparationOrderToday = (partnerId) => {
     return async dispatch => {
         try {
             const response = await fca.get('/order', {
                 params: {
+                    partnerId,
                     status: OrderStatus.PREPARATION
                 }
             });
@@ -69,17 +74,19 @@ export const getPreparationOrderToday = () => {
     }
 };
 
-export const getReadinessOrderToday = () => {
+export const getReadinessOrderToday = (partnerId) => {
     return async dispatch => {
         try {
             const responseReady = await fca.get('/order', {
                 params: {
+                    partnerId,
                     status:OrderStatus.READINESS     
                 }
             });
 
             const responseArrival = await fca.get('/order', {
                 params: {
+                    partnerId,
                     status:OrderStatus.ARRIVAL     
                 }
             });
@@ -100,11 +107,12 @@ export const getReadinessOrderToday = () => {
     }
 };
 
-export const getArrivalOrderToday = () => {
+export const getArrivalOrderToday = (partnerId) => {
     return async dispatch => {
         try {
             const response = await fca.get('/order', {
                 params: {
+                    partnerId,
                     status:OrderStatus.ARRIVAL     
                 }
             });
