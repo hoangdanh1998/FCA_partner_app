@@ -2,10 +2,10 @@ import { withNavigation } from '@react-navigation/compat';
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
+import { OrderStatus } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from './style';
-import {OrderStatus} from '../../../constance/constance'
 
 const OrderCardReady = (props) => {
     var order = props.order;
@@ -13,8 +13,10 @@ const OrderCardReady = (props) => {
     const [timeRemain, setTimeRemain] = useState(0);
     useEffect(() => {
         (async () => {
-            listenOrder(order.id, (timeRemain) => {
-                setTimeRemain(timeRemain);
+            listenOrder(order.id, (orderListened) => {
+                if (orderListened) {
+                    setTimeRemain(orderListened.timeRemain);
+                }
             })
         })();
     }, [])
@@ -27,7 +29,7 @@ const OrderCardReady = (props) => {
                         <Text style={[
                             styles.title_font_weight,
                             styles.title_font_size
-                        ]}>{order.customer.phone}</Text>
+                        ]}>{order.customer.account.phone}</Text>
                     </Left>
                     <Text
                             style={
