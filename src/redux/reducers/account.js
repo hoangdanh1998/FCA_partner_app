@@ -1,11 +1,12 @@
-const { LOGIN, RESTORE_TOKEN, SIGN_OUT, FINISH_LOADING } = require("../actions/account");
+const { LOGIN, RESTORE_TOKEN, SIGN_OUT, FINISH_LOADING, CHANGE_ERROR } = require("../actions/account");
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
     partner: {},
     token: null,
     isLoading: true,
-    isSignOut: false
+    isSignOut: false,
+    isError: false
 };
 
 const removeToken = async () => {
@@ -28,7 +29,7 @@ const storeToken = async (token, partner) => {
         const jsonPartner = JSON.stringify(partner);
         await AsyncStorage.setItem('@storage_Token', jsonToken);
         await AsyncStorage.setItem('@storage_Partner', jsonPartner);
-        
+
     } catch (e) {
         console.error("error of store token", e);
     }
@@ -48,6 +49,8 @@ const accountReducer = (state = initialState, action) => {
         case FINISH_LOADING:
             console.log("change isloading");
             return { ...state, isLoading: false };
+        case CHANGE_ERROR:
+            return {...state, isError: action.payload}
         default:
             return state;
     }

@@ -1,27 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
 import {
-    ActivityIndicator, Image,
-
+    ActivityIndicator, 
+    Image,
     KeyboardAvoidingView,
-
-
-
-    SafeAreaView, ScrollView, Text,
-
+    SafeAreaView, 
+    ScrollView, 
+    Text,
     TextInput,
-
-
-
-
-
-
-    TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View
+    TouchableHighlight, 
+    TouchableOpacity, 
+    TouchableWithoutFeedback, 
+    View
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BACKGROUND_COLOR, PRIMARY_COLOR } from '../../constance/constance';
-import { login } from '../../redux/actions/account';
+import { changeError, login } from '../../redux/actions/account';
 import { styles } from './style';
 
 const Login = (props) => {
@@ -30,6 +25,7 @@ const Login = (props) => {
 
     const dispatch = useDispatch();
 
+    const isError = useSelector(state => state.account.isError);
 
     const [data, setData] = useState({
         numberPhone: '',
@@ -39,13 +35,15 @@ const Login = (props) => {
         isLoading: false
     });
 
-    const storeToken = async (token) => {
-        try {
-            await AsyncStorage.setItem('@storage_Token', token)
-        } catch (e) {
-            console.error("error of store token", e);
-        }
-    };
+    
+
+    // const storeToken = async (token) => {
+    //     try {
+    //         await AsyncStorage.setItem('@storage_Token', token)
+    //     } catch (e) {
+    //         console.error("error of store token", e);
+    //     }
+    // };
     const handleChangePhone = (phone) => {
         setData(
             {
@@ -66,20 +64,23 @@ const Login = (props) => {
         try {
             setData({
                 ...data,
-                error: false,
+                // error: false,
                 isLoading: true
             })
+
+            dispatch(changeError(isError));
 
             await dispatch(login(phone, password));
 
             // props.navigation.navigate("HOME_STACK");
 
         } catch (error) {
-            setData({
-                ...data,
-                error: true,
+            // setData({
+            //     ...data,
+            //     error: true,
 
-            })
+            // })
+            dispatch(changeError(isError));
             console.log("errr sao ko bao");
         }
 
@@ -174,7 +175,7 @@ const Login = (props) => {
 
                             </View>
                             <View>
-                                {data.error ?
+                                {isError ?
                                     <Text style={[styles.titleText, styles.errorMessage,]}>Số điện thoại hoặc mật khẩu không hợp lệ</Text>
                                     : null}
                             </View>
