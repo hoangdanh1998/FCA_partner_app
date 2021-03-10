@@ -2,7 +2,7 @@ import * as firebase from 'firebase';
 export const listenOrder = async (orderId, returnValue) => {
     firebase.database().ref('order').child(orderId).on('value', (snapshot) => {
         if(snapshot)
-            returnValue(snapshot.val().timeRemain)
+            returnValue(snapshot.val())
     });
 }
 export const listenInComingOrder = async (partnerId, returnValue) => {
