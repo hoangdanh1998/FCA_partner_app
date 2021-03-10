@@ -25,7 +25,7 @@ const Login = (props) => {
 
     const dispatch = useDispatch();
 
-    const isError = useSelector(state => state.account.isError);
+    const errMessage = useSelector(state => state.account.errMessage);
 
     const [data, setData] = useState({
         numberPhone: '',
@@ -68,10 +68,13 @@ const Login = (props) => {
                 isLoading: true
             })
 
-            dispatch(changeError(isError));
+            dispatch(changeError(null));
 
-            await dispatch(login(phone, password));
-
+            if(phone.trim().length === 0) {
+                dispatch(changeError("Số điện thoại và mật khẩu là bắt buộc!"));
+            } else {
+                await dispatch(login(phone, password));
+            }
             // props.navigation.navigate("HOME_STACK");
 
         } catch (error) {
@@ -80,7 +83,7 @@ const Login = (props) => {
             //     error: true,
 
             // })
-            dispatch(changeError(isError));
+            dispatch(changeError("Số điện thoại hoặc mật khẩu không hợp lệ"));
             console.log("errr sao ko bao");
         }
 
@@ -175,8 +178,8 @@ const Login = (props) => {
 
                             </View>
                             <View>
-                                {isError ?
-                                    <Text style={[styles.titleText, styles.errorMessage,]}>Số điện thoại hoặc mật khẩu không hợp lệ</Text>
+                                {errMessage!=null ?
+                                    <Text style={[styles.titleText, styles.errorMessage,]}>{errMessage}</Text>
                                     : null}
                             </View>
                             <View style={styles.buttonBody}>

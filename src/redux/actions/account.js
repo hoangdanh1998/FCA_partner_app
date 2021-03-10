@@ -37,10 +37,10 @@ export const signOut = () => {
     }
 }
 
-export const changeError = (isError) => {
+export const changeError = (errMessage) => {
     return {
         type: CHANGE_ERROR,
-        payload: !isError
+        payload: errMessage
     }
 }
 

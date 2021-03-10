@@ -6,7 +6,7 @@ const initialState = {
     token: null,
     isLoading: true,
     isSignOut: false,
-    isError: false
+    errMessage: null
 };
 
 const removeToken = async () => {
@@ -50,7 +50,7 @@ const accountReducer = (state = initialState, action) => {
             console.log("change isloading");
             return { ...state, isLoading: false };
         case CHANGE_ERROR:
-            return {...state, isError: action.payload}
+            return {...state, errMessage: action.payload}
         default:
             return state;
     }
