@@ -4,7 +4,7 @@ import { Root } from 'native-base'
 import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
 
 const HomeScreen = (props) => {
-  console.log("props home: ", props.route.name);
+  // console.log("props home: ", props.route.name);
 
   // const handleBackButton = () => {
   //   if (props.route.name == "UPCOMING") {

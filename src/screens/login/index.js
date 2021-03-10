@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import {
-    View,
-    Text,
-    Image,
-    TextInput,
-    KeyboardAvoidingView,
-    TouchableWithoutFeedback,
-    Keyboard,
-    ScrollView,
-    SafeAreaView,
-    TouchableOpacity,
-    TouchableHighlight,
-    ImageBackground,
-    ActivityIndicator,
-    BackHandler
-} from 'react-native';
-import { styles } from './style';
-import Feather from 'react-native-vector-icons/Feather'
-import { BACKGROUND_COLOR, PRIMARY_COLOR } from '../../constance/constance';
-import { useDispatch } from 'react-redux'
-import { login } from '../../redux/actions/account';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from 'react';
+import {
+    ActivityIndicator, 
+    Image,
+    KeyboardAvoidingView,
+    SafeAreaView, 
+    ScrollView, 
+    Text,
+    TextInput,
+    TouchableHighlight, 
+    TouchableOpacity, 
+    TouchableWithoutFeedback, 
+    View
+} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import { useDispatch, useSelector } from 'react-redux';
+import { BACKGROUND_COLOR, PRIMARY_COLOR } from '../../constance/constance';
+import { changeError, login } from '../../redux/actions/account';
+import { styles } from './style';
 
 const Login = (props) => {
 
@@ -28,6 +25,7 @@ const Login = (props) => {
 
     const dispatch = useDispatch();
 
+    const errMessage = useSelector(state => state.account.errMessage);
 
     const [data, setData] = useState({
         numberPhone: '',
@@ -37,13 +35,15 @@ const Login = (props) => {
         isLoading: false
     });
 
-    const storeToken = async (token) => {
-        try {
-            await AsyncStorage.setItem('@storage_Token', token)
-        } catch (e) {
-            console.error("error of store token", e);
-        }
-    };
+    
+
+    // const storeToken = async (token) => {
+    //     try {
+    //         await AsyncStorage.setItem('@storage_Token', token)
+    //     } catch (e) {
+    //         console.error("error of store token", e);
+    //     }
+    // };
     const handleChangePhone = (phone) => {
         setData(
             {
@@ -64,20 +64,27 @@ const Login = (props) => {
         try {
             setData({
                 ...data,
-                error: false,
+                // error: false,
                 isLoading: true
             })
 
-            await dispatch(login(phone, password));
+            dispatch(changeError(null));
 
+            if(phone.trim().length === 0) {
+                dispatch(changeError("Số điện thoại và mật khẩu là bắt buộc!"));
+            } else {
+                await dispatch(login(phone, password));
+            }
             // props.navigation.navigate("HOME_STACK");
 
         } catch (error) {
-            setData({
-                ...data,
-                error: true,
+            // setData({
+            //     ...data,
+            //     error: true,
 
-            })
+            // })
+            dispatch(changeError("Số điện thoại hoặc mật khẩu không hợp lệ"));
+            console.log("errr sao ko bao");
         }
 
         setData({
@@ -131,6 +138,7 @@ const Login = (props) => {
                                         style={[styles.textInput, styles.titleText, { color: '#05375a', marginRight: 15 }]}
                                         autoCapitalize="none"
                                         keyboardType="phone-pad"
+                                        defaultValue={data.numberPhone}
                                         onChangeText={(val) => handleChangePhone(val)}
                                     />
                                 </View>
@@ -145,6 +153,7 @@ const Login = (props) => {
                                         placeholderTextColor="#666666"
                                         style={[styles.textInput, styles.titleText, { color: '#05375a' }]}
                                         autoCapitalize="none"
+                                        defaultValue={data.password}
                                         secureTextEntry={data.secureTextEntry ? true : false}
                                         onChangeText={(val) => handleChangePassword(val)}
                                     />
@@ -169,8 +178,8 @@ const Login = (props) => {
 
                             </View>
                             <View>
-                                {data.error ?
-                                    <Text style={[styles.titleText, styles.errorMessage,]}>Số điện thoại hoặc mật khẩu không hợp lệ</Text>
+                                {errMessage!=null ?
+                                    <Text style={[styles.titleText, styles.errorMessage,]}>{errMessage}</Text>
                                     : null}
                             </View>
                             <View style={styles.buttonBody}>

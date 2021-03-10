@@ -10,13 +10,16 @@ import MenuDrawer from './drawer-navigation';
 const HomeStack = createStackNavigator();
 
 
-function HomeStackScreen() {
+
+function HomeStackScreen(props) {
+    const handleLogOut = props.route.params.handleLogOut;
+    console.log("props home stack", props.route.params);
     return (
         // <NavigationContainer>
             <HomeStack.Navigator
                 screenOptions={{
                     header: (props) => (
-                        <MyHeader {...props} />
+                        <MyHeader {...props} handleLogOut = {handleLogOut} />
                     )
                 }}
             >
