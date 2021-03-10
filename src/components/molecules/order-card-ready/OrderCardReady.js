@@ -13,8 +13,8 @@ const OrderCardReady = (props) => {
     const [timeRemain, setTimeRemain] = useState(0);
     useEffect(() => {
         (async () => {
-            listenOrder(order.id, (timeRemain) => {
-                setTimeRemain(timeRemain);
+            listenOrder(order.id, (orderListened) => {
+                setTimeRemain(orderListened.timeRemain);
             })
         })();
     }, [])
@@ -27,7 +27,7 @@ const OrderCardReady = (props) => {
                         <Text style={[
                             styles.title_font_weight,
                             styles.title_font_size
-                        ]}>{order.customer.phone}</Text>
+                        ]}>{order.customer.account.phone}</Text>
                     </Left>
                     <Text
                             style={

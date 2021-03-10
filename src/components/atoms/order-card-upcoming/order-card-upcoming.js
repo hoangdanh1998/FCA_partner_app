@@ -12,23 +12,22 @@ const OrderCardUpComing = (props) => {
   const [timeRemain, setTimeRemain] = useState(0);
   useEffect(() => {
     (async () => {
-      listenOrder(order.id, (timeRemain) => {
-        handleUpdateStatusWithTime(timeRemain);
-        setTimeRemain(timeRemain);
+      listenOrder(order.id, (orderListened) => {
+        handleUpdateStatusWithTime(orderListened);
+        setTimeRemain(orderListened.timeRemain);
       })
     })();
   }, [])
 
 
-  const handleUpdateStatusWithTime = (timeRemain) => {
-    
-    if (props.status == "to-do" && order.status === OrderStatus.ACCEPTANCE) {
-      if(timeRemain === 0){
-        
+  const handleUpdateStatusWithTime = (orderListened) => {
+    let tmpTimeRemain = orderListened.timeRemain;
+    if (props.status == "to-do" && orderListened.status === OrderStatus.ACCEPTANCE) {
+      if (tmpTimeRemain === 0) {
         return;
       }
-      timeRemain += "";
-      const arrTimeString = timeRemain.split(" ");
+      tmpTimeRemain += "";
+      const arrTimeString = tmpTimeRemain.split(" ");
       
       const time = parseInt(arrTimeString[0]);
       console.log("Time: ", time);
@@ -44,7 +43,7 @@ const OrderCardUpComing = (props) => {
       <Card style={styles.card}>
         <CardItem style={styles.cardHeader} header bordered>
           <Left>
-            <Text style={styles.title}>{order.customer.phone}</Text>
+            <Text style={styles.title}>{order.customer.account.phone}</Text>
           </Left>
           <Text
             style={

@@ -37,7 +37,7 @@ const TabReadyScreen = () => {
 
     const handelSearchReadyList = (phone) => {
         const resultList = readyList.filter((order) => {
-            return order.customer.phone.search(phone) != -1;
+            return order.customer.account.phone.search(phone) != -1;
         })
 
         setSearchList(resultList);

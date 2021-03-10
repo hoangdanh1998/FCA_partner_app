@@ -43,7 +43,7 @@ const NewOrderModal = (props) => {
                         <Text
                                 style={[styles.text, styles.boldText, {marginLeft:5}]}  
                             >
-                                {newOrder?.customer?.phone}
+                                {newOrder?.customer?.account.phone}
                             </Text>
                         </View>          
                         <Card style={{width:"80%"}}>

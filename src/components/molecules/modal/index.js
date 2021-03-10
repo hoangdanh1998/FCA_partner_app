@@ -33,18 +33,7 @@ export default InitOrderModal = (props) => {
                         />
                         {listInitOrder.length > 1 ? (
                         <Body style={[styles.buttonBody, { marginTop: 18 }]}>
-                            <TouchableHighlight
-                                style={{ ...styles.button, backgroundColor: "#B85450" }}
-                                onPress={() => {
-                                    handleRejectOrder()
-                                }}
-                                underlayColor={"#F8CECC"}
-                                activeOpacity={0.9}
-                            >
-                                <Text style={[styles.text, styles.textButton, styles.boldText]}>
-                                    Từ chối tất cả
-                            </Text>
-                            </TouchableHighlight>
+                          
                             <TouchableHighlight
                                 onPress={() => { handleAcceptAllOrder() }}
                                 underlayColor={"#D5E8D4"}
