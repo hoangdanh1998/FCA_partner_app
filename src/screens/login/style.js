@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { BACKGROUND_COLOR, HEADER_FONT_SIZE } from '../../constance/constance';
+import { BACKGROUND_COLOR, HEADER_FONT_SIZE, LIGHT_COLOR } from '../../constance/constance';
 
 
 export const styles = StyleSheet.create({
@@ -76,6 +76,7 @@ export const styles = StyleSheet.create({
     centered: {
         flex: 1,
         alignItems:"center",
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor: LIGHT_COLOR
     },
 })

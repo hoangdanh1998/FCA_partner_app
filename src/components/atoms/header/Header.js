@@ -4,13 +4,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { styles } from "./stytle";
+import {DrawerActions } from '@react-navigation/native';
 
 
 export const MyHeader = (props) => {
     // console.log("header:", props);
     const partner = useSelector(state => state.account.partner);
     // console.log("partner header:", partner);
-    console.log("props my header: ", props.handleLogOut);
+    // console.log("props my header: ", props.handleLogOut);
     const handleLogOut = props.handleLogOut;
     return (
         <Header
@@ -32,6 +33,7 @@ export const MyHeader = (props) => {
                     : <Left style={{ flexDirection: "row" }}>
                         <Button transparent
                             style={{ marginRight: 20 }}
+                            onPress = {() => props.navigation.dispatch(DrawerActions.openDrawer())}
                         >
                             <Icon
                                 name="menu"

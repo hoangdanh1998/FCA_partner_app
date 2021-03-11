@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { finishLoading, restoreToken, signOut } from '../redux/actions/account';
 import LoadingPage from '../screens/loading-page/index';
 import Login from '../screens/login';
+import MenuDrawer from './drawer-navigation';
 import HomeStackScreen from './home-stack-screen';
 
 
@@ -69,7 +70,7 @@ function LoginNavigation() {
                     }} /> 
                     : <LoginStack.Screen
                         name="HOME_STACK"
-                        component={HomeStackScreen} 
+                        component={MenuDrawer} 
                             initialParams={{ handleLogOut }}
                         />}
 

@@ -3,7 +3,7 @@ import { Body, Left, Right, Switch, Text, Toast } from "native-base";
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
-import { OrderStatus, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
+import { LIGHT_COLOR, OrderStatus, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
 import { listenInComingOrder } from '../../../firebase/firebase-realtime';
 import { AUTO_ACCEPT_ORDER } from '../../../redux/action-types/action';
 import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER } from "../../../redux/actions/order-list";
@@ -113,7 +113,7 @@ const UpcomingTab = (props) => {
   // };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#e6d7ab' }}>
+    <View style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
       <View style={styles.switch_view}>
         <InitOrderModal visible={visible} handleAcceptAllOrder={() => { console.log('accept all order') }} setVisible={setVisible} />
         <Left></Left>

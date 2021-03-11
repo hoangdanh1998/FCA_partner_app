@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useDispatch, useSelector } from 'react-redux';
-import { BACKGROUND_COLOR, PRIMARY_COLOR } from '../../constance/constance';
+import { BACKGROUND_COLOR, LIGHT_COLOR, PRIMARY_COLOR } from '../../constance/constance';
 import { changeError, login } from '../../redux/actions/account';
 import { styles } from './style';
 
@@ -70,7 +70,7 @@ const Login = (props) => {
 
             dispatch(changeError(null));
 
-            if(phone.trim().length === 0) {
+            if(phone.trim().length === 0 || password.trim().length === 0) {
                 dispatch(changeError("Số điện thoại và mật khẩu là bắt buộc!"));
             } else {
                 await dispatch(login(phone, password));
@@ -104,7 +104,7 @@ const Login = (props) => {
     if (data.isLoading) {
         return (
             <View style={styles.centered}>
-                <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+                <ActivityIndicator size="large" color={BACKGROUND_COLOR} />
             </View>
         )
     }
@@ -119,7 +119,7 @@ const Login = (props) => {
                 enabled
             >
                 <TouchableWithoutFeedback >
-                    <ScrollView style={{ backgroundColor: "#e6d7ab" }}>
+                    <ScrollView style={{ backgroundColor: LIGHT_COLOR }}>
                         <View style={styles.container}>
                             <Image
                                 style={styles.logo}
