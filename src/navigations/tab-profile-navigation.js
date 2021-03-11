@@ -1,16 +1,13 @@
 import React from 'react';
-import HomeScreen from '../screens/items/index';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TabReadyScreen from '../screens/tab-ready/index'
 import { LIGHT_COLOR } from '../constance/constance';
+import StoreProfileTab from '../components/atoms/store-profile-tab';
 
 const Tab = createMaterialTopTabNavigator();
-const Stack = createStackNavigator();
 
-export default function TabNavigation() {
+export default function TabProfileNavigation() {
     return (
-        // <NavigationContainer>
+    
             <Tab.Navigator
                 tabBarOptions={{
                     activeTintColor: LIGHT_COLOR,
@@ -18,9 +15,9 @@ export default function TabNavigation() {
                     style: { backgroundColor: LIGHT_COLOR },
                 }}                
                 initialRouteName="UPCOMING">
-                <Tab.Screen options={{tabBarLabel:"ĐANG ĐẾN"}} name="UPCOMING" component={HomeScreen} />
+                <Tab.Screen options={{tabBarLabel:"THÔNG TIN CHUNG"}} name="STORE_PROFILE" component={StoreProfileTab} />
                 <Tab.Screen options={{tabBarLabel:"SẴN SÀNG"}} name="READY" component={TabReadyScreen} />
             </Tab.Navigator>
-        // </NavigationContainer>
+        
     );
 }
