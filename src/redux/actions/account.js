@@ -12,7 +12,7 @@ import fca from "../../service/fca-api/fca";
 export const login = (phone, password) => {
     return async dispatch => {
         try {
-            const response = await fca.post('/auth/login', { phone, password });
+            const response = await fca.post('/auth/login', {phone: phone, password: password});
             // console.log("account partner", response);
             dispatch({
                 type:LOGIN,

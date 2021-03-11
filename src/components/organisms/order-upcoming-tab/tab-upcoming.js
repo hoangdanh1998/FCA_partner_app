@@ -32,9 +32,9 @@ const UpcomingTab = (props) => {
     setIsLoading(true);
     try {
       setError();
-      dispatch(getAcceptOrderToday());
-      dispatch(getPreparationOrderToday());
-      dispatch(getReadinessOrderToday())
+      dispatch(getAcceptOrderToday(partnerAccount.id));
+      dispatch(getPreparationOrderToday(partnerAccount.id));
+      dispatch(getReadinessOrderToday(partnerAccount.id))
     } catch (error) {
       setError(error.message);
     }

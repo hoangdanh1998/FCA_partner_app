@@ -13,8 +13,10 @@ const OrderCardUpComing = (props) => {
   useEffect(() => {
     (async () => {
       listenOrder(order.id, (orderListened) => {
+        if (orderListened) {
         handleUpdateStatusWithTime(orderListened);
-        setTimeRemain(orderListened.timeRemain);
+          setTimeRemain(orderListened.timeRemain);
+        }
       })
     })();
   }, [])
