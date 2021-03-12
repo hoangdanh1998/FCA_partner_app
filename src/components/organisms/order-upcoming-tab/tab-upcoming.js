@@ -34,7 +34,7 @@ const UpcomingTab = (props) => {
       setError();
       dispatch(getAcceptOrderToday());
       dispatch(getPreparationOrderToday());
-      dispatch(getReadinessOrderToday())
+      dispatch(getReadinessOrderToday());
     } catch (error) {
       setError(error.message);
     }

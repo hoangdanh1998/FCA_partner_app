@@ -19,12 +19,12 @@ export default InitOrderModal = (props) => {
             >
                 <View style={[styles.centeredView, styles.containerView]}>
                     <View style={styles.modalView}>
-                        <View style = {{marginBottom:10}}>
-                            <Text style = {[styles.boldText, {fontSize: 30}]}>Xác Nhận Đơn Hàng</Text>
+                        <View style={{ marginBottom: 10 }}>
+                            <Text style={[styles.boldText, { fontSize: 30 }]}>Xác Nhận Đơn Hàng</Text>
                         </View>
                         <FlatList
                             data={listInitOrder}
-                            style = {{marginBottom: 15}}
+                            style={{ marginBottom: 15 }}
                             keyExtractor={order => order.id}
                             renderItem={({ item }) => (
                                 <NewOrderCard order={item} />
@@ -32,18 +32,18 @@ export default InitOrderModal = (props) => {
                             }
                         />
                         {listInitOrder.length > 1 ? (
-                        <Body style={[styles.buttonBody, { marginTop: 18 }]}>
-                          
-                            <TouchableHighlight
-                                onPress={() => { handleAcceptAllOrder() }}
-                                underlayColor={"#D5E8D4"}
-                                activeOpacity={0.9}
-                                style={styles.button}
-                            >
-                                <Text style={[styles.text, styles.textButton, styles.boldText]}>
-                                    Tiếp nhận tất cả
+                            <Body style={[styles.buttonBody, { marginTop: 18 }]}>
+
+                                <TouchableHighlight
+                                    onPress={() => { handleAcceptAllOrder() }}
+                                    underlayColor={"#D5E8D4"}
+                                    activeOpacity={0.9}
+                                    style={styles.button}
+                                >
+                                    <Text style={[styles.text, styles.textButton, styles.boldText]}>
+                                        Tiếp nhận tất cả
                             </Text>
-                            </TouchableHighlight>
+                                </TouchableHighlight>
                             </Body>) : null}
                     </View>
                 </View>

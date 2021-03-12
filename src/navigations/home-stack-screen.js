@@ -26,7 +26,7 @@ function HomeStackScreen(props) {
                 <HomeStack.Screen name="HOME" component={TabNavigation} />
                 <HomeStack.Screen name="QRCODE" component={QRCode} />
                 <HomeStack.Screen name="SIGNUP" component={SignUp} />
-                <HomeStack.Screen name="DRAWER" component={MenuDrawer} />
+                
             </HomeStack.Navigator>
             
         // </NavigationContainer>
