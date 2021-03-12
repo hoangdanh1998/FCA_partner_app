@@ -32,9 +32,9 @@ const UpcomingTab = (props) => {
     setIsLoading(true);
     try {
       setError();
-      dispatch(getAcceptOrderToday());
-      dispatch(getPreparationOrderToday());
-      dispatch(getReadinessOrderToday());
+      dispatch(getAcceptOrderToday(partnerAccount.id));
+      dispatch(getPreparationOrderToday(partnerAccount.id));
+      dispatch(getReadinessOrderToday(partnerAccount.id))
     } catch (error) {
       setError(error.message);
     }
@@ -51,14 +51,18 @@ const UpcomingTab = (props) => {
   //   setVisible(true)
   // });
 
-  
+
 
   const handleUpdateStatus = useCallback(
     async (status, id) => {
       try {
         if (status === "to-do") {
           await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
-        } else {
+        } else if (status === OrderStatus.READINESS) {
+          await dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
+          console.log("hello update arrival");
+        }
+        else {
           await dispatch(setOrderStatus(id, OrderStatus.READINESS));
         }
         Toast.show({
@@ -78,7 +82,7 @@ const UpcomingTab = (props) => {
     }
   )
 
- 
+
   useEffect(() => {
     loadOrderList();
     (() => {
@@ -100,7 +104,7 @@ const UpcomingTab = (props) => {
   //     <ErrorModal
   //       loadOrderList={() => loadOrderList()}
   //     />
-      
+
   //   )
   // }
 

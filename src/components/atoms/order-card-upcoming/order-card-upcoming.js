@@ -13,8 +13,10 @@ const OrderCardUpComing = (props) => {
   useEffect(() => {
     (async () => {
       listenOrder(order.id, (orderListened) => {
+        if (orderListened) {
         handleUpdateStatusWithTime(orderListened);
-        setTimeRemain(orderListened.timeRemain);
+          setTimeRemain(orderListened.timeRemain);
+        }
       })
     })();
   }, [])
@@ -33,6 +35,17 @@ const OrderCardUpComing = (props) => {
       console.log("Time: ", time);
       if (time <= TimeRemainTo.PREPARATION) {
         handleUpdateStatus(props.status, order.id);
+      }
+    }
+
+    if (orderListened.status === OrderStatus.PREPARATION || orderListened.status === OrderStatus.READINESS) {
+      tmpTimeRemain += "";
+      const arrTimeString = tmpTimeRemain.split(" ");
+      
+      const time = parseInt(arrTimeString[0]);
+      console.log("Time: ", time);
+      if (time <= TimeRemainTo.ARRIVAL) {
+        handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
       }
     }
 
