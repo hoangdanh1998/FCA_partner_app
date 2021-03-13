@@ -7,15 +7,16 @@ import { styles } from './style';
 
 export default InitOrderModal = (props) => {
 
-    const { visible, setVisible, handleAcceptAllOrder } = props;
+    const { visible, handleAcceptAllOrder } = props;
     const listInitOrder = useSelector(state => state.orderList.listInitOrder);
+
+
     return (
         <View style={[styles.centeredView, styles.containerView]}>
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={visible}
-
             >
                 <View style={[styles.centeredView, styles.containerView]}>
                     <View style={styles.modalView}>
@@ -35,7 +36,7 @@ export default InitOrderModal = (props) => {
                             <Body style={[styles.buttonBody, { marginTop: 18 }]}>
 
                                 <TouchableHighlight
-                                    onPress={() => { handleAcceptAllOrder() }}
+                                    onPress={() => { handleAcceptAllOrder(listInitOrder) }}
                                     underlayColor={"#D5E8D4"}
                                     activeOpacity={0.9}
                                     style={styles.button}

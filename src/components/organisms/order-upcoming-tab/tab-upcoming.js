@@ -41,17 +41,12 @@ const UpcomingTab = (props) => {
 
     setIsLoading(false);
   }, [dispatch, setError, setIsLoading])
-
-  // React.useMemo(() => {
-  //   dispatch(getOrderAfterUpdate(OrderStatus.PREPARATION));
-  // }, [doingList])
-
-  // Notifications.addNotificationReceivedListener((notification) => {
-  //   setNewOrder(notification.request.content.data.order);
-  //   setVisible(true)
-  // });
-
-
+  
+  const handleAcceptAllOrder = (listOrder) => {
+    listOrder.map((order) => {
+      dispatch(setOrderStatus(order.id, OrderStatus.ACCEPTANCE));
+    })
+  }
 
   const handleUpdateStatus = async (status, id) => {
       try {
@@ -89,7 +84,6 @@ const UpcomingTab = (props) => {
           type: "warning"
         })
       }
-      // console.log("todo");
     }
 
 
@@ -110,27 +104,10 @@ const UpcomingTab = (props) => {
     })();
   }, [dispatch, loadOrderList]);
 
-  // if (error) {
-  //   return (
-  //     <ErrorModal
-  //       loadOrderList={() => loadOrderList()}
-  //     />
-
-  //   )
-  // }
-
-  // if (isLoading) {
-  //   return (
-  //     <View style={styles.centered}>
-  //       <ActivityIndicator size="large" color={PRIMARY_COLOR} />
-  //     </View>
-  //   )
-  // };
-
   return (
     <View style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
       <View style={styles.switch_view}>
-        <InitOrderModal visible={visible} handleAcceptAllOrder={() => { console.log('accept all order') }} setVisible={setVisible} />
+        <InitOrderModal visible={visible} handleAcceptAllOrder={handleAcceptAllOrder} />
         <Left></Left>
         <Body style={styles.switch_container}>
           <Switch style={styles.switch} onValueChange={(value) => {
