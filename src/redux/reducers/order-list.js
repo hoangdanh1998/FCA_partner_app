@@ -28,13 +28,10 @@ const initialState = {
 };
 
 const ordersReducer = (state = initialState, action) => {
-    console.log('orderlist reducer: ' + action.type)
     switch (action.type) {
         case GET_ACCEPTANCE_ORDERS_TODAY: {
             
             const data = action.payload.data.data.orders;
-            // console.log('length: ' + data.length)
-            // console.log('setAcceptance ' + data.length)
             return {...state, filterToDoList: data};
         }
 
@@ -67,8 +64,7 @@ const ordersReducer = (state = initialState, action) => {
 
         case SET_PREPARATION_ORDER: {
             const id = action.payload;
-            let doingList = state.filterDoingList.map((order)=>order);
-            // console.log("filterDoingList: ", doingList);
+            let doingList = state.filterDoingList.map((order) => order);
             const orderList = state.filterToDoList.filter((order) => {
                 if(order.id === id){
                     doingList.push(order);
@@ -76,16 +72,14 @@ const ordersReducer = (state = initialState, action) => {
                 return order.id != id;
             })
 
-            
-            // console.log("filterTodoList: ", orderList);
+
             
             return {...state, filterToDoList: orderList, filterDoingList: doingList };
         }
 
         case SET_READINESS_ORDER: {
             const id = action.payload;
-            let readyList = state.filterReadyList.map((order)=>order);
-            // console.log("filterDoingList: ", doingList);
+            let readyList = state.filterReadyList.map((order) => order);
             const orderList = state.filterDoingList.filter((order) => {
                 if(order.id === id){
                     readyList.push(order);
@@ -93,14 +87,13 @@ const ordersReducer = (state = initialState, action) => {
                 return order.id != id;
             })
 
-            
-            // console.log("filterTodoList: ", orderList);
+
             
             return {...state, filterDoingList: orderList, filterReadyList: readyList };
         }
 
         case SET_ARRIVAL_ORDER : {
-            
+            return state;
         }
 
         case SET_ACCEPTANCE_ORDER: {

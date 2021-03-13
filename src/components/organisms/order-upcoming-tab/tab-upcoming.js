@@ -4,13 +4,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { LIGHT_COLOR, OrderStatus, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
-import { listenInComingOrder } from '../../../firebase/firebase-realtime';
-import { AUTO_ACCEPT_ORDER } from '../../../redux/action-types/action';
+import * as firebase from '../../../firebase/firebase-realtime';
 import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER } from "../../../redux/actions/order-list";
 import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { styles } from "./styles";
-
 
 
 const UpcomingTab = (props) => {
@@ -27,6 +25,7 @@ const UpcomingTab = (props) => {
   const [visible, setVisible] = useState(false);
   const [newOrder, setNewOrder] = useState({})
   const isFocused = useIsFocused();
+  const [autoAccept, setAutoAccept] = useState(false);
 
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
@@ -42,15 +41,21 @@ const UpcomingTab = (props) => {
     setIsLoading(false);
   }, [dispatch, setError, setIsLoading])
   
-  const handleAcceptAllOrder = (listOrder) => {
-    listOrder.map((order) => {
-      dispatch(setOrderStatus(order.id, OrderStatus.ACCEPTANCE));
+  const handleAcceptAllOrder = async (listOrder) => {
+    await new Promise((resolve) => {
+      const tmpList = listOrder.map((order) => {
+        dispatch(setOrderStatus(order.id, OrderStatus.ACCEPTANCE));
+        return order;
+      })
+      if (tmpList.length === listOrder) {
+        resolve()
+      }
     })
+
   }
 
   const handleUpdateStatus = async (status, id) => {
-      try {
-        console.log({ status })
+    try {
         switch (status) {
           case OrderStatus.PREPARATION:
             dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
@@ -59,7 +64,6 @@ const UpcomingTab = (props) => {
             dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
             break;
           case (OrderStatus.WAITING):
-            console.log('in wait switch')
             dispatch(setOrderStatus(id, OrderStatus.WAITING));
             break;
           case 'doing':
@@ -90,19 +94,25 @@ const UpcomingTab = (props) => {
 
   useEffect(() => {
     loadOrderList();
-    (() => {
-      listenInComingOrder(partnerAccount.id, (listInitOrder) => {
-        if (listInitOrder) {
-          const listInit = Object.values(listInitOrder);
+    console.log('Auto ', autoAccept)
+    firebase.listenInComingOrder(partnerAccount.id, async (listInitOrder) => {
+      if (listInitOrder) {
+        const listInit = Object.values(listInitOrder);
+        console.log('atuto ' + autoAccept)
+        if (autoAccept) {
+          setVisible(false);
+          await handleAcceptAllOrder(listInit);
+        } else {
           if (listInit.length > 0) { setVisible(true) }
           dispatch({ type: SET_LIST_INIT_ORDER, payload: { listInit } })
-        } else {
-          setVisible(false);
-          loadOrderList();
         }
-      })
-    })();
-  }, [dispatch, loadOrderList]);
+      } else {
+        setVisible(false);
+        loadOrderList();
+      }
+    })
+    return () => { firebase.stopListenInComingOrder(partnerAccount.id) }
+  }, [autoAccept]);
 
   return (
     <View style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
@@ -111,11 +121,12 @@ const UpcomingTab = (props) => {
         <Left></Left>
         <Body style={styles.switch_container}>
           <Switch style={styles.switch} onValueChange={(value) => {
-            dispatch({
-              type: AUTO_ACCEPT_ORDER,
-              payload: { autoAcceptOrder: value }
-            })
-          }} value={autoAcceptOrder} />
+            // dispatch({
+            //   type: AUTO_ACCEPT_ORDER,
+            //   payload: { autoAcceptOrder: value }
+            // })
+            setAutoAccept(value)
+          }} value={autoAccept} />
           <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
         </Body>
         <Right />

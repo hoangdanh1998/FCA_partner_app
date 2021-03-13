@@ -146,7 +146,6 @@ export const setOrderStatus = (id, status) => {
             if (response.data.meta.status !== SUCCESS) {
                 throw new Error("Something went wrong");
             }
-            // console.log(response);
             
             if(status === OrderStatus.RECEPTION) {
                 dispatch({
@@ -191,7 +190,6 @@ export const getOrderAfterUpdate = (status) => {
 
 export const sendQRCode = (id) => {
     return async dispatch => {
-        console.log('id' + 'id')
 
         try {
             const response = await fca.post(`/order/${id}/send-qrcode`, { 

@@ -4,7 +4,6 @@ const initialState = {
 }
 
 const behaviorReducer = (state = initialState, action) => {
-    console.log('behavior reducer: ' + action.type)
     switch (action.type) {
         case AUTO_ACCEPT_ORDER: {
             return { ...state, autoAcceptOrder: action.payload.autoAcceptOrder };

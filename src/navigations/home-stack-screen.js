@@ -13,7 +13,6 @@ const HomeStack = createStackNavigator();
 
 function HomeStackScreen(props) {
     const handleLogOut = props.route.params.handleLogOut;
-    // console.log("props home stack", props.route.params);
     return (
         // <NavigationContainer>
             <HomeStack.Navigator

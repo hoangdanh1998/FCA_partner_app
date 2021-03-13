@@ -2,7 +2,7 @@ import { withNavigation } from '@react-navigation/compat';
 import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
 import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
-import { listenOrder } from '../../../firebase/firebase-realtime';
+import * as firebase from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
 
@@ -14,8 +14,7 @@ const OrderCardUpComing = (props) => {
   const [timeRemain, setTimeRemain] = useState(0);
   const [status, setStatus] = useState();
   useEffect(() => {
-    (async () => {
-      listenOrder(order.id, (orderListened) => {
+    firebase.listenOrder(order.id, (orderListened) => {
         if (orderListened) {
           handleUpdateStatusWithTime(orderListened);
           setTimeRemain(orderListened.timeRemain);
@@ -23,9 +22,11 @@ const OrderCardUpComing = (props) => {
             setStatus(orderListened.status);
           }
         }
-      })
-    })();
-  }, [])
+    })
+    // return () => {
+    //   firebase.stopListenOrder(order.id)
+    // }
+  })
 
 
   const handleUpdateStatusWithTime = (orderListened) => {
@@ -34,6 +35,7 @@ const OrderCardUpComing = (props) => {
     const time = +arrTimeString[0];
 
     if (orderListened.status === OrderStatus.ACCEPTANCE && time <= TimeRemainTo.PREPARATION) {
+      console.log('update preparation')
       handleUpdateStatus(OrderStatus.PREPARATION, order.id);
     }
     if (orderListened.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {

@@ -15,7 +15,6 @@ import { SafeAreaView} from 'react-native'
 
 const OrderUpcoming = (props) => {
 
-  // console.log("props of order card up comming",props);
   var orderList = props.orderList;
   if (orderList.length === 0) {
     return (
