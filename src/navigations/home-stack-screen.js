@@ -13,7 +13,7 @@ const HomeStack = createStackNavigator();
 
 function HomeStackScreen(props) {
     const handleLogOut = props.route.params.handleLogOut;
-    console.log("props home stack", props.route.params);
+    // console.log("props home stack", props.route.params);
     return (
         // <NavigationContainer>
             <HomeStack.Navigator
@@ -26,7 +26,7 @@ function HomeStackScreen(props) {
                 <HomeStack.Screen name="HOME" component={TabNavigation} />
                 <HomeStack.Screen name="QRCODE" component={QRCode} />
                 <HomeStack.Screen name="SIGNUP" component={SignUp} />
-                <HomeStack.Screen name="DRAWER" component={MenuDrawer} />
+                
             </HomeStack.Navigator>
             
         // </NavigationContainer>

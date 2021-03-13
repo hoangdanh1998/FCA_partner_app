@@ -1,7 +1,9 @@
-import { Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
+import { withNavigation } from '@react-navigation/compat';
+import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
 import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
+import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
 
 const OrderCardUpComing = (props) => {
@@ -10,12 +12,16 @@ const OrderCardUpComing = (props) => {
   const order = props.order;
 
   const [timeRemain, setTimeRemain] = useState(0);
+  const [status, setStatus] = useState();
   useEffect(() => {
     (async () => {
       listenOrder(order.id, (orderListened) => {
         if (orderListened) {
-        handleUpdateStatusWithTime(orderListened);
+          handleUpdateStatusWithTime(orderListened);
           setTimeRemain(orderListened.timeRemain);
+          if (orderListened.status === OrderStatus.WAITING) {
+            setStatus(orderListened.status);
+          }
         }
       })
     })();
@@ -23,19 +29,15 @@ const OrderCardUpComing = (props) => {
 
 
   const handleUpdateStatusWithTime = (orderListened) => {
-    let tmpTimeRemain = orderListened.timeRemain;
-    if (props.status == "to-do" && orderListened.status === OrderStatus.ACCEPTANCE) {
-      if (tmpTimeRemain === 0) {
-        return;
-      }
-      tmpTimeRemain += "";
-      const arrTimeString = tmpTimeRemain.split(" ");
-      
-      const time = parseInt(arrTimeString[0]);
-      console.log("Time: ", time);
-      if (time <= TimeRemainTo.PREPARATION) {
-        handleUpdateStatus(props.status, order.id);
-      }
+    let tmpTimeRemain = orderListened.timeRemain + '';
+    const arrTimeString = tmpTimeRemain.split(" ");
+    const time = +arrTimeString[0];
+
+    if (orderListened.status === OrderStatus.ACCEPTANCE && time <= TimeRemainTo.PREPARATION) {
+      handleUpdateStatus(OrderStatus.PREPARATION, order.id);
+    }
+    if (orderListened.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
+      handleUpdateStatus(OrderStatus.WAITING, orderListened.id)
     }
 
   }
@@ -54,7 +56,7 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {timeRemain}
+            {status ? 'đang đợi' : timeRemain}
           </Text>
           <Right></Right>
         </CardItem>
@@ -78,7 +80,15 @@ const OrderCardUpComing = (props) => {
             />
           </Left>
           <Right>
-            <Icon
+            {status ? (<Button
+              style={styles.button}
+              onPress={() => {
+                dispatch(sendQRCode(order.id));
+                props.navigation.navigate("QRCODE");
+              }}
+              rounded>
+              <Text>Gửi mã QR</Text>
+            </Button>) : (<Icon
               button
               onPress={() => handleUpdateStatus(props.status, order.id)}
               android={
@@ -88,7 +98,9 @@ const OrderCardUpComing = (props) => {
               }
               name="arrow-forward"
               style={styles.icon}
-            />
+            />)}
+
+
           </Right>
         </CardItem>
       </Card>
@@ -96,4 +108,4 @@ const OrderCardUpComing = (props) => {
   );
 };
 
-export default OrderCardUpComing;
+export default withNavigation(OrderCardUpComing);

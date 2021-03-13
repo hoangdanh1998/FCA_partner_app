@@ -27,7 +27,7 @@ function LoginNavigation() {
 
     const handleGetToken = async () => {
         try {
-            console.log(123);
+            // console.log(123);
             let token = await AsyncStorage.getItem('@storage_Token');
             let partner = await AsyncStorage.getItem('@storage_Partner');
             if (token !== null) {
@@ -37,7 +37,7 @@ function LoginNavigation() {
                 // await AsyncStorage.removeItem('@storage_Token');
             } 
             await dispatch(finishLoading());
-            console.log("finish");
+            // console.log("finish");
         } catch (e) {
             console.error("get token from store: ", e);
         }

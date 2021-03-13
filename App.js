@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import {createStore, applyMiddleware} from 'redux';
 import {rootReducer} from './src/redux/reducers/root-reducer';
 import {Provider} from 'react-redux'
-import HomeStackScreen from './src/navigations/home-stack-screen';
 import  ReduxThunk  from  'redux-thunk';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';

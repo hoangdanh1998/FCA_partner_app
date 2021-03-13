@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SearchBar from '../../components/atoms/search-bar/search-bar';
 import TabReady from '../../components/organisms/tab-ready/tab-ready';
 import { EMPTY_LIST_MESSAGE, OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
-import { getOrderAfterUpdate, getReadinessOrderToday } from '../../redux/actions/order-list';
+import { getOrderAfterUpdate, getReadinessOrderToday, setOrderStatus } from '../../redux/actions/order-list';
 import { styles } from './style';
 const TabReadyScreen = () => {
 
@@ -22,17 +22,25 @@ const TabReadyScreen = () => {
         dispatch(getOrderAfterUpdate(OrderStatus.READINESS));
     }
 
-    const loadOrderList = useCallback(async () => {
-        setIsLoading(true);
+    const handleUpdateStatus = async (status, id) => {
         try {
-            await dispatch(getReadinessOrderToday());
+            console.log({ status })
+            switch (status) {
+                case OrderStatus.ARRIVAL:
+                    dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
+                    break;
+                default:
+                    break;
+            }
+
         } catch (error) {
-            setError(error.message);
+            Toast.show({
+                text: TOAST_FAIL_MESSAGE,
+                buttonText: "OK",
+                type: "warning"
+            })
         }
-        setIsLoading(false);
-    }, [dispatch,setIsLoading]);
-
-
+    }
 
 
     const handelSearchReadyList = (phone) => {
@@ -45,7 +53,7 @@ const TabReadyScreen = () => {
 
     useEffect(() => {
         // loadOrderList();
-        console.log(readyList)
+        // console.log(readyList)
         setSearchList(readyList);
     }, [dispatch, readyList]);
 
@@ -68,7 +76,7 @@ const TabReadyScreen = () => {
     return (
         <View style={{ flex: 1, backgroundColor: "#ffff" }}>
             <SearchBar handelSearchReadyList={handelSearchReadyList} />
-            <TabReady toDoOrderList={searchList} />
+            <TabReady toDoOrderList={searchList} handleUpdateStatus = {handleUpdateStatus} />
         </View>
     );
 }

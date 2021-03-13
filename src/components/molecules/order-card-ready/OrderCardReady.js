@@ -2,24 +2,39 @@ import { withNavigation } from '@react-navigation/compat';
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
-import { OrderStatus } from '../../../constance/constance';
+import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from './style';
 
+
 const OrderCardReady = (props) => {
-    var order = props.order;
+    const {handleUpdateStatus} = props;
+    let order = props.order;
+    const [status, setStatus] = useState()
     const dispatch = useDispatch();
     const [timeRemain, setTimeRemain] = useState(0);
     useEffect(() => {
         (async () => {
             listenOrder(order.id, (orderListened) => {
-                if (orderListened) {
-                    setTimeRemain(orderListened.timeRemain);
+                if (orderListened.status === OrderStatus.ARRIVAL) {
+                    setStatus(orderListened.status);
                 }
+                handleUpdateStatusWithTime(orderListened);
+                setTimeRemain(orderListened.timeRemain);
             })
         })();
     }, [])
+
+    const handleUpdateStatusWithTime = (orderListened) => {
+        let tmpTimeRemain = orderListened.timeRemain + '';
+        const arrTimeString = tmpTimeRemain.split(" ");
+        const time = +arrTimeString[0];
+        if (orderListened.status === OrderStatus.READINESS && time <= TimeRemainTo.ARRIVAL) {
+            console.log('move to arr')
+            handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
+        }
+    }
 
     return (
         <Content padder>
@@ -31,21 +46,24 @@ const OrderCardReady = (props) => {
                             styles.title_font_size
                         ]}>{order.customer.account.phone}</Text>
                     </Left>
-                    <Text
-                            style={
-                            timeRemain <= 10
-                                    ? styles.lateEstimation
-                                    : styles.earlyEstimation
-                            }
+                    <Body>
+                        <Text
+                            style={[
+                                styles.status_order,
+                                styles.title_font_size
+                            ]}
                         >
-                        {order.status == OrderStatus.ARRIVAL ? "" : `${timeRemain}`}
-                    </Text>
-                    <Right></Right>
+                            {status ? "đã đến" : timeRemain}
+                        </Text>
+                    </Body>
+
+
+
                 </CardItem>
                 <CardItem style={styles.cardBody} body bordered>
-                    <Left style={{flexDirection:"column"}}>
+                    <Left style={{ flexDirection: "column", width: "100%" }}>
                         <Left style={styles.cardBody}>
-                            
+
                             <List
                                 style={styles.list}
                                 keyExtractor={order.items.id}
@@ -53,7 +71,7 @@ const OrderCardReady = (props) => {
                                 renderRow={(item) => (
                                     <CardItem>
                                         <Left>
-                                            <Text style={styles.itemText}>{item.name}</Text>
+                                            <Text style={styles.itemText}>Trà sữa chân châu đường đen</Text>
                                         </Left>
                                         <Right style={{ flexDirection: "row" }}>
                                             <Left>
@@ -66,41 +84,25 @@ const OrderCardReady = (props) => {
                                     </CardItem>
                                 )}
                             />
-                            
-                            
                         </Left>
                         <Left style={styles.cardBody}>
-                        <CardItem>
-                                        <Left>
-                                            <Text style={[styles.itemText,styles.title_font_weight]}>Tổng cộng</Text>
-                                        </Left>
-                                        <Right style={{ flexDirection: "row" }}>
-                                            <Left>
-                                                <Text></Text>
-                                            </Left>
-                                            <Right>
-                                                <Text style={[styles.itemText,styles.title_font_weight]}>{order.total}</Text>
-                                            </Right>
-                                        </Right>
-                                    </CardItem>
+                            <CardItem>
+                                <Left>
+                                    <Text style={[styles.itemText, styles.title_font_weight]}>Tổng cộng</Text>
+                                </Left>
+                                <Right style={{ flexDirection: "row" }}>
+                                    <Left>
+                                        <Text></Text>
+                                    </Left>
+                                    <Right>
+                                        <Text style={[styles.itemText, styles.title_font_weight]}>{order.total}</Text>
+                                    </Right>
+                                </Right>
+                            </CardItem>
                         </Left>
                     </Left>
 
-                    <Body style={styles.body_card_item}>
-                        <CardItem
-                            style={styles.body_card_item}
-                        >
-                            
-                            <Right>
-                                <Text style={[
-                                    styles.status_order,
-                                    styles.title_font_size
-                                ]}>
-                                    {order.status == "arrived" ? "đã đến" : ""}
-                                </Text>
-                            </Right>
-                        </CardItem>
-                    </Body>
+
                     <Right>
                         <Button
                             style={styles.button}

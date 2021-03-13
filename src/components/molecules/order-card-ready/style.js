@@ -53,7 +53,8 @@ export const styles = StyleSheet.create({
 
     body_card_item: {
         justifyContent: "center",
-        width:"100%"
+        width:"100%",
+        backgroundColor: "yellow"
 
     },
     status_order: {
