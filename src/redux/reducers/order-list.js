@@ -9,6 +9,10 @@ import {
 
 
 
+    SET_ARRIVAL_ORDER,
+
+
+
     SET_LIST_INIT_ORDER, SET_PREPARATION_ORDER,
     SET_READINESS_ORDER,
     SET_RECEPTION_ORDER
@@ -93,6 +97,10 @@ const ordersReducer = (state = initialState, action) => {
             // console.log("filterTodoList: ", orderList);
             
             return {...state, filterDoingList: orderList, filterReadyList: readyList };
+        }
+
+        case SET_ARRIVAL_ORDER : {
+            
         }
 
         case SET_ACCEPTANCE_ORDER: {

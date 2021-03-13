@@ -58,11 +58,11 @@ const UpcomingTab = (props) => {
       try {
         if (status === "to-do") {
           await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
-        } else if (status === OrderStatus.READINESS) {
+        } else if (status === OrderStatus.ARRIVAL) {
           await dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
           console.log("hello update arrival");
         }
-        else {
+        else if (status === "doing"){
           await dispatch(setOrderStatus(id, OrderStatus.READINESS));
         }
         Toast.show({

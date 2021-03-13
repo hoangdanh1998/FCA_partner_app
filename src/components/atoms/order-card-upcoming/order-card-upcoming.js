@@ -32,7 +32,7 @@ const OrderCardUpComing = (props) => {
       const arrTimeString = tmpTimeRemain.split(" ");
       
       const time = parseInt(arrTimeString[0]);
-      console.log("Time: ", time);
+      console.log("Time set ready: ", time);
       if (time <= TimeRemainTo.PREPARATION) {
         handleUpdateStatus(props.status, order.id);
       }
@@ -44,7 +44,9 @@ const OrderCardUpComing = (props) => {
       
       const time = parseInt(arrTimeString[0]);
       console.log("Time: ", time);
-      if (time <= TimeRemainTo.ARRIVAL) {
+      if (time <= TimeRemainTo.ARRIVAL && orderListened.status === OrderStatus.PREPARATION) {
+        handleUpdateStatus(OrderStatus.WAIT, order.id);
+      } else if (timeRemain <= TimeRemainTo.ARRIVAL && orderListened.status === OrderStatus.READINESS) {
         handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
       }
     }
