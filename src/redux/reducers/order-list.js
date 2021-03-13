@@ -44,7 +44,7 @@ const ordersReducer = (state = initialState, action) => {
         }
 
         case GET_READINESS_ORDERS_TODAY: {
-            const data = [...action.responseReady.data.data.orders, ...action.responseArrival.data.data.orders];
+            const data = [...action.responseArrival.data.data.orders, ...action.responseReady.data.data.orders];
 
             return {...state, filterReadyList: data};
         }
