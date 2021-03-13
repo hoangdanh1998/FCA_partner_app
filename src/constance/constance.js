@@ -34,7 +34,7 @@ export const OrderStatus = {
   READINESS: "READINESS",
   ARRIVAL: "ARRIVAL",
   RECEPTION: "RECEPTION",
-  WAIT: "WAIT",
+  WAITING: "WAIT",
 };
 
 //name of navigation

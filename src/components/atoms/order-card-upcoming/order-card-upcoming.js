@@ -10,12 +10,16 @@ const OrderCardUpComing = (props) => {
   const order = props.order;
 
   const [timeRemain, setTimeRemain] = useState(0);
+  const [status, setStatus] = useState();
   useEffect(() => {
     (async () => {
       listenOrder(order.id, (orderListened) => {
         if (orderListened) {
-        handleUpdateStatusWithTime(orderListened);
+          handleUpdateStatusWithTime(orderListened);
           setTimeRemain(orderListened.timeRemain);
+          if (orderListened.status === OrderStatus.WAITING) {
+            setStatus(orderListened.status);
+          }
         }
       })
     })();
@@ -23,32 +27,15 @@ const OrderCardUpComing = (props) => {
 
 
   const handleUpdateStatusWithTime = (orderListened) => {
-    let tmpTimeRemain = orderListened.timeRemain;
-    if (props.status == "to-do" && orderListened.status === OrderStatus.ACCEPTANCE) {
-      if (tmpTimeRemain === 0) {
-        return;
-      }
-      tmpTimeRemain += "";
-      const arrTimeString = tmpTimeRemain.split(" ");
-      
-      const time = parseInt(arrTimeString[0]);
-      console.log("Time set ready: ", time);
-      if (time <= TimeRemainTo.PREPARATION) {
-        handleUpdateStatus(props.status, order.id);
-      }
-    }
+    let tmpTimeRemain = orderListened.timeRemain + '';
+    const arrTimeString = tmpTimeRemain.split(" ");
+    const time = +arrTimeString[0];
 
-    if (orderListened.status === OrderStatus.PREPARATION || orderListened.status === OrderStatus.READINESS) {
-      tmpTimeRemain += "";
-      const arrTimeString = tmpTimeRemain.split(" ");
-      
-      const time = parseInt(arrTimeString[0]);
-      console.log("Time: ", time);
-      if (time <= TimeRemainTo.ARRIVAL && orderListened.status === OrderStatus.PREPARATION) {
-        handleUpdateStatus(OrderStatus.WAIT, order.id);
-      } else if (timeRemain <= TimeRemainTo.ARRIVAL && orderListened.status === OrderStatus.READINESS) {
-        handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
-      }
+    if (orderListened.status === OrderStatus.ACCEPTANCE && time <= TimeRemainTo.PREPARATION) {
+      handleUpdateStatus(OrderStatus.PREPARATION, order.id);
+    }
+    if (orderListened.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
+      handleUpdateStatus(OrderStatus.WAITING, orderListened.id)
     }
 
   }
@@ -67,7 +54,7 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {timeRemain}
+            {status ? status : timeRemain}
           </Text>
           <Right></Right>
         </CardItem>

@@ -39,7 +39,7 @@ const ordersReducer = (state = initialState, action) => {
         }
 
         case GET_PREPARATION_ORDERS_TODAY: {
-            const data = action.payload.data.data.orders;
+            const data = action.payload.orders;
             return {...state, filterDoingList: data};
         }
 

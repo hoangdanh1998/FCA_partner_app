@@ -22,29 +22,25 @@ const TabReadyScreen = () => {
         dispatch(getOrderAfterUpdate(OrderStatus.READINESS));
     }
 
-    const loadOrderList = useCallback(async () => {
-        setIsLoading(true);
+    const handleUpdateStatus = async (status, id) => {
         try {
-            await dispatch(getReadinessOrderToday());
-        } catch (error) {
-            setError(error.message);
-        }
-        setIsLoading(false);
-    }, [dispatch,setIsLoading]);
-
-
-    const handleUpdateStatus = useCallback (
-        async (status, id) => {
-            try {
-                if (status === OrderStatus.READINESS) {
-                    await dispatch (setOrderStatus(id, OrderStatus.ARRIVAL));
-                    console.log("update arrival status: ");
-                }
-            } catch (error) {
-                console.error("update arrival status err: ", error);
+            console.log({ status })
+            switch (status) {
+                case OrderStatus.ARRIVAL:
+                    dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
+                    break;
+                default:
+                    break;
             }
+
+        } catch (error) {
+            Toast.show({
+                text: TOAST_FAIL_MESSAGE,
+                buttonText: "OK",
+                type: "warning"
+            })
         }
-    )
+    }
 
 
     const handelSearchReadyList = (phone) => {

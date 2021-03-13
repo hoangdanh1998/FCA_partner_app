@@ -2,43 +2,38 @@ import { withNavigation } from '@react-navigation/compat';
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
+import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from './style';
-import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 
 
 const OrderCardReady = (props) => {
     const {handleUpdateStatus} = props;
     let order = props.order;
-    const [statusOrder, setStatusOrder] = useState(order.status)
+    const [status, setStatus] = useState()
     const dispatch = useDispatch();
     const [timeRemain, setTimeRemain] = useState(0);
     useEffect(() => {
         (async () => {
             listenOrder(order.id, (orderListened) => {
+                if (orderListened.status === OrderStatus.ARRIVAL) {
+                    setStatus(orderListened.status);
+                }
                 handleUpdateStatusWithTime(orderListened);
                 setTimeRemain(orderListened.timeRemain);
-                
             })
         })();
     }, [])
 
     const handleUpdateStatusWithTime = (orderListened) => {
-        let tmpTimeRemain = orderListened.timeRemain;
-        
-        if (orderListened.status === OrderStatus.PREPARATION || orderListened.status === OrderStatus.READINESS) {
-            tmpTimeRemain += "";
-            const arrTimeString = tmpTimeRemain.split(" ");
-
-            const time = parseInt(arrTimeString[0]);
-            console.log("Time: ", time);
-            if (time <= TimeRemainTo.ARRIVAL) {
-                handleUpdateStatus(OrderStatus.READINESS, order.id);
-                setStatusOrder(orderListened.status);
-            }
+        let tmpTimeRemain = orderListened.timeRemain + '';
+        const arrTimeString = tmpTimeRemain.split(" ");
+        const time = +arrTimeString[0];
+        if (orderListened.status === OrderStatus.READINESS && time <= TimeRemainTo.ARRIVAL) {
+            console.log('move to arr')
+            handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
         }
-
     }
 
     return (
@@ -52,23 +47,14 @@ const OrderCardReady = (props) => {
                         ]}>{order.customer.account.phone}</Text>
                     </Left>
                     <Body>
-                        {order.status === OrderStatus.ARRIVAL
-                            ? (<Text style={[
+                        <Text
+                            style={[
                                 styles.status_order,
                                 styles.title_font_size
-                            ]}>
-                                {order.status == OrderStatus.ARRIVAL ? "đã đến" : ""}
-                            </Text>)
-                            : <Text
-                                style={
-                                    timeRemain <= 10
-                                        ? styles.lateEstimation
-                                        : styles.earlyEstimation
-                                }
-                            >
-                                {timeRemain}
-                            </Text>
-                        }
+                            ]}
+                        >
+                            {status ? "đã đến" : timeRemain}
+                        </Text>
                     </Body>
 
 
