@@ -1,15 +1,17 @@
 import { withNavigation } from '@react-navigation/compat';
+import { Alert } from 'react-native'
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
-import { sendQRCode } from '../../../redux/actions/order-list';
+import { sendQRCode, setOrderStatus } from '../../../redux/actions/order-list';
 import { styles } from './style';
 
 
+
 const OrderCardReady = (props) => {
-    const {handleUpdateStatus} = props;
+    const { handleUpdateStatus } = props;
     let order = props.order;
     const [status, setStatus] = useState()
     const dispatch = useDispatch();
@@ -35,6 +37,27 @@ const OrderCardReady = (props) => {
             handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
         }
     }
+
+    const showModal = () => {
+        console.log("hellloooooooo");
+        Alert.alert(
+            "Xác nhận",
+            "Bạn chắc chắn muốn giao hàng?",
+            [
+
+                {
+                    text: "Xác nhận",
+                    onPress: async() => await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION)),
+                    
+                },
+                {
+                    text: "Gọi điện",
+                    onPress: () => console.log("OK Pressed")
+                }
+            ]
+        );
+
+    };
 
     return (
         <Content padder>
@@ -71,7 +94,7 @@ const OrderCardReady = (props) => {
                                 renderRow={(item) => (
                                     <CardItem>
                                         <Left>
-                                            <Text style={styles.itemText}>Trà sữa chân châu đường đen</Text>
+                                            <Text style={styles.itemText}>{item.name}</Text>
                                         </Left>
                                         <Right style={{ flexDirection: "row" }}>
                                             <Left>
@@ -103,7 +126,13 @@ const OrderCardReady = (props) => {
                     </Left>
 
 
-                    <Right>
+                    <Right style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                        <Button
+                            style={styles.button}
+                            onPress={showModal}
+                            rounded>
+                            <Text>Giao hàng</Text>
+                        </Button>
                         <Button
                             style={styles.button}
                             onPress={() => {

@@ -7,6 +7,7 @@ import { BACKGROUND_COLOR, HEADER_FONT_SIZE, LIGHT_COLOR } from '../constance/co
 import OrderManagementStackScreen from './order-management-stack';
 import TabProfileNavigation from './tab-profile-navigation';
 import ProfileStackScreen from './stack-profile-navigation';
+import ProfileDrawerContent from './drawer-content/index'
 
 
 const Drawer = createDrawerNavigator();
@@ -16,7 +17,9 @@ const MenuDrawer = (props) => {
     return (
         <Drawer.Navigator
             initialRouteName="HOME_DRAWER"
-            
+            drawerContent = {
+                props => (<ProfileDrawerContent {...props} />)
+            }
             drawerContentOptions={{
                 labelStyle: {
                     fontSize: HEADER_FONT_SIZE,

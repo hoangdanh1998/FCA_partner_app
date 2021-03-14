@@ -5,11 +5,14 @@ import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
+import {useDispatch} from 'react-redux'
 
 const OrderCardUpComing = (props) => {
 
   const handleUpdateStatus = props.handleUpdateStatus;
   const order = props.order;
+
+  const dispatch = useDispatch();
 
   const [timeRemain, setTimeRemain] = useState(0);
   const [status, setStatus] = useState();
@@ -99,8 +102,6 @@ const OrderCardUpComing = (props) => {
               name="arrow-forward"
               style={styles.icon}
             />)}
-
-
           </Right>
         </CardItem>
       </Card>
