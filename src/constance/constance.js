@@ -37,6 +37,14 @@ export const OrderStatus = {
   WAIT: "WAIT",
 };
 
+export const OrderStatusVN = {
+  PREPARATION: "Đang thưc hiện",
+  CANCELLATION: "Huỷ",
+  RECEPTION: "Hoàn tất",
+  REJECTION: "Từ chối",
+  WAIT: "Trễ"
+}
+
 //name of navigation
 
 export const nameOfNavigation = {
@@ -56,3 +64,11 @@ export const ALERT_FAIL_MESSAGE = "Xác nhận đơn hàng thất bại";
 
 export const EMPTY_LIST_MESSAGE = "Hiện tại chưa có đơn hàng nào";
 
+
+export const StatisticColor = {
+  WAIT: "#fed21f",
+  PREPARATION: "#0043ce",
+  CANCELLATION: "#878d96",
+  RECEPTION: "#3dbb61",
+  REJECTION: "#da1e28"
+}

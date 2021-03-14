@@ -4,6 +4,7 @@ import Register from '../screens/register/index';
 import React from 'react'
 import HomeStackScreen from './home-stack-screen';
 import { BACKGROUND_COLOR, HEADER_FONT_SIZE, LIGHT_COLOR } from '../constance/constance';
+import OrderManagementStackScreen from './order-management-stack';
 
 
 const Drawer = createDrawerNavigator();
@@ -35,7 +36,13 @@ const MenuDrawer = (props) => {
                 name="HOME_DRAWER"
                 component={HomeStackScreen}
             />
-            <Drawer.Screen name="REGISTER" component={Register} />
+            <Drawer.Screen 
+            initialParams={{ handleLogOut }}
+            options={{
+                title: "QUẢN LÝ ĐƠN HÀNG",
+            }}
+            name="ORDER_MANAGEMENT" 
+            component={OrderManagementStackScreen} />
         </Drawer.Navigator>
     );
 };
