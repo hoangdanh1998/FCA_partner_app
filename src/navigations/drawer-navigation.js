@@ -5,6 +5,8 @@ import React from 'react'
 import HomeStackScreen from './home-stack-screen';
 import { BACKGROUND_COLOR, HEADER_FONT_SIZE, LIGHT_COLOR } from '../constance/constance';
 import OrderManagementStackScreen from './order-management-stack';
+import TabProfileNavigation from './tab-profile-navigation';
+import ProfileStackScreen from './stack-profile-navigation';
 
 
 const Drawer = createDrawerNavigator();
@@ -14,8 +16,8 @@ const MenuDrawer = (props) => {
     return (
         <Drawer.Navigator
             initialRouteName="HOME_DRAWER"
+            
             drawerContentOptions={{
-
                 labelStyle: {
                     fontSize: HEADER_FONT_SIZE,
                     fontWeight: "bold",
@@ -43,6 +45,17 @@ const MenuDrawer = (props) => {
             }}
             name="ORDER_MANAGEMENT" 
             component={OrderManagementStackScreen} />
+            <Drawer.Screen
+                name="STORE_PROFILE"
+                initialParams={{ handleLogOut }}
+                component={ProfileStackScreen}
+                options={{
+                    title: "THÔNG TIN CỬA HÀNG",
+                    
+                }}
+            />
+            
+            
         </Drawer.Navigator>
     );
 };

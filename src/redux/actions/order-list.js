@@ -52,20 +52,27 @@ export const getAcceptOrderToday = (partnerId) => {
 export const getPreparationOrderToday = (partnerId) => {
     return async dispatch => {
         try {
-            const response = await fca.get('/order', {
+            const responsePreparation = await fca.get('/order', {
                 params: {
                     partnerId,
                     status: OrderStatus.PREPARATION
                 }
             });
 
-            if (response.data.meta.status !== SUCCESS) {
+            const responseWait = await fca.get('/order', {
+                params: {
+                    partnerId,
+                    status: OrderStatus.WAITING
+                }
+            });
+
+            if (responseWait.data.meta.status !== SUCCESS || responsePreparation.data.meta.status !== SUCCESS) {
                 throw new Error("Something went wrong");
             }
-
+            const listOrder = [...responseWait.data.data.orders, ...responsePreparation.data.data.orders]
             dispatch({
                 type: GET_PREPARATION_ORDERS_TODAY,
-                payload: response
+                payload: { orders: listOrder }
             })
         } catch (error) {
             throw error;

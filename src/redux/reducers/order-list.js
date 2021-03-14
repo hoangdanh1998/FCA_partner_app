@@ -9,6 +9,10 @@ import {
 
 
 
+    SET_ARRIVAL_ORDER,
+
+
+
     SET_LIST_INIT_ORDER, SET_PREPARATION_ORDER,
     SET_READINESS_ORDER,
     SET_RECEPTION_ORDER
@@ -29,18 +33,18 @@ const ordersReducer = (state = initialState, action) => {
         case GET_ACCEPTANCE_ORDERS_TODAY: {
             
             const data = action.payload.data.data.orders;
-            console.log('length: ' + data.length)
+            // console.log('length: ' + data.length)
             // console.log('setAcceptance ' + data.length)
             return {...state, filterToDoList: data};
         }
 
         case GET_PREPARATION_ORDERS_TODAY: {
-            const data = action.payload.data.data.orders;
+            const data = action.payload.orders;
             return {...state, filterDoingList: data};
         }
 
         case GET_READINESS_ORDERS_TODAY: {
-            const data = [...action.responseReady.data.data.orders, ...action.responseArrival.data.data.orders];
+            const data = [...action.responseArrival.data.data.orders, ...action.responseReady.data.data.orders];
 
             return {...state, filterReadyList: data};
         }
@@ -93,6 +97,10 @@ const ordersReducer = (state = initialState, action) => {
             // console.log("filterTodoList: ", orderList);
             
             return {...state, filterDoingList: orderList, filterReadyList: readyList };
+        }
+
+        case SET_ARRIVAL_ORDER : {
+            
         }
 
         case SET_ACCEPTANCE_ORDER: {

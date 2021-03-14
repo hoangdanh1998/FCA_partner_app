@@ -51,16 +51,31 @@ const UpcomingTab = (props) => {
   //   setVisible(true)
   // });
 
-  
 
-  const handleUpdateStatus = useCallback(
-    async (status, id) => {
+
+  const handleUpdateStatus = async (status, id) => {
       try {
-        if (status === "to-do") {
-          await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
-        } else {
-          await dispatch(setOrderStatus(id, OrderStatus.READINESS));
+        console.log({ status })
+        switch (status) {
+          case OrderStatus.PREPARATION:
+            dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+            break;
+          case OrderStatus.ARRIVAL:
+            dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
+            break;
+          case (OrderStatus.WAITING):
+            console.log('in wait switch')
+            dispatch(setOrderStatus(id, OrderStatus.WAITING));
+            break;
+          case 'doing':
+            dispatch(setOrderStatus(id, OrderStatus.READINESS));
+            break;
+          case 'to-do':
+            dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+          default:
+            break;
         }
+
         Toast.show({
           text: TOAST_SUCCESS_MESSAGE,
           buttonText: "OK",
@@ -76,9 +91,9 @@ const UpcomingTab = (props) => {
       }
       // console.log("todo");
     }
-  )
 
- 
+
+
   useEffect(() => {
     loadOrderList();
     (() => {
@@ -100,7 +115,7 @@ const UpcomingTab = (props) => {
   //     <ErrorModal
   //       loadOrderList={() => loadOrderList()}
   //     />
-      
+
   //   )
   // }
 
