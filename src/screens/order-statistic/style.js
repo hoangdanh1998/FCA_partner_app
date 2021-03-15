@@ -6,7 +6,8 @@ export const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        padding:10
+        padding:10,
+        backgroundColor: "#fff"
     },  
 
     datePickerContainer: {
@@ -28,4 +29,10 @@ export const styles = StyleSheet.create({
         fontSize: HEADER_FONT_SIZE,
         color: BACKGROUND_COLOR
     },
+    
+    boxContainer: {
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center"
+    }
 })

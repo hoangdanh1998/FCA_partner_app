@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Accordion, List } from '@ant-design/react-native';
-export default class AccordionExample extends React.Component {
+export default class CardItemStatistics extends React.Component {
     constructor() {
         super(...arguments);
         this.state = {

@@ -65,6 +65,11 @@ export const ALERT_FAIL_MESSAGE = "Xác nhận đơn hàng thất bại";
 
 export const EMPTY_LIST_MESSAGE = "Hiện tại chưa có đơn hàng nào";
 
+export const HeaderOrderStatistic = {
+  TOTAL: "Tổng",
+  INCIDENT: "Sự cố",
+  REALITY: "Thực nhận"
+}
 
 export const StatisticColor = {
   WAIT: "#fed21f",
@@ -76,5 +81,14 @@ export const StatisticColor = {
 
 export const ButtonColor = {
   ACCESSS: "#82B366",
-  REJECTION: "#DD6B55"
+  REJECTION: "#DD6B55",
+  LIGHT_ACCESS: "#D5E8D4",
+  LIGHT_REJECT: "#F8CECC",
+  LIGHT_AZURE: "#F0FFFF"
+
+}
+
+export const SizeOrderStatistic = {
+  STATUS_FONT_SIZE: 20,
+  NUMBER_FONT_SIZE: 40
 }
