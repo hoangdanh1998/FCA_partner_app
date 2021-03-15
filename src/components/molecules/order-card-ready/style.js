@@ -59,5 +59,8 @@ export const styles = StyleSheet.create({
     },
     status_order: {
         color: "red",
+    },
+    titleAlert: {
+        fontSize: 25
     }
 });

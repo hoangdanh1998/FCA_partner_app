@@ -73,3 +73,8 @@ export const StatisticColor = {
   RECEPTION: "#3dbb61",
   REJECTION: "#da1e28"
 }
+
+export const ButtonColor = {
+  ACCESSS: "#82B366",
+  REJECTION: "#DD6B55"
+}

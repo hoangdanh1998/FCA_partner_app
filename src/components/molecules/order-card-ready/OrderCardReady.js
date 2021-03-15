@@ -1,13 +1,13 @@
 import { withNavigation } from '@react-navigation/compat';
-import { Alert } from 'react-native'
+import { Alert, Linking } from 'react-native'
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
-import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
+import { ButtonColor, OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode, setOrderStatus } from '../../../redux/actions/order-list';
 import { styles } from './style';
-
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 const OrderCardReady = (props) => {
@@ -16,6 +16,7 @@ const OrderCardReady = (props) => {
     const [status, setStatus] = useState()
     const dispatch = useDispatch();
     const [timeRemain, setTimeRemain] = useState(0);
+    const [isShowAlert, setIsShowAlert] = useState(false);
     useEffect(() => {
         (async () => {
             listenOrder(order.id, (orderListened) => {
@@ -37,8 +38,24 @@ const OrderCardReady = (props) => {
         }
     }
 
+    const showAlert = () => {
+        setIsShowAlert(true);
+    };
+
+    const hideAlert = () => {
+        setIsShowAlert(false);
+    };
+
+    const makeCall = (numberPhone) => {
+        let phoneNumber = `tel:${numberPhone}`;
+        hideAlert();
+        return Linking.openURL(phoneNumber);
+    }
+
     const showModal = () => {
-        console.log("hellloooooooo");
+
+
+
         Alert.alert(
             "Xác nhận",
             "Bạn chắc chắn muốn giao hàng?",
@@ -46,12 +63,16 @@ const OrderCardReady = (props) => {
 
                 {
                     text: "Xác nhận",
-                    onPress: async() => await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION)),
-                    
+                    onPress: async () => await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION)),
+
                 },
                 {
                     text: "Gọi điện",
-                    onPress: () => console.log("OK Pressed")
+
+                    onPress: () => {
+                        console.log("OK Pressed");
+                        makeCall("0364133838");
+                    }
                 }
             ]
         );
@@ -60,6 +81,36 @@ const OrderCardReady = (props) => {
 
     return (
         <Content padder>
+            <AwesomeAlert
+                show={isShowAlert}
+                showProgress={false}
+                title="Xác nhận"
+                message="Bạn chắc chắn muốn giao hàng?"
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="Xác nhận"
+                titleStyle={[styles.titleAlert, styles.title_font_weight]}
+                messageStyle={[styles.title_font_size]}
+                confirmText="Gọi điện"
+                confirmButtonColor={ButtonColor.ACCESSS}
+                onCancelPressed={
+                    async () => {
+                        hideAlert();
+                        await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION))
+
+                    }
+                }
+                onDismiss={() => {
+                    hideAlert();
+                }}
+                onConfirmPressed={() => {
+                    makeCall("0364133838");
+                }}
+                confirmButtonTextStyle={[styles.title_font_size, styles.title_font_weight]}
+                cancelButtonTextStyle={[styles.title_font_size, styles.title_font_weight]}
+            />
             <Card style={styles.card}>
                 <CardItem style={styles.cardHeader} header bordered>
                     <Left>
@@ -128,7 +179,7 @@ const OrderCardReady = (props) => {
                     <Right style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
                         <Button
                             style={styles.button}
-                            onPress={showModal}
+                            onPress={showAlert}
                             rounded>
                             <Text>Giao hàng</Text>
                         </Button>

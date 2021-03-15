@@ -1,5 +1,5 @@
 import {  StyleSheet} from 'react-native';
-import { HEADER_FONT_SIZE, PROFILE_COLOR } from '../../../constance/constance';
+import { BACKGROUND_COLOR, HEADER_FONT_SIZE, PROFILE_COLOR } from '../../../constance/constance';
 
 export const styles = StyleSheet.create({
     container: {
@@ -9,13 +9,13 @@ export const styles = StyleSheet.create({
     rowContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: 5
+        marginTop: 12
     },
     nameStore: {
-        color: PROFILE_COLOR,
-        fontSize: 30,
+        color: BACKGROUND_COLOR,
+        fontSize: 35,
         fontWeight: "bold",
-        textAlign: "center"
+        
     },
     headerProfile: {
         fontSize: 17
@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
         fontSize: HEADER_FONT_SIZE
     },
     isOpen: {
-        backgroundColor: "#82B366",
+        
         width: 70,
         fontWeight: "bold",
         borderRadius: 30,
