@@ -6,8 +6,8 @@ export const listenOrder = async (orderId, returnValue) => {
     });
 }
 
-export const stopListenOrder = async (orderId) => {
-    firebase.database().ref('order').child(orderId).on('value');
+export const stopListenOrder = async (orderId, listener) => {
+    firebase.database().ref('order').child(orderId).off('value', listener());
 }
 
 export const listenInComingOrder = async (partnerId, returnValue) => {
@@ -17,7 +17,7 @@ export const listenInComingOrder = async (partnerId, returnValue) => {
     })
 }
 
-export const stopListenInComingOrder = async (partnerId) => {
+export const stopListenInComingOrder = async (partnerId, listener) => {
     const ref = firebase.database().ref('partner');
-    ref.child(partnerId).child('in-coming-order').off('value', () => { });
+    ref.child(partnerId).child('in-coming-order').off('value', listener());
 }

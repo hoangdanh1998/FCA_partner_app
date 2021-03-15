@@ -20,12 +20,14 @@ const UpcomingTab = (props) => {
   const autoAcceptOrder = useSelector(state => state.behavior.autoAcceptOrder);
   const partnerAccount = useSelector(state => state.account.partner);
 
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [visible, setVisible] = useState(false);
   const [newOrder, setNewOrder] = useState({})
   const isFocused = useIsFocused();
   const [autoAccept, setAutoAccept] = useState(false);
+  const [listInitOrder, setListInitOrder] = useState();
 
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
@@ -94,25 +96,33 @@ const UpcomingTab = (props) => {
 
   useEffect(() => {
     loadOrderList();
-    console.log('Auto ', autoAccept)
+    console.log('use1')
     firebase.listenInComingOrder(partnerAccount.id, async (listInitOrder) => {
+      setListInitOrder(listInitOrder)
       if (listInitOrder) {
         const listInit = Object.values(listInitOrder);
-        console.log('atuto ' + autoAccept)
-        if (autoAccept) {
-          setVisible(false);
-          await handleAcceptAllOrder(listInit);
-        } else {
-          if (listInit.length > 0) { setVisible(true) }
-          dispatch({ type: SET_LIST_INIT_ORDER, payload: { listInit } })
-        }
+        dispatch({ type: SET_LIST_INIT_ORDER, payload: { listInit } })
       } else {
-        setVisible(false);
         loadOrderList();
       }
     })
-    return () => { firebase.stopListenInComingOrder(partnerAccount.id) }
-  }, [autoAccept]);
+  }, []);
+
+  useEffect(() => {
+    console.log('use2')
+    if (listInitOrder) {
+      console.log('use3')
+      const listInit = Object.values(listInitOrder);
+      if (autoAccept) {
+        setVisible(false);
+        handleAcceptAllOrder(listInit);
+      } else {
+        setVisible(true);
+      }
+    } else {
+      setVisible(false);
+    }
+  }, [listInitOrder, autoAccept])
 
   return (
     <View style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>

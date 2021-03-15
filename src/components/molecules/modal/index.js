@@ -32,7 +32,7 @@ export default InitOrderModal = (props) => {
                             )
                             }
                         />
-                        {listInitOrder.length > 1 ? (
+                        {listInitOrder && listInitOrder.length > 1 ? (
                             <Body style={[styles.buttonBody, { marginTop: 18 }]}>
 
                                 <TouchableHighlight
