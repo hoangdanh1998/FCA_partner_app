@@ -1,39 +1,26 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Accordion, List } from '@ant-design/react-native';
-export default class AccordionExample extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.state = {
-            activeSections: [2, 0],
-        };
-        this.onChange = activeSections => {
-            this.setState({ activeSections });
-        };
-    }
-    render() {
-        return (
-            <View style={{ marginTop: 80, marginBottom: 10 }}>
-                <Accordion
-                    onChange={this.onChange}
-                    activeSections={this.state.activeSections}
-                >
-                    <Accordion.Panel header="Title 1">
-                        <List>
-                            <List.Item>Content 1</List.Item>
-                            <List.Item>Content 2</List.Item>
-                            <List.Item>Content 3</List.Item>
-                        </List>
-                    </Accordion.Panel>
-                    <Accordion.Panel header="Title 2">
-                        this is panel content2 or other
-                    </Accordion.Panel>
-                    <Accordion.Panel header="Title 3">
-                        Text text text text text text text text text text text text text
-                        text text
-                    </Accordion.Panel>
-                </Accordion>
+import { View, Text } from 'react-native';
+import BoxStatistic from '../../components/atoms/box-statistic';
+import CustomDatePicker from '../../components/atoms/date-picker';
+import {styles} from './style';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+export default function OrderStatistic() {
+    
+    return (
+        <View style = {styles.container}>
+            <View style = {styles.datePickerContainer}>
+                <CustomDatePicker/>
+                <AntDesign 
+                    name = "arrowright"
+                    size = {40}
+                />
+                <CustomDatePicker/>
             </View>
-        );
-    }
+            <View>
+                <BoxStatistic />
+            </View>
+            <View></View>
+        </View>
+    )
 }

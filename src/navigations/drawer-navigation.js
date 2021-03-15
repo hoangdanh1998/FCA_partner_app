@@ -8,6 +8,8 @@ import OrderManagementStackScreen from './order-management-stack';
 import TabProfileNavigation from './tab-profile-navigation';
 import ProfileStackScreen from './stack-profile-navigation';
 import ProfileDrawerContent from './drawer-content/index'
+import AccordionExample from '../screens/order-statistic';
+import OrderStatistic from '../screens/order-statistic';
 
 
 const Drawer = createDrawerNavigator();
@@ -51,7 +53,7 @@ const MenuDrawer = (props) => {
                     title: "QUẢN LÝ ĐƠN HÀNG",
                 }}
                 name="ORDER_MANAGEMENT"
-                component={OrderManagementStackScreen} />
+                component={OrderStatistic} />
             <Drawer.Screen
                 name="STORE_PROFILE"
                 initialParams={{ handleLogOut }}
