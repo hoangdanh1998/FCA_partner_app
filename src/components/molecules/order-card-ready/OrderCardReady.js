@@ -31,7 +31,6 @@ const OrderCardReady = (props) => {
         const arrTimeString = tmpTimeRemain.split(" ");
         const time = +arrTimeString[0];
         if (orderListened.status === OrderStatus.READINESS && time <= TimeRemainTo.ARRIVAL) {
-            console.log('move to arr')
             handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
         }
     }

@@ -1,16 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
 import {
-    ActivityIndicator, 
+    ActivityIndicator,
     Image,
     KeyboardAvoidingView,
-    SafeAreaView, 
-    ScrollView, 
+    SafeAreaView,
+    ScrollView,
     Text,
     TextInput,
-    TouchableHighlight, 
-    TouchableOpacity, 
-    TouchableWithoutFeedback, 
+    TouchableHighlight,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
     View
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
@@ -20,8 +19,6 @@ import { changeError, login } from '../../redux/actions/account';
 import { styles } from './style';
 
 const Login = (props) => {
-
-    // console.log("pros login page", props);
 
     const dispatch = useDispatch();
 
@@ -84,7 +81,6 @@ const Login = (props) => {
 
             // })
             dispatch(changeError("Số điện thoại hoặc mật khẩu không hợp lệ"));
-            console.log("errr sao ko bao");
         }
 
         setData({

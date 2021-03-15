@@ -2,45 +2,47 @@ import { withNavigation } from '@react-navigation/compat';
 import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
 import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
-import { listenOrder } from '../../../firebase/firebase-realtime';
+import * as firebase from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
 
 const OrderCardUpComing = (props) => {
 
-  const handleUpdateStatus = props.handleUpdateStatus;
-  const order = props.order;
+  const { handleUpdateStatus, order } = props;
+  const propsStatus = props.status;
 
   const [timeRemain, setTimeRemain] = useState(0);
   const [status, setStatus] = useState();
+  const [listenedOrder, setListenedOrder] = useState();
+
   useEffect(() => {
-    (async () => {
-      listenOrder(order.id, (orderListened) => {
-        if (orderListened) {
-          handleUpdateStatusWithTime(orderListened);
-          setTimeRemain(orderListened.timeRemain);
-          if (orderListened.status === OrderStatus.WAITING) {
-            setStatus(orderListened.status);
-          }
-        }
-      })
-    })();
-  }, [])
+        firebase.listenOrder(order.id, (orderListened) => {
+              if (orderListened) {
+                setListenedOrder(orderListened);
+                setTimeRemain(orderListened.timeRemain);
+                if (orderListened.status === OrderStatus.WAITING) {
+                  setStatus(orderListened.status);
+                }
+              }
+        })
+  }, []);
+  
+  useEffect(() => {
+    if (listenedOrder) {
+      let tmpTimeRemain = listenedOrder.timeRemain + '';
+      const arrTimeString = tmpTimeRemain.split(" ");
+      const time = +arrTimeString[0];
+      
+      if (propsStatus === 'to-do' && time <= TimeRemainTo.PREPARATION) {
+        console.log('update preparation')
+        handleUpdateStatus(OrderStatus.PREPARATION, listenedOrder.id);
+      }
 
-
-  const handleUpdateStatusWithTime = (orderListened) => {
-    let tmpTimeRemain = orderListened.timeRemain + '';
-    const arrTimeString = tmpTimeRemain.split(" ");
-    const time = +arrTimeString[0];
-
-    if (orderListened.status === OrderStatus.ACCEPTANCE && time <= TimeRemainTo.PREPARATION) {
-      handleUpdateStatus(OrderStatus.PREPARATION, order.id);
+      if (listenedOrder.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
+        handleUpdateStatus(OrderStatus.WAITING, listenedOrder.id)
+      }
     }
-    if (orderListened.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
-      handleUpdateStatus(OrderStatus.WAITING, orderListened.id)
-    }
-
-  }
+  }, [listenedOrder])
 
   return (
     <Content>

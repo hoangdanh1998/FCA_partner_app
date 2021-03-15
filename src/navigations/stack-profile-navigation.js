@@ -7,7 +7,6 @@ const ProfileStack = createStackNavigator();
 
 function ProfileStackScreen(props) {
     const handleLogOut = props.route.params.handleLogOut;
-    console.log("props home stack", props.route.params);
     return (
         // <NavigationContainer>
             <ProfileStack.Navigator

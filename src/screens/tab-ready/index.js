@@ -24,7 +24,6 @@ const TabReadyScreen = () => {
 
     const handleUpdateStatus = async (status, id) => {
         try {
-            console.log({ status })
             switch (status) {
                 case OrderStatus.ARRIVAL:
                     dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
@@ -52,8 +51,6 @@ const TabReadyScreen = () => {
     }
 
     useEffect(() => {
-        // loadOrderList();
-        // console.log(readyList)
         setSearchList(readyList);
     }, [dispatch, readyList]);
 

@@ -4,13 +4,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { LIGHT_COLOR, OrderStatus, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
-import { listenInComingOrder } from '../../../firebase/firebase-realtime';
-import { AUTO_ACCEPT_ORDER } from '../../../redux/action-types/action';
+import * as firebase from '../../../firebase/firebase-realtime';
 import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER } from "../../../redux/actions/order-list";
 import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { styles } from "./styles";
-
 
 
 const UpcomingTab = (props) => {
@@ -22,11 +20,14 @@ const UpcomingTab = (props) => {
   const autoAcceptOrder = useSelector(state => state.behavior.autoAcceptOrder);
   const partnerAccount = useSelector(state => state.account.partner);
 
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [visible, setVisible] = useState(false);
   const [newOrder, setNewOrder] = useState({})
   const isFocused = useIsFocused();
+  const [autoAccept, setAutoAccept] = useState(false);
+  const [listInitOrder, setListInitOrder] = useState();
 
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
@@ -41,21 +42,22 @@ const UpcomingTab = (props) => {
 
     setIsLoading(false);
   }, [dispatch, setError, setIsLoading])
+  
+  const handleAcceptAllOrder = async (listOrder) => {
+    await new Promise((resolve) => {
+      const tmpList = listOrder.map((order) => {
+        dispatch(setOrderStatus(order.id, OrderStatus.ACCEPTANCE));
+        return order;
+      })
+      if (tmpList.length === listOrder) {
+        resolve()
+      }
+    })
 
-  // React.useMemo(() => {
-  //   dispatch(getOrderAfterUpdate(OrderStatus.PREPARATION));
-  // }, [doingList])
-
-  // Notifications.addNotificationReceivedListener((notification) => {
-  //   setNewOrder(notification.request.content.data.order);
-  //   setVisible(true)
-  // });
-
-
+  }
 
   const handleUpdateStatus = async (status, id) => {
-      try {
-        console.log({ status })
+    try {
         switch (status) {
           case OrderStatus.PREPARATION:
             dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
@@ -64,7 +66,6 @@ const UpcomingTab = (props) => {
             dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
             break;
           case (OrderStatus.WAITING):
-            console.log('in wait switch')
             dispatch(setOrderStatus(id, OrderStatus.WAITING));
             break;
           case 'doing':
@@ -89,56 +90,53 @@ const UpcomingTab = (props) => {
           type: "warning"
         })
       }
-      // console.log("todo");
     }
 
 
 
   useEffect(() => {
     loadOrderList();
-    (() => {
-      listenInComingOrder(partnerAccount.id, (listInitOrder) => {
-        if (listInitOrder) {
-          const listInit = Object.values(listInitOrder);
-          if (listInit.length > 0) { setVisible(true) }
-          dispatch({ type: SET_LIST_INIT_ORDER, payload: { listInit } })
-        } else {
-          setVisible(false);
-          loadOrderList();
-        }
-      })
-    })();
-  }, [dispatch, loadOrderList]);
+    console.log('use1')
+    firebase.listenInComingOrder(partnerAccount.id, async (listInitOrder) => {
+      setListInitOrder(listInitOrder)
+      if (listInitOrder) {
+        const listInit = Object.values(listInitOrder);
+        dispatch({ type: SET_LIST_INIT_ORDER, payload: { listInit } })
+      } else {
+        loadOrderList();
+      }
+    })
+  }, []);
 
-  // if (error) {
-  //   return (
-  //     <ErrorModal
-  //       loadOrderList={() => loadOrderList()}
-  //     />
-
-  //   )
-  // }
-
-  // if (isLoading) {
-  //   return (
-  //     <View style={styles.centered}>
-  //       <ActivityIndicator size="large" color={PRIMARY_COLOR} />
-  //     </View>
-  //   )
-  // };
+  useEffect(() => {
+    console.log('use2')
+    if (listInitOrder) {
+      console.log('use3')
+      const listInit = Object.values(listInitOrder);
+      if (autoAccept) {
+        setVisible(false);
+        handleAcceptAllOrder(listInit);
+      } else {
+        setVisible(true);
+      }
+    } else {
+      setVisible(false);
+    }
+  }, [listInitOrder, autoAccept])
 
   return (
     <View style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
       <View style={styles.switch_view}>
-        <InitOrderModal visible={visible} handleAcceptAllOrder={() => { console.log('accept all order') }} setVisible={setVisible} />
+        <InitOrderModal visible={visible} handleAcceptAllOrder={handleAcceptAllOrder} />
         <Left></Left>
         <Body style={styles.switch_container}>
           <Switch style={styles.switch} onValueChange={(value) => {
-            dispatch({
-              type: AUTO_ACCEPT_ORDER,
-              payload: { autoAcceptOrder: value }
-            })
-          }} value={autoAcceptOrder} />
+            // dispatch({
+            //   type: AUTO_ACCEPT_ORDER,
+            //   payload: { autoAcceptOrder: value }
+            // })
+            setAutoAccept(value)
+          }} value={autoAccept} />
           <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
         </Body>
         <Right />
