@@ -32,7 +32,7 @@ const MenuDrawer = (props) => {
             }}
             drawerStyle={{
                 backgroundColor: "#fff",
-                width: 400,
+                width: 500,
 
 
             }}

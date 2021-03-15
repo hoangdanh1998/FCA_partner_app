@@ -34,7 +34,7 @@ export default ProfileContentDrawer = () => {
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[{flex: 4}, styles.headerProfile]}>Địa chỉ</Text>
-                <Text style = {[{flex: 7}, styles.profileText]}>
+                <Text style = {[{flex: 7}, styles.profileText, {textAlign: "right"}]}>
                     {partner.address.description}
                 </Text>
             </View>

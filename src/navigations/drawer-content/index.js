@@ -22,6 +22,7 @@ export default function ProfileDrawerContent(props) {
                 <DrawerItem
                 style = {{width: "100%", marginLeft: 0, marginTop: 0, backgroundColor: LIGHT_COLOR}}
                     label={() => (<ProfileContentDrawer />)}
+                    onPress = {() => {}}
                 />
                 <DrawerItemList {...props} />
                 <DrawerItem

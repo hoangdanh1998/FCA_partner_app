@@ -4,6 +4,7 @@ import { BACKGROUND_COLOR, HEADER_FONT_SIZE, PROFILE_COLOR } from '../../../cons
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingLeft: 15
 
     },
     rowContainer: {

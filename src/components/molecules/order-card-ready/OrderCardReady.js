@@ -3,7 +3,7 @@ import { Alert, Linking } from 'react-native'
 import { Body, Button, Card, CardItem, Content, Left, List, Right, Text } from 'native-base';
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
-import { ButtonColor, OrderStatus, TimeRemainTo } from '../../../constance/constance';
+import { BACKGROUND_COLOR, ButtonColor, OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode, setOrderStatus } from '../../../redux/actions/order-list';
 import { styles } from './style';
@@ -176,12 +176,12 @@ const OrderCardReady = (props) => {
                     </Left>
 
 
-                    <Right style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                    <Right style={{ flexDirection: "row", justifyContent: "flex-end" }}>
                         <Button
-                            style={styles.button}
+                            style={{borderColor: BACKGROUND_COLOR}}
                             onPress={showAlert}
-                            rounded>
-                            <Text>Giao hàng</Text>
+                            bordered>
+                            <Text style = {{color: BACKGROUND_COLOR}}>Giao hàng</Text>
                         </Button>
                         <Button
                             style={styles.button}
@@ -189,7 +189,7 @@ const OrderCardReady = (props) => {
                                 dispatch(sendQRCode(order.id));
                                 props.navigation.navigate("QRCODE");
                             }}
-                            rounded>
+                            >
                             <Text>Gửi mã QR</Text>
                         </Button>
                     </Right>
