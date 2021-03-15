@@ -4,14 +4,20 @@ import {styles} from './style';
 import {useSelector} from 'react-redux';
 
 export default ProfileContentDrawer = () => {
-
+    const partner = useSelector(state => state.account.partner);
+    console.log("partner profile: ", partner);
+    
     return (
+        partner ?
         <View style = {styles.container}>
             <View>
-                <Text style = {styles.nameStore}>Cà phê sân vườn Misona</Text>
+                <Text style = {styles.nameStore}>{partner.name}</Text>
             </View>
             <View>
-                <Text style = {[styles.isOpen]}>Mở cửa</Text>
+                {partner.isOpen ? 
+                <Text style = {{...styles.isOpen, backgroundColor: "#82B366"}}>Mở cửa</Text>
+                : <Text style = {{...styles.isOpen, backgroundColor: "#B85450"}}>Đóng cửa</Text>
+            } 
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[styles.headerProfile]}>Số dư ví</Text>
@@ -20,14 +26,13 @@ export default ProfileContentDrawer = () => {
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[styles.headerProfile]}>Số điện thoại</Text>
-                <Text style = {[styles.profileText]}>0399193913</Text>
+        <Text style = {[styles.profileText]}>{partner.account.phone}</Text>
 
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[{flex: 4}, styles.headerProfile]}>Địa chỉ</Text>
-                <Text style = {[{flex: 7}, styles.profileText]}>Khu dân cư Tân Chánh Hiệp,
-                    Gần chợ Hóc Môn, đi thẳng khoảng 500m gần 
-                    
+                <Text style = {[{flex: 7}, styles.profileText]}>
+                    {partner.address.description}
                 </Text>
             </View>
             <View style = {[styles.rowContainer]}>
@@ -36,5 +41,6 @@ export default ProfileContentDrawer = () => {
             </View>
 
         </View>
+        : null
     )
 }

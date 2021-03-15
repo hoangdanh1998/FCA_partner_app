@@ -8,11 +8,12 @@ import {
 } from '@react-navigation/drawer';
 import MaterialCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import { BACKGROUND_COLOR, HEADER_FONT_SIZE, LIGHT_COLOR } from '../../constance/constance';
-import { Container, Content, Header } from 'native-base';
 import ProfileContentDrawer from '../../components/atoms/profile-drawer/index'
 
 
+
 export default function ProfileDrawerContent(props) {
+    
     
     return (
 
