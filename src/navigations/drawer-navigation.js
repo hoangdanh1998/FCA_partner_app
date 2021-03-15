@@ -18,7 +18,7 @@ const MenuDrawer = (props) => {
         <Drawer.Navigator
             initialRouteName="HOME_DRAWER"
             drawerContent={
-                props => (<ProfileDrawerContent {...props} />)
+                props => (<ProfileDrawerContent {...props} handleLogOut = {handleLogOut} />)
             }
             drawerContentOptions={{
                 labelStyle: {

@@ -13,7 +13,7 @@ import ProfileContentDrawer from '../../components/atoms/profile-drawer/index'
 
 
 export default function ProfileDrawerContent(props) {
-    
+    const handleLogOut = props.handleLogOut;
     
     return (
 
@@ -39,7 +39,7 @@ export default function ProfileDrawerContent(props) {
                     //         size={25}
                     //     />
                     // )}
-                    onPress={() => alert('Link to help')} />
+                    onPress={() => handleLogOut()} />
             </DrawerContentScrollView>
         </View>
 

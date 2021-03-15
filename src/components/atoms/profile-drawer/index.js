@@ -5,7 +5,6 @@ import {useSelector} from 'react-redux';
 
 export default ProfileContentDrawer = () => {
     const partner = useSelector(state => state.account.partner);
-    console.log("partner profile: ", partner);
     
     return (
         partner ?
