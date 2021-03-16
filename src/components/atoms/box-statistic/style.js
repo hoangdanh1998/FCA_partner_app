@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     container: {
         width: 350,
         height: 200,
-        marginTop: 10,
+        
         justifyContent: "space-evenly",
         shadowColor: "#000",
         shadowOffset: {

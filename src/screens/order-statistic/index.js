@@ -1,13 +1,65 @@
-import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableHighlight } from 'react-native';
 import BoxStatistic from '../../components/atoms/box-statistic';
 import CustomDatePicker from '../../components/atoms/date-picker';
 import { styles } from './style';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ListCartItem from "../../components/molecules/list-item-statistic/index";
+import { useSelector, useDispatch } from 'react-redux';
+import { getReport } from '../../redux/actions/report';
 
 export default function OrderStatistic() {
+    const [isShowTotalBox, setIsShowTotalBox] = useState(true);
+    const dispatch = useDispatch();
+
+    const partner = useSelector(state => state.account.partner);
+
+    const report = useSelector(state => state.report.report);
+    const cancellationOrder = useSelector(state => state.report.cancellationOrder);
+    const rejectionOrder = useSelector(state => state.report.rejectionOrder);
+    const receptionOrder = useSelector(state => state.report.receptionOrder);
+
+    // console.log("report order: ", report);
+    const loadReport = async () => {
+        await dispatch(getReport(partner.id, "2021-3-13", "2021-3-16"));
+
+    }
+
+    useEffect(() => {
+        loadReport();
+    }, [])
+
+    const countOrders = () => {
+        let count = 0;
+        if (report) {
+            let arr = Object.values(report?.orders);
+
+            for (let i = 0; i < arr.length; i++) {
+                count += arr[i].count;
+            }
+        }
+
+        return count;
+    }
+
+    let countOfOrder = countOrders();
+
+    const totalOrders = () => {
+        let count = 0;
+        if (report) {
+            let arr = Object.values(report.orders);
+
+            for (let i = 0; i < arr.length; i++) {
+                count += arr[i].total;
+            }
+        }
+
+        return count;
+    }
+
+    let totalOfOrders = totalOrders();
+
 
     const totalStatisticArr = [
         {
@@ -67,6 +119,15 @@ export default function OrderStatistic() {
         },
     ];
 
+    const handleShowTotalBox = () => {
+        setIsShowTotalBox(true);
+    }
+
+
+    const handleUnShowTotalBox = () => {
+        setIsShowTotalBox(false);
+    }
+
 
     const showBox = ({ item }) => (
         <BoxStatistic />
@@ -80,35 +141,54 @@ export default function OrderStatistic() {
                 <AntDesign
                     name="arrowright"
                     size={40}
+                    style={{ marginLeft: 20 }}
                 />
                 <CustomDatePicker />
             </View>
             <View style={styles.boxContainer}>
-                <BoxStatistic
-                    status={orderStatisticArr[0].status}
-                    number={orderStatisticArr[0].number}
-                    money={orderStatisticArr[0].money}
-                />
+                <TouchableHighlight
+                    onPress={handleShowTotalBox}
+
+                    underlayColor={"#D5E8D4"}
+                    activeOpacity={0.9}
+                >
+                    <BoxStatistic
+                        status="Tổng"
+                        number={countOfOrder}
+                        money={totalOfOrders}
+                    />
+                </TouchableHighlight>
+
                 <AntDesign
                     name="minus"
                     size={40}
+
                 />
-                <BoxStatistic
-                    status={orderStatisticArr[1].status}
-                    number={orderStatisticArr[1].number}
-                    money={orderStatisticArr[1].money}
-                />
+                <TouchableHighlight
+                    onPress={handleUnShowTotalBox}
+                    underlayColor={"#F8CECC"}
+                    activeOpacity={0.9}
+                >
+                    <BoxStatistic
+                        status="Sự cố"
+                        number={cancellationOrder.count + rejectionOrder.count}
+                        money={cancellationOrder.total + receptionOrder.total}
+                    />
+                </TouchableHighlight>
+
                 <Material name="equal" size={40} />
                 <BoxStatistic
-                    status={orderStatisticArr[2].status}
-                    number={orderStatisticArr[2].number}
-                    money={orderStatisticArr[2].money}
+                    status="Thực nhận"
+                    number={receptionOrder.count}
+                    money={receptionOrder.total}
                 />
 
             </View>
-            <View style = {[styles.listItem]}>
+            <View style={[styles.listItem]}>
                 <ListCartItem
-                    totalStatisticArr={ totalStatisticArr}
+                    isShowTotalBox={isShowTotalBox}
+                    report = {report}
+                    totalStatisticArr={totalStatisticArr}
                 />
             </View>
         </View>

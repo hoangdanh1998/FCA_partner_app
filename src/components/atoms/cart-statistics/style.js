@@ -11,7 +11,8 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "black",
         backgroundColor: "#fff",
-        margin:10
+        margin: 10,
+        marginHorizontal: 30
     },   
     
     rowContainer: {

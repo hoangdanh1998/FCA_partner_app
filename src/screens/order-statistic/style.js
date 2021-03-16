@@ -7,12 +7,13 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding:10,
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+        paddingTop: 30
     },  
 
     datePickerContainer: {
         flexDirection: "row",
-        justifyContent: "space-evenly"
+        justifyContent: "center"
     },
 
     datePicker: {
@@ -33,12 +34,14 @@ export const styles = StyleSheet.create({
     boxContainer: {
         flexDirection: "row",
         justifyContent: "space-evenly",
-        alignItems: "center"
+        alignItems: "center",
+        marginTop:20
     },
 
     listItem: {
         flex: 1,
         // backgroundColor:"red",
+        marginTop:10,
         alignItems: "center"
     }
 })

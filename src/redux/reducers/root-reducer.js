@@ -4,6 +4,7 @@ import accountReducer from './account';
 import behaviorReducer from './behavior';
 import modalReducer from './modal';
 import ordersReducer from './order-list';
+import reportReducer from './report';
 
 
 //store tong cua ung dung
@@ -12,7 +13,8 @@ const appReducer = combineReducers({
     orderList: ordersReducer,
     modalVisible: modalReducer,
     behavior: behaviorReducer,
-    account: accountReducer
+    account: accountReducer,
+    report: reportReducer
 });
 
 const rootReducer = (state, action) => {
@@ -21,6 +23,7 @@ const rootReducer = (state, action) => {
         
     }
 
+    // console.log("repport in root", state.report);
     return appReducer(state, action);
 };
 

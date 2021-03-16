@@ -23,7 +23,7 @@ const BoxStatistic = (props) => {
     }
 
     return (
-        <TouchableHighlight >
+        
             <View style={[styles.container, { backgroundColor: backgroundColorBox(status) }]}>
                 <Text style={styles.headerText}>{status}</Text>
                 <View
@@ -53,7 +53,7 @@ const BoxStatistic = (props) => {
                 </View>
 
             </View>
-        </TouchableHighlight>
+        
     )
 
 }
