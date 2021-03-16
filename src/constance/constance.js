@@ -89,6 +89,7 @@ export const ButtonColor = {
 }
 
 export const SizeOrderStatistic = {
-  STATUS_FONT_SIZE: 20,
-  NUMBER_FONT_SIZE: 40
+  STATUS_FONT_SIZE: 25,
+  NUMBER_FONT_SIZE: 40,
+  
 }

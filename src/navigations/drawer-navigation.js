@@ -10,6 +10,7 @@ import ProfileStackScreen from './stack-profile-navigation';
 import ProfileDrawerContent from './drawer-content/index'
 import AccordionExample from '../screens/order-statistic';
 import OrderStatistic from '../screens/order-statistic';
+import OrderStatisticScreen from './order-statistic/order-statistic-stack';
 
 
 const Drawer = createDrawerNavigator();
@@ -53,7 +54,7 @@ const MenuDrawer = (props) => {
                     title: "QUẢN LÝ ĐƠN HÀNG",
                 }}
                 name="ORDER_MANAGEMENT"
-                component={OrderStatistic} />
+                component={OrderStatisticScreen} />
             <Drawer.Screen
                 name="STORE_PROFILE"
                 initialParams={{ handleLogOut }}

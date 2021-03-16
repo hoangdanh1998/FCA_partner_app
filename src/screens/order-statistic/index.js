@@ -4,9 +4,28 @@ import BoxStatistic from '../../components/atoms/box-statistic';
 import CustomDatePicker from '../../components/atoms/date-picker';
 import { styles } from './style';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Material from 'react-native-vector-icons/MaterialCommunityIcons'
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import ListCartItem from "../../components/molecules/list-item-statistic/index";
 
 export default function OrderStatistic() {
+
+    const totalStatisticArr = [
+        {
+            title: "Hoàn tất",
+            number: 296,
+            money: 30000000
+        },
+        {
+            title: "Từ chối",
+            number: 10,
+            money: 300000
+        },
+        {
+            title: "Thực nhận",
+            number: 286,
+            money: 27700000
+        }
+    ]
 
     const orderStatisticArr =
         [
@@ -87,7 +106,11 @@ export default function OrderStatistic() {
                 />
 
             </View>
-            <View></View>
+            <View style = {[styles.listItem]}>
+                <ListCartItem
+                    totalStatisticArr={ totalStatisticArr}
+                />
+            </View>
         </View>
     )
 }

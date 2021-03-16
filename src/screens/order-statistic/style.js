@@ -34,5 +34,11 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: "center"
+    },
+
+    listItem: {
+        flex: 1,
+        // backgroundColor:"red",
+        alignItems: "center"
     }
 })

@@ -1,14 +1,23 @@
 
 import { StyleSheet } from "react-native";
-import {HEADER_FONT_SIZE, SizeOrderStatistic} from '../../../constance/constance'
+import { HEADER_FONT_SIZE, SizeOrderStatistic } from '../../../constance/constance'
 
 export const styles = StyleSheet.create({
     container: {
         width: 350,
         height: 200,
         marginTop: 10,
-        justifyContent: "space-evenly"
-        
+        justifyContent: "space-evenly",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+
     },
     headerText: {
         fontWeight: "bold",
@@ -30,6 +39,6 @@ export const styles = StyleSheet.create({
         fontSize: HEADER_FONT_SIZE,
         alignSelf: "flex-end",
         marginLeft: 10
-        
+
     }
 });
