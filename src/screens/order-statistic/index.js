@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableHighlight } from 'react-native';
-import BoxStatistic from '../../components/atoms/box-statistic';
-import CustomDatePicker from '../../components/atoms/date-picker';
-import { styles } from './style';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { TouchableHighlight, View } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import BoxStatistic from '../../components/atoms/box-statistic';
+import CustomDatePicker from '../../components/atoms/date-picker';
 import ListCartItem from "../../components/molecules/list-item-statistic/index";
-import { useSelector, useDispatch } from 'react-redux';
 import { getReport } from '../../redux/actions/reportAction';
+import { styles } from './style';
 
 export default function OrderStatistic() {
     const [isShowTotalBox, setIsShowTotalBox] = useState(true);
     const dispatch = useDispatch();
+    const isFocused = useIsFocused();
 
     const partner = useSelector(state => state.account.partner);
 
@@ -134,6 +136,10 @@ export default function OrderStatistic() {
         <BoxStatistic />
     );
 
+
+    useEffect(() => {
+        dispatch(getReport(partner.id, "2021-3-13", "2021-3-18"));
+    }, [isFocused])
 
     return (
         <View style={styles.container}>

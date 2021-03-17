@@ -1,7 +1,7 @@
-import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 import { MyHeader } from '../../components/atoms/header/Header';
-import OrderStatisticComponent from '../../screens/order-statistic/index'
+import OrderStatisticComponent from '../../screens/order-statistic/index';
 
 const OrderStatistic = createStackNavigator();
 

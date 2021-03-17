@@ -38,7 +38,7 @@ const UpcomingTab = (props) => {
       dispatch(getPreparationOrderToday(partnerAccount.id));
       dispatch(getReadinessOrderToday(partnerAccount.id));
       
-      dispatch(getReport(partnerAccount.id, "2021-3-13", "2021-3-18"));
+      
     } catch (error) {
       setError(error.message);
     }
