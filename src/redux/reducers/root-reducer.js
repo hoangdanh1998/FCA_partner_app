@@ -4,7 +4,8 @@ import accountReducer from './account';
 import behaviorReducer from './behavior';
 import modalReducer from './modal';
 import ordersReducer from './order-list';
-import reportReducer from './report';
+import reportReducer from './reportReduce';
+
 
 
 //store tong cua ung dung

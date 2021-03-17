@@ -7,6 +7,7 @@ import { ButtonColor } from '../../../constance/constance';
 const ListCartItem = (props) => {
 
     const { totalStatisticArr, isShowTotalBox, report } = props;
+    console.log("repport list view", report.orders);
 
     const [activeSections, setActiveSections] = useState([])
 
@@ -95,7 +96,7 @@ const ListCartItem = (props) => {
                         </Accordion.Panel>
                         <Accordion.Panel header = { <CartItemStatistic 
                             title = "Lỗi"
-                            count = {report.orders.CANCELLATION.count}
+                            count = {report.orders?.CANCELLATION.count}
 
                         />}>
                             this is panel content2 or other
@@ -108,8 +109,6 @@ const ListCartItem = (props) => {
                     </Accordion.Panel>
                     </Accordion>
                 </ScrollView>
-
-
 
             </View>
         );

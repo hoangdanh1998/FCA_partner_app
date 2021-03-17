@@ -7,7 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ListCartItem from "../../components/molecules/list-item-statistic/index";
 import { useSelector, useDispatch } from 'react-redux';
-import { getReport } from '../../redux/actions/report';
+import { getReport } from '../../redux/actions/reportAction';
 
 export default function OrderStatistic() {
     const [isShowTotalBox, setIsShowTotalBox] = useState(true);
@@ -15,20 +15,21 @@ export default function OrderStatistic() {
 
     const partner = useSelector(state => state.account.partner);
 
+    console.log("report order: ", report);
     const report = useSelector(state => state.report.report);
     const cancellationOrder = useSelector(state => state.report.cancellationOrder);
     const rejectionOrder = useSelector(state => state.report.rejectionOrder);
     const receptionOrder = useSelector(state => state.report.receptionOrder);
 
-    // console.log("report order: ", report);
-    const loadReport = async () => {
-        await dispatch(getReport(partner.id, "2021-3-13", "2021-3-16"));
+    console.log("report order: ", report);
+    // const loadReport = async () => {
+    //     await dispatch(getReport(partner.id, "2021-3-13", "2021-3-18"));
 
-    }
+    // }
 
-    useEffect(() => {
-        loadReport();
-    }, [])
+    // useEffect(() => {
+    //     loadReport();
+    // }, [])
 
     const countOrders = () => {
         let count = 0;
@@ -47,7 +48,7 @@ export default function OrderStatistic() {
 
     const totalOrders = () => {
         let count = 0;
-        if (report) {
+        if (report != null) {
             let arr = Object.values(report.orders);
 
             for (let i = 0; i < arr.length; i++) {
@@ -171,23 +172,41 @@ export default function OrderStatistic() {
                 >
                     <BoxStatistic
                         status="Sự cố"
-                        number={cancellationOrder.count + rejectionOrder.count}
-                        money={cancellationOrder.total + receptionOrder.total}
+                        number={
+                            cancellationOrder && receptionOrder ?
+                            cancellationOrder.count + rejectionOrder.count:
+                            0
+                        }
+                        money={
+                            cancellationOrder && receptionOrder ?
+                            cancellationOrder.total + receptionOrder.total :
+                            0
+                        }
                     />
                 </TouchableHighlight>
 
                 <Material name="equal" size={40} />
                 <BoxStatistic
                     status="Thực nhận"
-                    number={receptionOrder.count}
-                    money={receptionOrder.total}
+                    number={
+                        receptionOrder ?
+                        receptionOrder.count :
+                        0
+                    }
+                    money={
+                        receptionOrder ?
+                        receptionOrder.total :
+                        0
+                    }
                 />
 
             </View>
             <View style={[styles.listItem]}>
                 <ListCartItem
                     isShowTotalBox={isShowTotalBox}
-                    report = {report}
+                    report = {
+                        report
+                    }
                     totalStatisticArr={totalStatisticArr}
                 />
             </View>

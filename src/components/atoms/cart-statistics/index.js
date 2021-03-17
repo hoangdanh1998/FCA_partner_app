@@ -9,7 +9,6 @@ export default function CartItemStatistic(props) {
         <View style={[styles.container, styles.rowContainer]}>
             {() => {
                 console.log("status 0 :", item.orders[0].status);
-                
 
             }}
 

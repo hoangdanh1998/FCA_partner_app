@@ -9,6 +9,7 @@ import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, 
 import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { styles } from "./styles";
+import {getReport} from '../../../redux/actions/reportAction'
 
 
 const UpcomingTab = (props) => {
@@ -35,7 +36,9 @@ const UpcomingTab = (props) => {
       setError();
       dispatch(getAcceptOrderToday(partnerAccount.id));
       dispatch(getPreparationOrderToday(partnerAccount.id));
-      dispatch(getReadinessOrderToday(partnerAccount.id))
+      dispatch(getReadinessOrderToday(partnerAccount.id));
+      
+      dispatch(getReport(partnerAccount.id, "2021-3-13", "2021-3-18"));
     } catch (error) {
       setError(error.message);
     }
