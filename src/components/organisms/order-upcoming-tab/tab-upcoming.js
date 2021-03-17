@@ -29,7 +29,8 @@ const UpcomingTab = (props) => {
   const isFocused = useIsFocused();
   const [autoAccept, setAutoAccept] = useState(false);
   const [listInitOrder, setListInitOrder] = useState();
-
+  const [countOrderAccepted, setCountOrderAccepted] = useState(0);
+  
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -99,7 +100,6 @@ const UpcomingTab = (props) => {
 
   useEffect(() => {
     loadOrderList();
-    console.log('use1')
     firebase.listenInComingOrder(partnerAccount.id, async (listInitOrder) => {
       setListInitOrder(listInitOrder)
       if (listInitOrder) {
@@ -112,10 +112,9 @@ const UpcomingTab = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log('use2')
     if (listInitOrder) {
-      console.log('use3')
       const listInit = Object.values(listInitOrder);
+      setCountOrderAccepted(prev => prev + listInit.length)
       if (autoAccept) {
         setVisible(false);
         handleAcceptAllOrder(listInit);
@@ -131,18 +130,22 @@ const UpcomingTab = (props) => {
     <View style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
       <View style={styles.switch_view}>
         <InitOrderModal visible={visible} handleAcceptAllOrder={handleAcceptAllOrder} />
-        <Left></Left>
         <Body style={styles.switch_container}>
           <Switch style={styles.switch} onValueChange={(value) => {
             // dispatch({
-            //   type: AUTO_ACCEPT_ORDER,
-            //   payload: { autoAcceptOrder: value }
-            // })
-            setAutoAccept(value)
-          }} value={autoAccept} />
+              //   type: AUTO_ACCEPT_ORDER,
+              //   payload: { autoAcceptOrder: value }
+              // })
+              setAutoAccept(value)
+            }} value={autoAccept} />
           <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
         </Body>
-        <Right />
+        <Left></Left>
+        {autoAccept ?
+          <Text> Đã tự động tiếp nhận {countOrderAccepted} đơn hàng </Text> : null
+        }
+        <Right></Right>
+
       </View>
       <View style={styles.order_view}>
 
