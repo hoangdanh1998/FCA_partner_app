@@ -46,6 +46,7 @@ export default function OrderStatistic() {
         if (cancellationOrder) {
             // console.log(cancellationOrder)
         }
+
     })
 
 
@@ -90,11 +91,11 @@ export default function OrderStatistic() {
     }, [report])
 
     useEffect(() => {
-        setListError([
+        const errList = [
             {
                 title: "Từ chối",
-                number: rejectionOrder?.count,
-                money: rejectionOrder?.total,
+                number: rejectionOrder ? rejectionOrder.count : 0,
+                money: rejectionOrder ? rejectionOrder.total : 0
             },
             // {
             //     title: "Lỗi",
@@ -104,13 +105,13 @@ export default function OrderStatistic() {
             // },
             {
                 title: "Huỷ",
-                number: cancellationOrder?.count,
+                number: cancellationOrder ? cancellationOrder.count : 0,
                 description: [],
-                money: cancellationOrder?.total,
+                money: cancellationOrder ? cancellationOrder.total : 0
             }
-        ])
+        ];
 
-        setListTotal([
+        const totalList = [
             {
                 title: "Hoàn tất",
                 number: receptionOrder ? receptionOrder.count : 0 + closureOrder ? closureOrder.count : 0,
@@ -126,10 +127,10 @@ export default function OrderStatistic() {
                 number: cancellationOrder ? cancellationOrder.count : 0,
                 money: cancellationOrder ? cancellationOrder.total : 0
             }
-        ])
+        ]
 
-        if (cancellationOrder && listError) {
-            const listErrorTmp = listError;
+        if (cancellationOrder) {
+            const listErrorTmp = errList;
             listErrorTmp[listErrorTmp.length - 1][`description`] = [];
             cancellationOrder.orders.map((order) => {
                 listErrorTmp[listErrorTmp.length - 1][`description`].push({
@@ -137,15 +138,11 @@ export default function OrderStatistic() {
                     total: order.total,
                 });
             })
-
             setListError(listErrorTmp);
         }
+        setListTotal(totalList);
 
-
-
-
-
-    }, [cancellationOrder, rejectionOrder])
+    }, [cancellationOrder, rejectionOrder, receptionOrder, closureOrder])
 
     useEffect(() => {
         if (isShowTotal) {
@@ -210,8 +207,5 @@ export default function OrderStatistic() {
                 />) : null}
                 </View>
             </View>
-        )
-
-
-
+    )
 }
