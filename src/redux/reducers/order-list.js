@@ -55,11 +55,16 @@ const ordersReducer = (state = initialState, action) => {
         case SET_RECEPTION_ORDER: {
             
             const id = action.payload;
+
+            const doingList = state.filterDoingList.filter((order) => {
+                return order.id != id;
+            })
+
             const orderList = state.filterReadyList.filter((order) => {
                 return order.id != id;
             })
             
-            return {...state, filterReadyList: orderList};
+            return {...state, filterReadyList: orderList, filterDoingList: doingList};
         }
 
         case SET_PREPARATION_ORDER: {
