@@ -35,15 +35,30 @@ export default function OrderStatistic() {
     const [isShowTotal, setIsShowTotal] = useState(false);
     const [listError, setListError] = useState();
     const [listTotal, setListTotal] = useState();
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date());
 
     const loadReport = async () => {
-        dispatch(getReport(partner.id, "2021-3-13", "2021-3-18"));
+        dispatch(getReport(partner.id, fromDate, toDate));
     }
 
     useEffect(() => {
-        loadReport();
+        if (cancellationOrder) {
+            // console.log(cancellationOrder)
+        }
+    })
+
+
+    useEffect(() => {
+        toDate.setDate(toDate.getDate() + 1)
     }, [])
 
+    useEffect(() => {
+        if (fromDate >= toDate) {
+            setToDate(fromDate);
+        }
+        loadReport();
+    }, [fromDate, toDate])
 
     useEffect(() => {
         loadReport();
@@ -70,60 +85,67 @@ export default function OrderStatistic() {
             setRemainCount(count - errorCount);
             setRemainMoney(money - errorMoney);
 
-            setListError([
-                {
-                    title: "Từ chối",
-                    number: rejectionOrder?.count,
-                    money: rejectionOrder?.total,
-                },
-                // {
-                //     title: "Lỗi",
-                //     number: countErrorOrder,
-                //     description: [],
-                //     money: moneyErrorOrder
-                // },
-                {
-                    title: "Huỷ",
-                    number: cancellationOrder?.count,
-                    description: [],
-                    money: cancellationOrder?.total,
-                }
-            ])
 
-            setListTotal([
-                {
-                    title: "Hoàn tất",
-                    number: receptionOrder ? receptionOrder.count : 0 + closureOrder ? closureOrder.count : 0,
-                    money: receptionOrder ? receptionOrder.total : 0 + closureOrder ? closureOrder.total : 0
-                },
-                {
-                    title: "Từ chối",
-                    number: rejectionOrder ? rejectionOrder.count : 0,
-                    money: rejectionOrder ? rejectionOrder.total : 0
-                },
-                {
-                    title: "Huỷ",
-                    number: cancellationOrder ? cancellationOrder.count : 0,
-                    money: cancellationOrder ? cancellationOrder.total : 0
-                }
-            ])
         }
     }, [report])
 
     useEffect(() => {
+        setListError([
+            {
+                title: "Từ chối",
+                number: rejectionOrder?.count,
+                money: rejectionOrder?.total,
+            },
+            // {
+            //     title: "Lỗi",
+            //     number: countErrorOrder,
+            //     description: [],
+            //     money: moneyErrorOrder
+            // },
+            {
+                title: "Huỷ",
+                number: cancellationOrder?.count,
+                description: [],
+                money: cancellationOrder?.total,
+            }
+        ])
+
+        setListTotal([
+            {
+                title: "Hoàn tất",
+                number: receptionOrder ? receptionOrder.count : 0 + closureOrder ? closureOrder.count : 0,
+                money: receptionOrder ? receptionOrder.total : 0 + closureOrder ? closureOrder.total : 0
+            },
+            {
+                title: "Từ chối",
+                number: rejectionOrder ? rejectionOrder.count : 0,
+                money: rejectionOrder ? rejectionOrder.total : 0
+            },
+            {
+                title: "Huỷ",
+                number: cancellationOrder ? cancellationOrder.count : 0,
+                money: cancellationOrder ? cancellationOrder.total : 0
+            }
+        ])
+
         if (cancellationOrder && listError) {
             const listErrorTmp = listError;
             listErrorTmp[listErrorTmp.length - 1][`description`] = [];
             cancellationOrder.orders.map((order) => {
                 listErrorTmp[listErrorTmp.length - 1][`description`].push({
-                    description: order.transaction.description,
+                    description: order.transaction[order.transaction.length - 1].description,
                     total: order.total,
                 });
             })
+
             setListError(listErrorTmp);
         }
-        
-    }, [cancellationOrder])
+
+
+
+
+
+    }, [cancellationOrder, rejectionOrder])
 
     useEffect(() => {
         if (isShowTotal) {
@@ -136,13 +158,13 @@ export default function OrderStatistic() {
     return (
             <View style={styles.container}>
                 <View style={styles.datePickerContainer}>
-                    <CustomDatePicker />
+                <CustomDatePicker value={fromDate} setDate={setFromDate} />
                     <AntDesign
                         name="arrowright"
                         size={40}
                         style={{ marginLeft: 20 }}
                     />
-                    <CustomDatePicker />
+                <CustomDatePicker value={toDate} setDate={setToDate} />
                 </View>
                 <View style={styles.boxContainer}>
                     <TouchableHighlight
