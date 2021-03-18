@@ -716,9 +716,10 @@ export const GET_REPORT_ORDERS = "GET_REPORT_ORDERS";
 //     }
 // }
 export const getReport = (id, fromDate, toDate) => {
+
     return async dispatch => {
             const response =
-                await fca.post(`/partner/0440ef59-6c90-4630-8be4-553533e45591/report`, {
+                await fca.post(`/partner/${id}/report`, {
                     fromDate,
                     toDate
                 });

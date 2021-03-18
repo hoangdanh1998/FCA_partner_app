@@ -9,7 +9,6 @@ import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, 
 import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { styles } from "./styles";
-import {getReport} from '../../../redux/actions/reportAction'
 
 
 const UpcomingTab = (props) => {
@@ -112,6 +111,7 @@ const UpcomingTab = (props) => {
   }, []);
 
   useEffect(() => {
+    loadOrderList();
     if (listInitOrder) {
       const listInit = Object.values(listInitOrder);
       setCountOrderAccepted(prev => prev + listInit.length)

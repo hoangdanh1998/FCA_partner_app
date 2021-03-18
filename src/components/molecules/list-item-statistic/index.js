@@ -22,13 +22,13 @@ const ListCartItem = (props) => {
                                         setActiveSections(activeSections)
                                     }}>
                                     <Accordion.Panel key={index} header={<CartItemStatistic item={element} />}>
-                                        <List>
                                             {element.description ? element.description.map((orderCancel) => {
                                                 return (
+                                                    <List>
                                                     <List.Item>{orderCancel.description} - {orderCancel.total}</List.Item>
+                                                    </List>
                                                 )
                                             }) : null}
-                                        </List>
                                     </Accordion.Panel>
                                 </Accordion>
                             )
