@@ -36,7 +36,7 @@ export default function CartItemStatistic(props) {
             </View>
             <View style={styles.rowContainer}>
                 <Text
-                    style={[styles.titleText, { color: setColorForText(item.title), textAlign:  }]}
+                    style={[styles.titleText, { color: setColorForText(item.title), textAlign: 'center' }]}
                 >
                     {item.money}
                     {/* 1000000000000 */}
