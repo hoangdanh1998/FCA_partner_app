@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
         marginHorizontal: 20,
         flexDirection: "row",
         justifyContent: "space-around",
+        
     },   
     
     rowContainer: {

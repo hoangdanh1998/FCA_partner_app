@@ -4,20 +4,31 @@ import { ButtonColor, StatisticColor } from '../../../constance/constance';
 import { styles } from './style';
 
 export default function CartItemStatistic(props) {
-    const { item } = props;
+    const { item, isShowTotal, description} = props;
     const setColorForText = (title) => {
         switch (title) {
             case "Hoàn tất":
-                return ButtonColor.ACCESSS;
+                return StatisticColor.RECEPTION;
             case "Từ chối":
-                return ButtonColor.REJECTION;
+                return StatisticColor.REJECTION;
             case "Huỷ":
                 return StatisticColor.CANCELLATION;
         }
     }
+    
+
+    const changeMarginLeft = () => {
+        if(description) {
+            return 5;
+        } else {
+            return 20
+        }
+    }
+
 
     return (
-        <View style={[styles.container]}>
+        <View  style={isShowTotal ? [styles.container] : [styles.container, 
+        {width: "93%", alignSelf: "flex-start", marginHorizontal: changeMarginLeft() }]}>
             <View style={[styles.rowContainer]}>
                 <Text
                     style={[styles.titleText, { color: setColorForText(item.title) }]}
@@ -32,16 +43,16 @@ export default function CartItemStatistic(props) {
                     {item.number}
                     {/* 100000000000000 */}
                 </Text>
-                <Text style = {{color: setColorForText(item.title)}}>đơn</Text>
+                <Text style = {{color: setColorForText(item.title), alignSelf: "flex-end", marginLeft:5}}>đơn</Text>
             </View>
             <View style={styles.rowContainer}>
                 <Text
-                    style={[styles.titleText, { color: setColorForText(item.title), textAlign:  }]}
+                    style={[styles.titleText, { color: setColorForText(item.title), textAlign: "center" }]}
                 >
                     {item.money}
                     {/* 1000000000000 */}
                 </Text>
-                <Text>VNĐ</Text>
+                <Text style = {{ color: setColorForText(item.title), alignSelf: "flex-end", marginLeft: 5}} >VNĐ</Text>
             </View>
         </View>
     )

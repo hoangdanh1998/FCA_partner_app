@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { ButtonColor } from '../../../constance/constance';
+import { ButtonColor, HEADER_FONT_SIZE } from '../../../constance/constance';
 
 
 export const styles = StyleSheet.create({
@@ -20,6 +20,17 @@ export const styles = StyleSheet.create({
 
     cardCancelItem:{
         width: "85%", 
+    },
+    cancelItemList: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        flex:1,
+        // backgroundColor: "blue"
+    },
+
+    cancelTextItem: {
+        fontSize: HEADER_FONT_SIZE,
+
     }
 
 })
