@@ -4,24 +4,26 @@ const initialState = {
     report: null,
     cancellationOrder: null,
     rejectionOrder: null,
-    receptionOrder: null
+    receptionOrder: null,
+    closureOrder: null
+
 };
 
 const reportReducer = (state = initialState, action) => {
-    console.log("action type: ", action.type);
     switch (action.type) {
         case GET_REPORT_ORDERS:
-            const data = action.payload;
-            console.log("data,", data.orders);
+            const report = action.payload;
+            
             return {
                 ...state,
-                report: data,
-                cancellationOrder: data.orders.CANCELLATION,
-                rejectionOrder: data.orders.REJECTION,
-                receptionOrder: data.orders.RECEPTION,
+                report,
+                cancellationOrder: report.orders.CANCELLATION,
+                rejectionOrder: report.orders.REJECTION,
+                receptionOrder: report.orders.RECEPTION,
+                closureOrder: report.orders.CLOSURE,
+
             };
         default:
-            console.log("default");
             return {...state};
     }
 }
