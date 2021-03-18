@@ -12,12 +12,15 @@ export const styles = StyleSheet.create({
         borderColor: "black",
         backgroundColor: "#fff",
         margin: 10,
-        marginHorizontal: 30
+        marginHorizontal: 20,
+        flexDirection: "row",
+        justifyContent: "space-around",
     },   
     
     rowContainer: {
         flexDirection: "row",
-        justifyContent: "space-around",
+        justifyContent: "center",
+        flex: 1
     },
 
     titleText: {
