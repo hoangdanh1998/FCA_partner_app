@@ -1,6 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { BACKGROUND_COLOR } from '../../../constance/constance';
 import { styles } from './style';
@@ -17,7 +17,7 @@ export default function CustomDatePicker(props) {
     };
 
     const onChange = (event, newDate) => {
-        const currentDate = newDate;
+        const currentDate = newDate || value;
         setIsShow(false);
         setDate(currentDate);
         console.log("choose day: ", newDate);
@@ -25,6 +25,7 @@ export default function CustomDatePicker(props) {
 
     return (
         <View>
+            <TouchableOpacity onPress={() => { setIsShow(true) }}>
             <View style={styles.datePicker}>
                 <Text style={styles.chosenDateText}>
                     {/* {value.toLocaleDateString()} */}
@@ -38,12 +39,11 @@ export default function CustomDatePicker(props) {
                     color={BACKGROUND_COLOR}
                 />
             </View>
-
+            </TouchableOpacity>
             {
                 isShow && <DateTimePicker
-
                     testID="dateTimePicker"
-                    value={chosenDate}
+                    value={value}
                     mode="date"
                     is24Hour={true}
                     display="default"
@@ -51,6 +51,7 @@ export default function CustomDatePicker(props) {
                     locale="vi-VN"
                 />
             }
+
         </View>
 
     )
