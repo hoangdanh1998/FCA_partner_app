@@ -23,7 +23,7 @@ export default function OrderStatistic() {
     const cancellationOrder = useSelector(state => state.report.cancellationOrder);
     const rejectionOrder = useSelector(state => state.report.rejectionOrder);
     const receptionOrder = useSelector(state => state.report.receptionOrder);
-    const closureOrder = useSelector(state => state.report.closureEOrder)
+    const closureOrder = useSelector(state => state.report.closureOrder)
 
     const [totalMoney, setTotalMoney] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
@@ -68,8 +68,8 @@ export default function OrderStatistic() {
 
     useEffect(() => {
         if (report) {
+
             let count = 0, money = 0, errorCount = 0, errorMoney = 0;
-            let listErrTmp = listError;
             Object.values(report.orders).forEach((itemReport) => {
                 const status = itemReport.orders[0].status;
                 count += itemReport.count;
@@ -91,18 +91,19 @@ export default function OrderStatistic() {
     }, [report])
 
     useEffect(() => {
+
         const errList = [
             {
                 title: "Từ chối",
                 number: rejectionOrder ? rejectionOrder.count : 0,
                 money: rejectionOrder ? rejectionOrder.total : 0
             },
-            // {
-            //     title: "Lỗi",
-            //     number: countErrorOrder,
-            //     description: [],
-            //     money: moneyErrorOrder
-            // },
+            {
+                title: "Lỗi",
+                number: 0,
+                description: [],
+                money: 0
+            },
             {
                 title: "Huỷ",
                 number: cancellationOrder ? cancellationOrder.count : 0,
@@ -131,16 +132,38 @@ export default function OrderStatistic() {
 
         if (cancellationOrder) {
             const listErrorTmp = errList;
-            listErrorTmp[listErrorTmp.length - 1][`description`] = [];
+            listErrorTmp[2][`description`] = [];
             cancellationOrder.orders.map((order) => {
                 listErrorTmp[listErrorTmp.length - 1][`description`].push({
                     description: order.transaction[order.transaction.length - 1].description,
                     total: order.total,
                 });
+
             })
             setListError(listErrorTmp);
         }
         setListTotal(totalList);
+
+        if (receptionOrder) {
+            const listErrTmp = { ...errList };
+            listErrTmp[1][`description`] = [];
+            receptionOrder.orders.map((order) => {
+
+                order.transaction.map((trans) => {
+                    console.log(trans.toStatus)
+                    if (trans.toStatus === OrderStatus.WAITING) {
+                        listErrTmp[1][`description`].push({
+                            description: 'Chuẩn bị trễ',
+                            total: 0,
+                        });
+                        listErrTmp[1][`number`]++;
+                        listErrTmp[1][`money`] += 0;
+                    }
+                })
+            })
+            setListError(listErrTmp);
+        }
+
 
     }, [cancellationOrder, rejectionOrder, receptionOrder, closureOrder])
 

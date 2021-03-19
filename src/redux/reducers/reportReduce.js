@@ -21,7 +21,6 @@ const reportReducer = (state = initialState, action) => {
                 rejectionOrder: report.orders.REJECTION,
                 receptionOrder: report.orders.RECEPTION,
                 closureOrder: report.orders.CLOSURE,
-
             };
         default:
             return {...state};
