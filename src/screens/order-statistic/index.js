@@ -143,26 +143,26 @@ export default function OrderStatistic() {
             setListError(listErrorTmp);
         }
         setListTotal(totalList);
+        setListError(errList)
 
-        if (receptionOrder) {
-            const listErrTmp = { ...errList };
-            listErrTmp[1][`description`] = [];
-            receptionOrder.orders.map((order) => {
-
-                order.transaction.map((trans) => {
-                    console.log(trans.toStatus)
-                    if (trans.toStatus === OrderStatus.WAITING) {
-                        listErrTmp[1][`description`].push({
-                            description: 'Chuẩn bị trễ',
-                            total: 0,
-                        });
-                        listErrTmp[1][`number`]++;
-                        listErrTmp[1][`money`] += 0;
-                    }
-                })
-            })
-            setListError(listErrTmp);
-        }
+        // if (receptionOrder) {
+        //     const listErrTmp = { ...errList };
+        //     listErrTmp[1][`description`] = [];
+        //     receptionOrder.orders.map((order) => {
+        //         order.transaction.map((trans) => {
+        //             console.log(trans.toStatus)
+        //             if (trans.toStatus === OrderStatus.WAITING) {
+        //                 listErrTmp[1][`description`].push({
+        //                     description: 'Chuẩn bị trễ',
+        //                     total: 0,
+        //                 });
+        //                 listErrTmp[1][`number`]++;
+        //                 listErrTmp[1][`money`] += 0;
+        //             }
+        //         })
+        //     })
+        //     setListError(listErrTmp);
+        // }
 
 
     }, [cancellationOrder, rejectionOrder, receptionOrder, closureOrder])
@@ -173,7 +173,7 @@ export default function OrderStatistic() {
         } else {
             setListReport(listError)
         }
-    }, [isShowTotal, listReport, listError])
+    }, [isShowTotal, listReport])
 
     return (
             <View style={styles.container}>
