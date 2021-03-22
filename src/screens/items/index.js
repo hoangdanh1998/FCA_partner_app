@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { View, BackHandler, Alert } from "react-native";
 import { Root } from 'native-base'
 import UpcomingTab from "../../components/organisms/order-upcoming-tab/tab-upcoming";
+import {useDispatch} from 'react-redux';
+import { getReport } from "../../redux/actions/reportAction";
 
 const HomeScreen = (props) => {
   // console.log("props home: ", props.route.name);
@@ -30,6 +32,8 @@ const HomeScreen = (props) => {
   //     BackHandler.removeEventListener("handleBackButton", handleBackButton);
   //   };
   // }, [handleBackButton])
+
+  
 
   return (
     <Root>

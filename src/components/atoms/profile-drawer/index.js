@@ -7,7 +7,7 @@ export default ProfileContentDrawer = () => {
     const partner = useSelector(state => state.account.partner);
     
     return (
-        partner ?
+        partner != null ?
         <View style = {styles.container}>
             <View>
                 <Text style = {styles.nameStore}>{partner.name}</Text>
@@ -24,20 +24,21 @@ export default ProfileContentDrawer = () => {
 
             </View>
             <View style = {[styles.rowContainer]}>
+                <Text style = {[styles.headerProfile]}>Ngày hết hạn</Text>
+                <Text style = {[styles.profileText]}>30-12-2021</Text>
+            </View>
+            <View style = {[styles.rowContainer]}>
                 <Text style = {[styles.headerProfile]}>Số điện thoại</Text>
         <Text style = {[styles.profileText]}>{partner.account.phone}</Text>
 
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[{flex: 4}, styles.headerProfile]}>Địa chỉ</Text>
-                <Text style = {[{flex: 7}, styles.profileText]}>
+                <Text style = {[{flex: 7}, styles.profileText, {textAlign: "right"}]}>
                     {partner.address.description}
                 </Text>
             </View>
-            <View style = {[styles.rowContainer]}>
-                <Text style = {[styles.headerProfile]}>Ngày hết hạn</Text>
-                <Text style = {[styles.profileText]}>30-12-2021</Text>
-            </View>
+            
 
         </View>
         : null

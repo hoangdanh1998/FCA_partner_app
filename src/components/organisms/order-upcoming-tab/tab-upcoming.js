@@ -36,7 +36,9 @@ const UpcomingTab = (props) => {
       setError();
       dispatch(getAcceptOrderToday(partnerAccount.id));
       dispatch(getPreparationOrderToday(partnerAccount.id));
-      dispatch(getReadinessOrderToday(partnerAccount.id))
+      dispatch(getReadinessOrderToday(partnerAccount.id));
+      
+      
     } catch (error) {
       setError(error.message);
     }
@@ -109,6 +111,7 @@ const UpcomingTab = (props) => {
   }, []);
 
   useEffect(() => {
+    loadOrderList();
     if (listInitOrder) {
       const listInit = Object.values(listInitOrder);
       setCountOrderAccepted(prev => prev + listInit.length)

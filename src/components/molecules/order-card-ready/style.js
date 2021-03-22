@@ -48,8 +48,10 @@ export const styles = StyleSheet.create({
         width: "100%",
     },
     button: {
-        backgroundColor:BACKGROUND_COLOR
+        backgroundColor:BACKGROUND_COLOR,
+        marginLeft: 10
     },
+
 
     body_card_item: {
         justifyContent: "center",
@@ -59,5 +61,8 @@ export const styles = StyleSheet.create({
     },
     status_order: {
         color: "red",
+    },
+    titleAlert: {
+        fontSize: 25
     }
 });

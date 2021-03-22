@@ -37,7 +37,7 @@ export const MyHeader = (props) => {
                                 style={styles.icon}
                             />
                         </Button>
-                        <Button
+                        {/* <Button
                             transparent
                             onPress={() => handleLogOut()}
                             >
@@ -45,7 +45,7 @@ export const MyHeader = (props) => {
                                 name="logout"
                                 style={styles.icon}
                             />
-                        </Button>
+                        </Button> */}
                     </Left>
                 }
 

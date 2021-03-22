@@ -4,7 +4,7 @@ import StatisticBox from '../../components/atoms/statistics-box';
 import { styles } from './style';
 import { Flex, SegmentedControl, WhiteSpace } from '@ant-design/react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { BACKGROUND_COLOR, OrderStatusVN } from '../../constance/constance';
 
 
