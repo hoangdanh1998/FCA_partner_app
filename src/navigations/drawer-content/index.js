@@ -18,9 +18,9 @@ export default function ProfileDrawerContent(props) {
     return (
 
         <View style={{ flex: 1 }}>
-            <DrawerContentScrollView {...props} >
+            <DrawerContentScrollView {...props}>
                 <DrawerItem
-                style = {{width: "100%", marginLeft: 0, marginTop: 0, backgroundColor: LIGHT_COLOR}}
+                style = {{width: "100%", marginLeft: 0, marginTop: 0, backgroundColor: LIGHT_COLOR, }}
                     label={() => (<ProfileContentDrawer />)}
                     onPress = {() => {}}
                 />
@@ -30,9 +30,9 @@ export default function ProfileDrawerContent(props) {
                         style={{
                             fontSize: HEADER_FONT_SIZE,
                             color: "#696969",
-
+                            
                         }}
-                    >Logout</Text>)}
+                    >Đăng xuất</Text>)}
                     // icon={() => (
                     //     <MaterialCommunity
                     //         name="logout"

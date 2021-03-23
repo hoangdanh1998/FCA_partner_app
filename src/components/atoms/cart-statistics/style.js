@@ -20,12 +20,13 @@ export const styles = StyleSheet.create({
     
     rowContainer: {
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "flex-end",
         flex: 1
     },
 
     titleText: {
-        fontSize: SizeOrderStatistic.STATUS_FONT_SIZE
+        fontSize: SizeOrderStatistic.STATUS_FONT_SIZE,
+        textAlign: "right"
     },
 
     
