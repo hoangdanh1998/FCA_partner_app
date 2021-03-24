@@ -51,9 +51,12 @@ export const styles = StyleSheet.create({
         resizeMode: "cover",
     },
     button: {
-        backgroundColor: 'blue',
-        padding: 20,
-        borderRadius: 5,
+        width:175,
+        backgroundColor: BACKGROUND_COLOR,
+        borderRadius: 30,
+        padding:10,
+        elevation: 2,
+        alignItems:"center",
     },
     buttonText: {
         fontSize: 20,
@@ -64,5 +67,27 @@ export const styles = StyleSheet.create({
         width: 100,
         height: 100,
         
+    },
+    textButton: {
+        color:"#fff"
+    },
+
+    text: {
+        fontSize: HEADER_FONT_SIZE
+    },
+    boldText: {
+        fontWeight: "bold"
+    },
+    buttonContainer: {
+        flex: 1,
+        alignItems: "center",
+    }, 
+    errorMessage: {
+        color: "red",
+        alignSelf: "center",
+        width: "50%",
+        // backgroundColor: "red",
+        fontSize: HEADER_FONT_SIZE,
+        marginRight:15
     }
 })
