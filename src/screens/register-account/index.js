@@ -5,18 +5,45 @@ import {
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     ScrollView,
-    TextInput
+    TextInput,
+    TouchableOpacity,
+    Image
 } from 'react-native';
 import { styles } from './style'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { HEADER_FONT_SIZE, KEY_GOOGLE_MAP } from '../../constance/constance';
-
+import { HEADER_FONT_SIZE, KEY_GOOGLE_MAP, StatisticColor } from '../../constance/constance';
+import * as ImagePicker from 'expo-image-picker';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 const RegisterAccountScreen = () => {
 
     const [address, setAddress] = useState();
+    const [selectedImage, setSelectedImage] = useState(null)
 
+    let openImagePickerAsync = async () => {
+        let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert('Permission to access camera roll is required!');
+            return;
+        }
+
+        let pickerResult = await ImagePicker.launchImageLibraryAsync();
+        if (pickerResult.cancelled === true) {
+            return;
+        }
+
+        setSelectedImage({ localUri: pickerResult.uri });
+    };
+
+    // if (selectedImage !== null) {
+    //     return (
+    //         <View style={styles.container}>
+    //             <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />
+    //         </View>
+    //     );
+    // }
 
     return (
         <KeyboardAvoidingView
@@ -64,7 +91,8 @@ const RegisterAccountScreen = () => {
                                             styles.titleText,
                                             { color: '#05375a', marginRight: 15 }]}
                                         autoCapitalize="none"
-                                        keyboardType="phone-pad"
+                                        secureTextEntry = {true}
+                                        // keyboardType="phone-pad"
                                     // defaultValue={data.numberPhone}
                                     // onChangeText={(val) => handleChangePhone(val)}
                                     />
@@ -82,7 +110,8 @@ const RegisterAccountScreen = () => {
                                             styles.titleText,
                                             { color: '#05375a', marginRight: 15 }]}
                                         autoCapitalize="none"
-                                        keyboardType="phone-pad"
+                                        // keyboardType="phone-pad"
+                                        secureTextEntry = {true}
                                     // defaultValue={data.numberPhone}
                                     // onChangeText={(val) => handleChangePhone(val)}
                                     />
@@ -100,12 +129,44 @@ const RegisterAccountScreen = () => {
                                             styles.titleText,
                                             { color: '#05375a', marginRight: 15 }]}
                                         autoCapitalize="none"
-                                        keyboardType="phone-pad"
+                                        // keyboardType="phone-pad"
                                     // defaultValue={data.numberPhone}
                                     // onChangeText={(val) => handleChangePhone(val)}
                                     />
                                 </View>
+                                <View style={[styles.rowContainer, { height: 100 }]}>
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text style={[styles.labelText]}>
+                                        Ảnh cửa hàng
+                                    </Text>
+                                    <View style={{
+                                        width: "51.5%", marginLeft: 23,
+                                        flexDirection: "row",
+                                        justifyContent: "flex-start",
+                                    }}>
+                                        {selectedImage !== null
+                                            ? (<View style = {{marginRight: 15}}>
+                                                <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />
+                                            </View>) : null
+                                        }
 
+                                        <TouchableOpacity
+                                            style={[styles.uploadButton,]}
+                                            onPress={openImagePickerAsync}
+                                        >
+                                            <AntDesign
+                                                name="plus"
+                                                size={92}
+                                                style={{
+                                                    flexDirection: "column",
+                                                    alignSelf: "center",
+                                                    color: StatisticColor.CANCELLATION
+                                                }}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+
+                                </View>
                                 <View style={[styles.rowContainer,]}>
                                     <View style={{
                                         justifyContent: "flex-end",
@@ -179,14 +240,12 @@ const RegisterAccountScreen = () => {
                                     />
                                 </View>
                             </View>
-
-
                         </View>
                     </View>
                 </ScrollView>
             </TouchableWithoutFeedback>
 
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
 
     )
 };
