@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { LIGHT_COLOR, OrderStatus, TOAST_FAIL_MESSAGE, TOAST_SUCCESS_MESSAGE } from "../../../constance/constance";
 import * as firebase from '../../../firebase/firebase-realtime';
-import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER } from "../../../redux/actions/order-list";
+import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, setOrderStatus, SET_LIST_INIT_ORDER, updateListApterChangeStatus } from "../../../redux/actions/order-list";
 import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { styles } from "./styles";
@@ -76,6 +76,9 @@ const UpcomingTab = (props) => {
             break;
           case 'to-do':
             dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+            case OrderStatus.CANCELLATION: {
+              dispatch(updateListApterChangeStatus(id, status));
+            }
           default:
             break;
         }

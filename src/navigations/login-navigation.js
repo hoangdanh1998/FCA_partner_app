@@ -8,6 +8,7 @@ import LoadingPage from '../screens/loading-page/index';
 import Login from '../screens/login';
 import MenuDrawer from './drawer-navigation';
 import HomeStackScreen from './home-stack-screen';
+import LoginStackScreen from './login-navigation/index'
 
 
 
@@ -57,10 +58,11 @@ function LoginNavigation() {
         <NavigationContainer>
             <LoginStack.Navigator
                 headerMode="none"
+                
             >
                 {isLoading ? (<LoginStack.Screen name="LOADING_PAGE" component={LoadingPage} />)
                     : token == null ? <LoginStack.Screen name="LOGIN" 
-                    component={Login} 
+                    component={LoginStackScreen} 
                     options = {{
                         title:"Sign in",
                         animationTypeForReplace: isSignOut ? 'pop' : 'push'

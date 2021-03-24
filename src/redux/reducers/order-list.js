@@ -1,21 +1,20 @@
+import { OrderStatus } from "../../constance/constance";
 import {
     GET_ACCEPTANCE_ORDERS_TODAY,
     GET_ARRIVAL_ORDER_TODAY,
     GET_ORDER_AFTER_UPDATE,
     GET_PREPARATION_ORDERS_TODAY,
     GET_READINESS_ORDERS_TODAY,
+
     SEND_QR_CODE,
+
     SET_ACCEPTANCE_ORDER,
-
-
-
     SET_ARRIVAL_ORDER,
-
-
-
     SET_LIST_INIT_ORDER, SET_PREPARATION_ORDER,
     SET_READINESS_ORDER,
-    SET_RECEPTION_ORDER
+    SET_RECEPTION_ORDER,
+
+    UPDATE_LIST_AFTER_CHANGE_STATUS
 } from "../actions/order-list";
 
 const initialState = {
@@ -117,6 +116,18 @@ const ordersReducer = (state = initialState, action) => {
         case SET_LIST_INIT_ORDER: {
 
             return { ...state, listInitOrder: action.payload.listInit };
+        }
+
+        case UPDATE_LIST_AFTER_CHANGE_STATUS: {
+            const id = action.payload.id;
+            const currentStatus = action.payload.currentStatus;
+            if (currentStatus === OrderStatus.ACCEPTANCE) {
+                const orderList = state.filterToDoList.filter((order) => {
+                    return order.id != id;
+                });
+
+                return { ...state, filterToDoList: orderList };
+            }
         }
 
         default:
