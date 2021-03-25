@@ -3,9 +3,9 @@ import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "
 import React, { useEffect, useState } from "react";
 import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import * as firebase from '../../../firebase/firebase-realtime';
-import { sendQRCode } from '../../../redux/actions/order-list';
+import { sendQRCode, updateListApterChangeStatus } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const OrderCardUpComing = (props) => {
 
@@ -19,23 +19,24 @@ const OrderCardUpComing = (props) => {
   const [listenedOrder, setListenedOrder] = useState();
 
   useEffect(() => {
-        firebase.listenOrder(order.id, (orderListened) => {
-              if (orderListened) {
-                setListenedOrder(orderListened);
-                setTimeRemain(orderListened.timeRemain);
-                if (orderListened.status === OrderStatus.WAITING) {
-                  setStatus(orderListened.status);
-                }
-              }
-        })
+    firebase.listenOrder(order.id, (orderListened) => {
+      if (orderListened) {
+        setListenedOrder(orderListened);
+        setTimeRemain(orderListened.timeRemain);
+        if (orderListened.status === OrderStatus.WAITING) {
+          setStatus(orderListened.status);
+        }
+      }
+    })
   }, []);
-  
+
+
   useEffect(() => {
     if (listenedOrder) {
       let tmpTimeRemain = listenedOrder.timeRemain + '';
       const arrTimeString = tmpTimeRemain.split(" ");
       const time = +arrTimeString[0];
-      
+
       if (propsStatus === 'to-do' && time <= TimeRemainTo.PREPARATION) {
         console.log('update preparation')
         handleUpdateStatus(OrderStatus.PREPARATION, listenedOrder.id);
@@ -43,6 +44,12 @@ const OrderCardUpComing = (props) => {
 
       if (listenedOrder.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
         handleUpdateStatus(OrderStatus.WAITING, listenedOrder.id)
+      }
+
+      if (listenedOrder.status === OrderStatus.CANCELLATION
+        && order.status === OrderStatus.ACCEPTANCE) {
+          console.log("update order list");
+          handleUpdateStatus(listenedOrder.status, order.id);
       }
     }
   }, [listenedOrder])

@@ -4,6 +4,7 @@ export const RESTORE_TOKEN = "RESTORE_TOKEN";
 export const SIGN_OUT = "SIGN_OUT";
 export const FINISH_LOADING = "FINISH_LOADING";
 export const CHANGE_ERROR = "CHANGE_ERROR";
+export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
 
 
 import fca from "../../service/fca-api/fca";
@@ -12,9 +13,9 @@ import fca from "../../service/fca-api/fca";
 export const login = (phone, password) => {
     return async dispatch => {
         try {
-            const response = await fca.post('/auth/login', {phone: phone, password: password});
+            const response = await fca.post('/auth/login', { phone: phone, password: password });
             dispatch({
-                type:LOGIN,
+                type: LOGIN,
                 payload: response
             })
         } catch (error) {
@@ -48,6 +49,27 @@ export const restoreToken = (token, partner) => {
         payload: {
             token,
             partner
+        }
+    }
+};
+
+export const registerAccount = (account, name, imageLink, address) => {
+    return async dispatch => {
+        try {
+            const response = await fca.post('/partner',
+                {
+                    account: {
+                        phone: account.numberPhone,
+                        password: account.password
+                    },
+                    name,
+                    imageLink:"",
+                    address
+                }
+            )
+            console.log("response registerAccount", response);
+        } catch (error) {
+            console.error(error);
         }
     }
 }

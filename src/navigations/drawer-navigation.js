@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Login from '../screens/login/index';
-import Register from '../screens/register/index';
+import Register from '../screens/register-account/index';
 import React from 'react'
 import HomeStackScreen from './home-stack-screen';
 import { BACKGROUND_COLOR, HEADER_FONT_SIZE, LIGHT_COLOR } from '../constance/constance';

@@ -16,6 +16,9 @@ export const SET_READINESS_ORDER = "SET_READINESS_ORDER";
 export const SET_ARRIVAL_ORDER = "SET_ARRIVAL_ORDER";
 export const SET_LIST_INIT_ORDER = "SET_LIST_INIT_ORDER";
 
+//UPDATE
+export const UPDATE_LIST_AFTER_CHANGE_STATUS = "UPDATE_LIST_AFTER_CHANGE_STATUS";
+
 
 
 export const SEND_QR_CODE = "SEND_QR_CODE";
@@ -207,5 +210,15 @@ export const sendQRCode = (id) => {
         } catch (error) {
             throw error;
         }        
+    }
+}
+
+export const updateListApterChangeStatus = (id, currentStatus) => {
+    return {
+        type: UPDATE_LIST_AFTER_CHANGE_STATUS,
+        payload: { 
+            id,
+            currentStatus
+        }
     }
 }

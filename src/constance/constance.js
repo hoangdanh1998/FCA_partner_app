@@ -93,3 +93,5 @@ export const SizeOrderStatistic = {
   NUMBER_FONT_SIZE: 40,
   
 }
+
+export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
