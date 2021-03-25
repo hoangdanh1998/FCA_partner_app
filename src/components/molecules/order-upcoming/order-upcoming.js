@@ -11,7 +11,7 @@ import {
 } from "native-base";
 import { styles } from "./styles";
 import OrderCardUpComing from "../../atoms/order-card-upcoming/order-card-upcoming";
-import { SafeAreaView} from 'react-native'
+import { SafeAreaView } from 'react-native'
 
 const OrderUpcoming = (props) => {
 
@@ -34,7 +34,7 @@ const OrderUpcoming = (props) => {
   }
 
   return (
-    <Container style={{height:"100%"}}>
+    <Container style={{ height: "100%" }}>
       <Card>
         <CardItem header bordered style={{ borderColor: '#603a18' }}>
           <Left />
@@ -44,11 +44,16 @@ const OrderUpcoming = (props) => {
       </Card>
       <Content padder>
 
-          <List
-            keyExtractor={orderList.id}
-            dataArray={orderList}
-            renderRow={(order) => <OrderCardUpComing order={order} status = {props.status} handleUpdateStatus={props.handleUpdateStatus}/>}
-          />
+        <List
+          keyExtractor={orderList.id}
+          dataArray={orderList}
+          renderRow={(order) => <OrderCardUpComing
+            order={order}
+            status={props.status}
+            handleUpdateStatus={props.handleUpdateStatus}
+            handleUpdateListApterChangeStatus = {props.handleUpdateListApterChangeStatus}
+          />}
+        />
 
 
       </Content>

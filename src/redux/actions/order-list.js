@@ -214,6 +214,7 @@ export const sendQRCode = (id) => {
 }
 
 export const updateListApterChangeStatus = (id, currentStatus) => {
+    
     return {
         type: UPDATE_LIST_AFTER_CHANGE_STATUS,
         payload: { 

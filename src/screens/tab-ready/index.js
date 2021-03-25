@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SearchBar from '../../components/atoms/search-bar/search-bar';
 import TabReady from '../../components/organisms/tab-ready/tab-ready';
 import { EMPTY_LIST_MESSAGE, OrderStatus, PRIMARY_COLOR } from '../../constance/constance';
-import { getOrderAfterUpdate, getReadinessOrderToday, setOrderStatus } from '../../redux/actions/order-list';
+import { getOrderAfterUpdate, getReadinessOrderToday, setOrderStatus, updateListApterChangeStatus } from '../../redux/actions/order-list';
 import { styles } from './style';
 const TabReadyScreen = () => {
 
@@ -28,6 +28,11 @@ const TabReadyScreen = () => {
                 case OrderStatus.ARRIVAL:
                     dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
                     break;
+                case OrderStatus.CANCELLATION: {
+                    
+                    dispatch(updateListApterChangeStatus(id, status));
+                    break;
+                }
                 default:
                     break;
             }
