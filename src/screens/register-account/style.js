@@ -4,6 +4,7 @@ import { BACKGROUND_COLOR, HEADER_FONT_SIZE } from '../../constance/constance';
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginTop:"2%"
     },
 
     rowContainer: {

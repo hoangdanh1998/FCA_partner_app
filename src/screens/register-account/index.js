@@ -15,9 +15,12 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { HEADER_FONT_SIZE, KEY_GOOGLE_MAP, PRIMARY_COLOR, StatisticColor } from '../../constance/constance';
 import * as ImagePicker from 'expo-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useDispatch } from 'react-redux'
+import { registerAccount } from '../../redux/actions/account';
 
 
 const RegisterAccountScreen = () => {
+    const dispatch = useDispatch();
 
     const [address, setAddress] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -135,7 +138,17 @@ const RegisterAccountScreen = () => {
             } if (!address) {
                 setAddressErr("Địa chỉ cửa hàng là bắt buộc");
 
+            } if (!numberErr && !passwordErr && !confirmPasswordErr
+                && !storeNameErr && !imageErr && !addressErr
+            ) {
+                dispatch(registerAccount(    
+                    {numberPhone: data.numberPhone, password: data.password},
+                    storeName, 
+                    selectedImage,
+                    address
+                ));
             }
+
 
         } catch (error) {
             console.error(error);
