@@ -34,11 +34,11 @@ const OrderCardReady = (props) => {
         const arrTimeString = tmpTimeRemain.split(" ");
         const time = +arrTimeString[0];
         if (orderListened.status === OrderStatus.READINESS && time <= TimeRemainTo.ARRIVAL) {
-            handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
+            handleUpdateStatus(OrderStatus.ARRIVAL, order);
         } if (orderListened.status === OrderStatus.CANCELLATION
             || orderListened.status === OrderStatus.RECEPTION) {
             console.log("update order list");
-            handleUpdateStatus(orderListened.status, order.id);
+            handleUpdateStatus(orderListened.status, order);
         }
     }
 

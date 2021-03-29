@@ -116,20 +116,29 @@ const UpcomingTab = (props) => {
     try {
       await dispatch(updateListApterChangeStatus(order.id, order.status));
       showAlert();
-      setTitleAlert(`Đơn hàng ${order.customer.account.phone}`)
+      setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
       if (realtimeStatus === OrderStatus.CANCELLATION) {
         setAlertMessage(
-        `Đơn hàng ${order.customer.account.phone} đã được nhân viên huỷ thành công`
+          `Đã được nhân viên huỷ thành công`
         )
       } else if (realtimeStatus === OrderStatus.RECEPTION) {
         setAlertMessage(
-          `Đơn hàng ${order.customer.account.phone} đã được nhân viên cập nhật trạng thái thành công`
+          `Đã được nhân viên xác nhận thành công`
         )
       }
 
 
     } catch (error) {
-      console.error(error);
+      setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
+      if (realtimeStatus === OrderStatus.CANCELLATION) {
+        setAlertMessage(
+          `Huỷ thất bại`
+        )
+      } else if (realtimeStatus === OrderStatus.RECEPTION) {
+        setAlertMessage(
+          `Xác nhận thất bại`
+        )
+      }
     }
 
   }
