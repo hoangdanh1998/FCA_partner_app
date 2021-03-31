@@ -13,15 +13,15 @@ function LoginStackScreen() {
         <LoginStack.Navigator
             screenOptions={{ headerShow: false }}
         >
-            <LoginStack.Screen name="OTP_SMS"
-            component={OtpSmsScreen}
-            options={{ title: "" }}
-            />
+
             <LoginStack.Screen name="LOGIN" component={Login} options={{ headerShown: false }} />
             <LoginStack.Screen name="REGISTER_ACCOUNT"
                 options={{ title: "Đăng ký tài khoản" }}
                 component={RegisterAccountScreen} />
-
+            <LoginStack.Screen name="OTP_SMS"
+                component={OtpSmsScreen}
+                options={{ title: "" }}
+            />
         </LoginStack.Navigator>
 
     );

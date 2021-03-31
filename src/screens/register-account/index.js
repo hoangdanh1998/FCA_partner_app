@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux'
 import { registerAccount } from '../../redux/actions/account';
 
 
-const RegisterAccountScreen = () => {
+const RegisterAccountScreen = (props) => {
     const dispatch = useDispatch();
 
     const [address, setAddress] = useState(null);
@@ -29,15 +29,6 @@ const RegisterAccountScreen = () => {
         password: "",
         confirmPassword: "",
         storeName: "",
-    });
-
-    const [errorMessage, setErrorMessage] = useState({
-        numberErr: null,
-        passwordErr: null,
-        confirmPasswordErr: null,
-        storeNameErr: null,
-        addressErr: null,
-        imageErr: null
     });
 
     const [numberErr, setNumberErr] = useState(null);
@@ -141,12 +132,28 @@ const RegisterAccountScreen = () => {
             } if (!numberErr && !passwordErr && !confirmPasswordErr
                 && !storeNameErr && !imageErr && !addressErr
             ) {
-                dispatch(registerAccount(    
-                    {numberPhone: data.numberPhone, password: data.password},
-                    storeName, 
-                    selectedImage,
-                    address
-                ));
+                try {
+                    // dispatch(registerAccount(    
+                    //     {numberPhone: data.numberPhone, password: data.password},
+                    //     storeName, 
+                    //     selectedImage,
+                    //     address
+                    // ));
+
+                    const newAccount = {
+                        numberPhone: data.numberPhone, 
+                        password: data.password,
+                        storeName, 
+                        selectedImage,
+                        address
+                    }
+
+                    props.navigation.navigate("OTP_SMS", {newAccount: {newAccount}});
+
+                } catch (error) {
+                    console.error("create error", error);
+                }
+                
             }
 
 
@@ -175,7 +182,7 @@ const RegisterAccountScreen = () => {
                                         Số điện thoại
                                 </Text>
                                     <TextInput
-                                        maxLength={11}
+                                        maxLength={15}
                                         placeholder="Nhập số điện thoại"
                                         placeholderTextColor="#666666"
                                         style={[
