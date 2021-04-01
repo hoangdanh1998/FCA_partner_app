@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 
 const OrderCardUpComing = (props) => {
 
-  const { handleUpdateStatus, order } = props;
+  const { handleUpdateStatus, order, handleUpdateListApterChangeStatus } = props;
   const propsStatus = props.status;
 
   const dispatch = useDispatch();
@@ -47,9 +47,9 @@ const OrderCardUpComing = (props) => {
       }
 
       if (listenedOrder.status === OrderStatus.CANCELLATION
-        && order.status === OrderStatus.ACCEPTANCE) {
+        || listenedOrder.status === OrderStatus.RECEPTION) {
           console.log("update order list");
-          handleUpdateStatus(listenedOrder.status, order.id);
+          handleUpdateListApterChangeStatus(order, listenedOrder.status);
       }
     }
   }, [listenedOrder])

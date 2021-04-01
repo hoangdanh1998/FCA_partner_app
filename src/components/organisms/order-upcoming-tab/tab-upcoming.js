@@ -9,6 +9,7 @@ import { getAcceptOrderToday, getPreparationOrderToday, getReadinessOrderToday, 
 import InitOrderModal from '../../molecules/modal/index';
 import OrderUpcoming from "../../molecules/order-upcoming/order-upcoming";
 import { styles } from "./styles";
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 const UpcomingTab = (props) => {
@@ -29,7 +30,11 @@ const UpcomingTab = (props) => {
   const [autoAccept, setAutoAccept] = useState(false);
   const [listInitOrder, setListInitOrder] = useState();
   const [countOrderAccepted, setCountOrderAccepted] = useState(0);
-  
+  const [alertMessage, setAlertMessage] = useState();
+  const [isShowAlert, setIsShowAlert] = useState(false);
+  const [titleAlert, setTitleAlert] = useState();
+
+
   const loadOrderList = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -37,15 +42,15 @@ const UpcomingTab = (props) => {
       dispatch(getAcceptOrderToday(partnerAccount.id));
       dispatch(getPreparationOrderToday(partnerAccount.id));
       dispatch(getReadinessOrderToday(partnerAccount.id));
-      
-      
+
+
     } catch (error) {
       setError(error.message);
     }
 
     setIsLoading(false);
   }, [dispatch, setError, setIsLoading])
-  
+
   const handleAcceptAllOrder = async (listOrder) => {
     await new Promise((resolve) => {
       const tmpList = listOrder.map((order) => {
@@ -59,44 +64,84 @@ const UpcomingTab = (props) => {
 
   }
 
+  const showAlert = () => {
+    console.log("hien alert len");
+    setIsShowAlert(true);
+  };
+
+  const hideAlert = () => {
+    setIsShowAlert(false);
+  };
+
   const handleUpdateStatus = async (status, id) => {
     try {
-        switch (status) {
-          case OrderStatus.PREPARATION:
-            dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
-            break;
-          case OrderStatus.ARRIVAL:
-            dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
-            break;
-          case (OrderStatus.WAITING):
-            dispatch(setOrderStatus(id, OrderStatus.WAITING));
-            break;
-          case 'doing':
-            dispatch(setOrderStatus(id, OrderStatus.READINESS));
-            break;
-          case 'to-do':
-            dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
-            case OrderStatus.CANCELLATION: {
-              dispatch(updateListApterChangeStatus(id, status));
-            }
-          default:
-            break;
-        }
+      switch (status) {
+        case OrderStatus.PREPARATION:
+          dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+          break;
+        case OrderStatus.ARRIVAL:
+          dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
+          break;
+        case (OrderStatus.WAITING):
+          dispatch(setOrderStatus(id, OrderStatus.WAITING));
+          break;
+        case 'doing':
+          dispatch(setOrderStatus(id, OrderStatus.READINESS));
+          break;
+        case 'to-do':
+          dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+        // case OrderStatus.A: {
+        //   dispatch(updateListApterChangeStatus(id, status));
+        // }
+        default:
+          break;
+      }
 
-        Toast.show({
-          text: TOAST_SUCCESS_MESSAGE,
-          buttonText: "OK",
-          type: "success"
-        })
+      Toast.show({
+        text: TOAST_SUCCESS_MESSAGE,
+        buttonText: "OK",
+        type: "success"
+      })
 
-      } catch (error) {
-        Toast.show({
-          text: TOAST_FAIL_MESSAGE,
-          buttonText: "OK",
-          type: "warning"
-        })
+    } catch (error) {
+      Toast.show({
+        text: TOAST_FAIL_MESSAGE,
+        buttonText: "OK",
+        type: "warning"
+      })
+    }
+  }
+
+  const handleUpdateListApterChangeStatus = async (order, realtimeStatus) => {
+    try {
+      await dispatch(updateListApterChangeStatus(order.id, order.status));
+      showAlert();
+      setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
+      if (realtimeStatus === OrderStatus.CANCELLATION) {
+        setAlertMessage(
+          `Đã được nhân viên huỷ thành công`
+        )
+      } else if (realtimeStatus === OrderStatus.RECEPTION) {
+        setAlertMessage(
+          `Đã được nhân viên xác nhận thành công`
+        )
+      }
+
+
+    } catch (error) {
+      setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
+      if (realtimeStatus === OrderStatus.CANCELLATION) {
+        setAlertMessage(
+          `Huỷ thất bại`
+        )
+      } else if (realtimeStatus === OrderStatus.RECEPTION) {
+        setAlertMessage(
+          `Xác nhận thất bại`
+        )
       }
     }
+
+  }
 
 
 
@@ -131,16 +176,33 @@ const UpcomingTab = (props) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
+      <AwesomeAlert
+        show={isShowAlert}
+        showProgress={false}
+        title={titleAlert}
+        message={alertMessage}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        titleStyle={[styles.titleAlert, styles.boldText]}
+        messageStyle={[styles.title_font_size]}
+        confirmText="OK"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => {
+          hideAlert();
+        }}
+        confirmButtonTextStyle={[styles.title_font_size, styles.boldText]}
+      />
       <View style={styles.switch_view}>
         <InitOrderModal visible={visible} handleAcceptAllOrder={handleAcceptAllOrder} />
         <Body style={styles.switch_container}>
           <Switch style={styles.switch} onValueChange={(value) => {
             // dispatch({
-              //   type: AUTO_ACCEPT_ORDER,
-              //   payload: { autoAcceptOrder: value }
-              // })
-              setAutoAccept(value)
-            }} value={autoAccept} />
+            //   type: AUTO_ACCEPT_ORDER,
+            //   payload: { autoAcceptOrder: value }
+            // })
+            setAutoAccept(value)
+          }} value={autoAccept} />
           <Text style={styles.switch_text}>Tự động tiếp nhận đơn hàng mới</Text>
         </Body>
         <Left></Left>
@@ -152,8 +214,16 @@ const UpcomingTab = (props) => {
       </View>
       <View style={styles.order_view}>
 
-        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={toDoOrderList} status="to-do" />
-        <OrderUpcoming handleUpdateStatus={handleUpdateStatus} orderList={doingList} status="doing" />
+        <OrderUpcoming
+          handleUpdateStatus={handleUpdateStatus}
+          orderList={toDoOrderList} status="to-do"
+          handleUpdateListApterChangeStatus={handleUpdateListApterChangeStatus}
+        />
+        <OrderUpcoming
+          handleUpdateStatus={handleUpdateStatus}
+          handleUpdateListApterChangeStatus={handleUpdateListApterChangeStatus}
+          orderList={doingList}
+          status="doing" />
       </View>
     </View>
   );

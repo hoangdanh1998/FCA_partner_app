@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop:20,
+    marginTop: 20,
     width: 150,
     backgroundColor: "#82B366",
     borderRadius: 30,
@@ -48,5 +48,11 @@ export const styles = StyleSheet.create({
   },
   boldText: {
     fontWeight: "bold"
+  },
+  titleAlert: {
+    fontSize: 25
+  },
+  title_font_size: {
+    fontSize: HEADER_FONT_SIZE
   },
 });

@@ -34,7 +34,11 @@ const OrderCardReady = (props) => {
         const arrTimeString = tmpTimeRemain.split(" ");
         const time = +arrTimeString[0];
         if (orderListened.status === OrderStatus.READINESS && time <= TimeRemainTo.ARRIVAL) {
-            handleUpdateStatus(OrderStatus.ARRIVAL, order.id);
+            handleUpdateStatus(OrderStatus.ARRIVAL, order);
+        } if (orderListened.status === OrderStatus.CANCELLATION
+            || orderListened.status === OrderStatus.RECEPTION) {
+            console.log("update order list");
+            handleUpdateStatus(orderListened.status, order);
         }
     }
 
@@ -178,10 +182,10 @@ const OrderCardReady = (props) => {
 
                     <Right style={{ flexDirection: "row", justifyContent: "flex-end" }}>
                         <Button
-                            style={{borderColor: BACKGROUND_COLOR}}
+                            style={{ borderColor: BACKGROUND_COLOR }}
                             onPress={showAlert}
                             bordered>
-                            <Text style = {{color: BACKGROUND_COLOR}}>Giao hàng</Text>
+                            <Text style={{ color: BACKGROUND_COLOR }}>Giao hàng</Text>
                         </Button>
                         <Button
                             style={styles.button}
@@ -189,7 +193,7 @@ const OrderCardReady = (props) => {
                                 dispatch(sendQRCode(order.id));
                                 props.navigation.navigate("QRCODE");
                             }}
-                            >
+                        >
                             <Text>Gửi mã QR</Text>
                         </Button>
                     </Right>

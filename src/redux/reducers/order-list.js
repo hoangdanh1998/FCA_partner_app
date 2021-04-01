@@ -29,30 +29,30 @@ const initialState = {
 const ordersReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_ACCEPTANCE_ORDERS_TODAY: {
-            
+
             const data = action.payload.data.data.orders;
-            return {...state, filterToDoList: data};
+            return { ...state, filterToDoList: data };
         }
 
         case GET_PREPARATION_ORDERS_TODAY: {
             const data = action.payload.orders;
-            return {...state, filterDoingList: data};
+            return { ...state, filterDoingList: data };
         }
 
         case GET_READINESS_ORDERS_TODAY: {
             const data = [...action.responseArrival.data.data.orders, ...action.responseReady.data.data.orders];
 
-            return {...state, filterReadyList: data};
+            return { ...state, filterReadyList: data };
         }
 
         case GET_ARRIVAL_ORDER_TODAY: {
             const data = action.payload.data.data.orders;
 
-            return {...state, filterArrivalList: data};
+            return { ...state, filterArrivalList: data };
         }
 
         case SET_RECEPTION_ORDER: {
-            
+
             const id = action.payload;
 
             const doingList = state.filterDoingList.filter((order) => {
@@ -62,41 +62,41 @@ const ordersReducer = (state = initialState, action) => {
             const orderList = state.filterReadyList.filter((order) => {
                 return order.id != id;
             })
-            
-            return {...state, filterReadyList: orderList, filterDoingList: doingList};
+
+            return { ...state, filterReadyList: orderList, filterDoingList: doingList };
         }
 
         case SET_PREPARATION_ORDER: {
             const id = action.payload;
             let doingList = state.filterDoingList.map((order) => order);
             const orderList = state.filterToDoList.filter((order) => {
-                if(order.id === id){
+                if (order.id === id) {
                     doingList.push(order);
                 }
                 return order.id != id;
             })
 
 
-            
-            return {...state, filterToDoList: orderList, filterDoingList: doingList };
+
+            return { ...state, filterToDoList: orderList, filterDoingList: doingList };
         }
 
         case SET_READINESS_ORDER: {
             const id = action.payload;
             let readyList = state.filterReadyList.map((order) => order);
             const orderList = state.filterDoingList.filter((order) => {
-                if(order.id === id){
+                if (order.id === id) {
                     readyList.push(order);
                 }
                 return order.id != id;
             })
 
 
-            
-            return {...state, filterDoingList: orderList, filterReadyList: readyList };
+
+            return { ...state, filterDoingList: orderList, filterReadyList: readyList };
         }
 
-        case SET_ARRIVAL_ORDER : {
+        case SET_ARRIVAL_ORDER: {
             return state;
         }
 
@@ -109,7 +109,7 @@ const ordersReducer = (state = initialState, action) => {
         }
 
         case GET_ORDER_AFTER_UPDATE: {
-            
+
             return state;
         }
 
@@ -121,19 +121,36 @@ const ordersReducer = (state = initialState, action) => {
         case UPDATE_LIST_AFTER_CHANGE_STATUS: {
             const id = action.payload.id;
             const currentStatus = action.payload.currentStatus;
-            if (currentStatus === OrderStatus.ACCEPTANCE) {
-                const orderList = state.filterToDoList.filter((order) => {
-                    return order.id != id;
-                });
+            const toDoList = state.filterToDoList.filter((order) => {
+                return order.id != id;
+            });
 
-                return { ...state, filterToDoList: orderList };
+            const doingList = state.filterDoingList.filter((order) => {
+                return order.id != id;
+            })
+
+            const readyList = state.filterReadyList.filter((order) => {
+                return order.id != id;
+            })
+
+            const arrivalList = state.filterArrivalList.filter((order) => {
+                return order.id != id;
+            })
+
+            
+            return {
+                ...state,
+                filterToDoList: toDoList,
+                filterDoingList: doingList,
+                filterReadyList: readyList,
+                filterArrivalList: arrivalList
             }
         }
 
         default:
             return state;
     }
-    
+
 }
 
 export default ordersReducer;
