@@ -1,11 +1,11 @@
 import { withNavigation } from '@react-navigation/compat';
 import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
 import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import * as firebase from '../../../firebase/firebase-realtime';
-import { sendQRCode, updateListApterChangeStatus } from '../../../redux/actions/order-list';
+import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
-import { useDispatch } from 'react-redux'
 
 const OrderCardUpComing = (props) => {
 
@@ -68,7 +68,7 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {status ? 'đang đợi' : timeRemain}
+            {status ? 'đang đợi' : timeRemain} phút
           </Text>
           <Right></Right>
         </CardItem>

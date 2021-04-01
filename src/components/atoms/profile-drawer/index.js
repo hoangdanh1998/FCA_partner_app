@@ -1,7 +1,8 @@
+import moment from 'moment';
 import React from 'react';
-import { View, Text } from 'react-native';
-import {styles} from './style';
-import {useSelector} from 'react-redux';
+import { Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { styles } from './style';
 
 export default ProfileContentDrawer = () => {
     const partner = useSelector(state => state.account.partner);
@@ -20,12 +21,13 @@ export default ProfileContentDrawer = () => {
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[styles.headerProfile]}>Số dư ví</Text>
-                <Text style = {[styles.profileText]}>10 000 000</Text>
+                    <Text style={[styles.profileText]}>{partner.account.balance | '0'}</Text>
 
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[styles.headerProfile]}>Ngày hết hạn</Text>
-                <Text style = {[styles.profileText]}>30-12-2021</Text>
+                    <Text style={[styles.profileText]}> {partner.expirationDate ?
+                        moment(partner.expirationDate).format('YYYY-MM-DD') : 'Chưa đăng ký'}</Text>
             </View>
             <View style = {[styles.rowContainer]}>
                 <Text style = {[styles.headerProfile]}>Số điện thoại</Text>
