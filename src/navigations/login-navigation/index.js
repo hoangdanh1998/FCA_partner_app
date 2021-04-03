@@ -7,7 +7,10 @@ import OtpSmsScreen from '../../screens/otp-sms/index'
 
 const LoginStack = createStackNavigator();
 
-function LoginStackScreen() {
+
+function LoginStackScreen(props) {
+    console.log("props of login stack ", props.route);
+    // const handleLogOut = props.route.params.handleLogOut;
     return (
 
         <LoginStack.Navigator
@@ -21,6 +24,7 @@ function LoginStackScreen() {
             <LoginStack.Screen name="OTP_SMS"
                 component={OtpSmsScreen}
                 options={{ title: "" }}
+                
             />
         </LoginStack.Navigator>
 

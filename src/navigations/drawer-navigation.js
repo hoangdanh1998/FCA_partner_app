@@ -16,6 +16,7 @@ import OrderStatisticScreen from './order-statistic/order-statistic-stack';
 const Drawer = createDrawerNavigator();
 
 const MenuDrawer = (props) => {
+    console.log("dawer props", props);
     const handleLogOut = props.route.params.handleLogOut;
     return (
         <Drawer.Navigator

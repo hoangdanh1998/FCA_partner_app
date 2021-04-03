@@ -19,8 +19,10 @@ import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-fi
 
 export default function OtpSmsScreen(props) {
 
-    console.log("props of otp:", props);
+    // console.log("props of otp:", props);
     const newAccount = props.route.params.newAccount.newAccount;
+    const numberPhoneValue = props.route.params.numberPhoneValue;
+    // console.log("numberphone value", numberPhoneValue);
 
     const [duration, setDuration] = useState(10);
     const [isShowButton, setIsShowButton] = useState(false);
@@ -51,7 +53,7 @@ export default function OtpSmsScreen(props) {
         try {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             phoneProvider
-                .verifyPhoneNumber(newAccount.numberPhone, recaptchaVerifier.current)
+                .verifyPhoneNumber(numberPhoneValue, recaptchaVerifier.current)
                 .then(setVerificationId);
                 console.log("send success");
         } catch (error) {
@@ -71,6 +73,7 @@ export default function OtpSmsScreen(props) {
                 .signInWithCredential(credential)
                 .then((result) => {
                     // Do something with the results here
+                    
                     console.log(result);
                 });
         } catch (error) {
@@ -105,7 +108,7 @@ export default function OtpSmsScreen(props) {
                                     Một mã xác nhận gồm 6 số đã được gửi đến
                                 </Text>
                                 <Text style={styles.title}>số điện thoại
-                                    <Text> 0364133838</Text>
+                                    <Text> {newAccount.numberPhone}</Text>
                                 </Text>
 
                             </View>

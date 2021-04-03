@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
     View,
     Text,
@@ -8,7 +8,8 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
-    TouchableHighlight
+    TouchableHighlight,
+    ActivityIndicator
 } from 'react-native';
 import { styles } from './style'
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -17,11 +18,17 @@ import * as ImagePicker from 'expo-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useDispatch } from 'react-redux'
 import { registerAccount } from '../../redux/actions/account';
+import PhoneInput from "react-native-phone-number-input";
+
+
 
 
 const RegisterAccountScreen = (props) => {
     const dispatch = useDispatch();
 
+    const [numberPhoneValue, setNumberPhoneValue] = useState("");
+    const [valid, setValid] = useState(false);
+    const phoneInput = useRef(PhoneInput);
     const [address, setAddress] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [data, setData] = useState({
@@ -37,9 +44,12 @@ const RegisterAccountScreen = (props) => {
     const [storeNameErr, setStoreNameErr] = useState(null);
     const [addressErr, setAddressErr] = useState(null);
     const [imageErr, setImageErr] = useState(null);
+    const [isLoadingImage, setIsLoadingImage] = useState(false);
 
     let openImagePickerAsync = async () => {
-        let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+        setIsLoadingImage(true);
+        console.log("hello");
+        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
             alert('Permission to access camera roll is required!');
@@ -47,13 +57,21 @@ const RegisterAccountScreen = (props) => {
         }
 
         let pickerResult = await ImagePicker.launchImageLibraryAsync();
-        if (pickerResult.cancelled === true) {
-            return;
+        console.log("picker image", pickerResult);
+        if (pickerResult.cancelled) {
+            if (!selectedImage)
+                setSelectedImage(null);
+            setIsLoadingImage(false);
+
+        } else {
+            setSelectedImage({ localUri: pickerResult.uri });
         }
 
-        setSelectedImage({ localUri: pickerResult.uri });
         setImageErr(null);
+        setIsLoadingImage(false);
     };
+
+
 
     const handleChangePhone = (numberPhone) => {
 
@@ -64,8 +82,58 @@ const RegisterAccountScreen = (props) => {
                 numberPhone: numberPhone
             }
         )
+    }
+
+    const checkValuePhoneNumber = (numberPhone) => {
+
+        const phoneReg = /^[0-9]+$/;
+
+        if (!numberPhone.match(phoneReg)) {
+            setNumberErr("Số điện thoại không được bỏ trống");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const checkStoreName = (storeName) => {
+
+        // const nameReg = /^[A-Za-z0-9]+$/;
+        // console.log(storeName.match(nameReg));
+
+        if (storeName.length === 0) {
+            setStoreNameErr("Tên cửa hàng là bắt buộc");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const checkPassword = (password) => {
 
 
+        const passReg = /^(?=.*\d+.*)(?=.*[A-Z]+.*)\w{8,20}$/;
+        console.log("pass:", password.match(passReg));
+
+        if (!password.match(passReg)) {
+            setPasswordErr("Mật khẩu phải có ít nhất 8 kí tự, phải chứa chữ in hoa, chữ số, chữ thường");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    const checkConfirmPassword = (confirmPassword) => {
+
+        // const passReg = /^([A-Z]+[a-z]+[0-9]+){8,16}$/;
+        // console.log("pass:",confirmPassword.match(passReg));
+
+        if (confirmPassword !== data.password) {
+            setConfirmPasswordErr("Xác nhận mật khẩu chưa chính xác")
+            return false;
+        } else {
+            return true;
+        }
     }
 
     const handleChangePassword = (password) => {
@@ -104,56 +172,51 @@ const RegisterAccountScreen = (props) => {
             console.log("password", password);
             console.log("confirmPassword", confirmPassword);
             setNumberErr(null);
-            setPasswordErr(null);
             setConfirmPasswordErr(null);
             setStoreNameErr(null);
             setImageErr(null);
             setAddressErr(null);
+            setPasswordErr(null);
 
-            if (numberPhone.trim().length === 0) {
-                setNumberErr("Số điện thoại là bắt buộc");
+            console.log("number phone:", numberPhone);
 
-            }
-            if (password.trim().length === 0) {
-                setPasswordErr("Mật khẩu là bắt buộc");
+            const isNumberPhone = checkValuePhoneNumber(numberPhone);
 
-            } if (password !== confirmPassword) {
-                console.log("hello");
-                setConfirmPasswordErr("Xác nhận mật khẩu chưa chính xác")
-
-            } if (storeName.trim().length === 0) {
-                setStoreNameErr("Tên cửa hàng là bắt buộc");
-
-            } if (!image) {
+            const isStoreName = checkStoreName(storeName);
+            const isPassword = checkPassword(password);
+            const isConfirmPass = checkConfirmPassword(confirmPassword);
+            if (!image) {
                 setImageErr("Hình ảnh cửa hàng là bắt buộc")
             } if (!address) {
                 setAddressErr("Địa chỉ cửa hàng là bắt buộc");
-
-            } if (!numberErr && !passwordErr && !confirmPasswordErr
-                && !storeNameErr && !imageErr && !addressErr
+            }
+            if (isNumberPhone && isPassword && isStoreName
+                && isConfirmPass && image && address
             ) {
-                try {
-                    // dispatch(registerAccount(    
-                    //     {numberPhone: data.numberPhone, password: data.password},
-                    //     storeName, 
-                    //     selectedImage,
-                    //     address
-                    // ));
 
-                    const newAccount = {
-                        numberPhone: data.numberPhone, 
-                        password: data.password,
-                        storeName, 
-                        selectedImage,
-                        address
-                    }
+                console.log("bi loi roi ne");
+                // dispatch(registerAccount(    
+                //     {numberPhone: data.numberPhone, password: data.password},
+                //     storeName, 
+                //     selectedImage,
+                //     address
+                // ));
 
-                    props.navigation.navigate("OTP_SMS", {newAccount: {newAccount}});
 
-                } catch (error) {
-                    console.error("create error", error);
+
+                const newAccount = {
+                    numberPhone: data.numberPhone,
+                    password: data.password,
+                    storeName,
+                    selectedImage,
+                    address
                 }
-                
+                console.log(123);
+
+                props.navigation.navigate("OTP_SMS", { newAccount: { newAccount },numberPhoneValue: numberPhoneValue});
+
+
+
             }
 
 
@@ -164,6 +227,7 @@ const RegisterAccountScreen = (props) => {
 
 
     return (
+
         <KeyboardAvoidingView
             style={{ flex: 1, backgroundColor: '#ffff' }}
             behavior="height"
@@ -175,24 +239,59 @@ const RegisterAccountScreen = (props) => {
                 >
                     <View style={styles.container}>
                         <View style={styles.formContainer}>
-                            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+
+                            <View style={{ flex: 1 }}>
+
                                 <View style={[styles.rowContainer]}>
                                     <Text style={styles.requireText}>*</Text>
                                     <Text style={[styles.labelText]}>
-                                        Số điện thoại
-                                </Text>
+                                        Tên cửa hàng
+                                    </Text>
                                     <TextInput
-                                        maxLength={15}
-                                        placeholder="Nhập số điện thoại"
+                                        placeholder="Nhập tên cửa hàng"
                                         placeholderTextColor="#666666"
                                         style={[
                                             styles.textInput,
                                             styles.titleText,
-                                            { color: '#05375a', marginRight: 15 }]}
+                                            { color: "#000", marginRight: 15 }]}
                                         autoCapitalize="none"
-                                        keyboardType="phone-pad"
+
+                                        defaultValue={data.storeName}
+                                        onChangeText={(val) => handleChangeStoreName(val)}
+                                    />
+                                </View>
+                                {storeNameErr
+                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
+                                        <></>
+                                        <Text style={[styles.errorMessage]}>
+                                            {storeNameErr}
+                                        </Text>
+                                    </View>)
+                                    : null
+                                }
+                                <View style={styles.rowContainer} >
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text style={[styles.labelText]}>
+                                        Số điện thoại
+                                </Text>
+                                    <PhoneInput
+                                        ref={phoneInput}
                                         defaultValue={data.numberPhone}
-                                        onChangeText={(val) => handleChangePhone(val)}
+                                        defaultCode="VN"
+                                        layout="first"
+                                        onChangeText={(text) => {
+                                            handleChangePhone(text);
+                                        }}
+                                        onChangeFormattedText={text => setNumberPhoneValue(text)}
+                                        // withDarkTheme
+                                        // withShadow
+                                        // autoFocus
+                                        containerStyle={styles.phoneInputContainer}
+                                        flagButtonStyle={styles.flagButtonStyle}
+                                        textInputStyle={styles.phoneInputStyle}
+                                        placeholder="Nhập số điện thoại"
+                                        textContainerStyle={styles.textContainerStyle}
+                                        codeTextStyle={styles.codeTextStyle}
                                     />
                                 </View>
                                 {numberErr
@@ -204,7 +303,6 @@ const RegisterAccountScreen = (props) => {
                                     </View>)
                                     : null
                                 }
-
                                 <View style={[styles.rowContainer]}>
                                     <Text style={styles.requireText}>*</Text>
 
@@ -217,7 +315,7 @@ const RegisterAccountScreen = (props) => {
                                         style={[
                                             styles.textInput,
                                             styles.titleText,
-                                            { color: '#05375a', marginRight: 15 }]}
+                                            { color: "#000", marginRight: 15 }]}
                                         autoCapitalize="none"
                                         secureTextEntry={true}
                                         defaultValue={data.password}
@@ -235,7 +333,7 @@ const RegisterAccountScreen = (props) => {
                                 }
                                 <View style={[styles.rowContainer]}>
                                     <Text style={styles.requireText}>*</Text>
-                                    <Text style={[styles.labelText]}>
+                                    <Text style={[styles.labelText,]}>
                                         Xác nhận mật khẩu
                                 </Text>
                                     <TextInput
@@ -244,7 +342,7 @@ const RegisterAccountScreen = (props) => {
                                         style={[
                                             styles.textInput,
                                             styles.titleText,
-                                            { color: '#05375a', marginRight: 15 }]}
+                                            { color: "#000", marginRight: 15 }]}
                                         autoCapitalize="none"
                                         // keyboardType="phone-pad"
                                         secureTextEntry={true}
@@ -261,33 +359,6 @@ const RegisterAccountScreen = (props) => {
                                     </View>)
                                     : null
                                 }
-                                <View style={[styles.rowContainer]}>
-                                    <Text style={styles.requireText}>*</Text>
-                                    <Text style={[styles.labelText]}>
-                                        Tên cửa hàng
-                                    </Text>
-                                    <TextInput
-                                        placeholder="Nhập tên cửa hàng"
-                                        placeholderTextColor="#666666"
-                                        style={[
-                                            styles.textInput,
-                                            styles.titleText,
-                                            { color: '#05375a', marginRight: 15 }]}
-                                        autoCapitalize="none"
-                                        // keyboardType="phone-pad"
-                                        defaultValue={data.storeName}
-                                        onChangeText={(val) => handleChangeStoreName(val)}
-                                    />
-                                </View>
-                                {storeNameErr
-                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                        <></>
-                                        <Text style={[styles.errorMessage]}>
-                                            {storeNameErr}
-                                        </Text>
-                                    </View>)
-                                    : null
-                                }
                                 <View style={[styles.rowContainer, { height: 100 }]}>
                                     <Text style={styles.requireText}>*</Text>
                                     <Text style={[styles.labelText]}>
@@ -299,25 +370,45 @@ const RegisterAccountScreen = (props) => {
                                         justifyContent: "flex-start",
                                     }}>
                                         {selectedImage !== null
-                                            ? (<View style={{ marginRight: 15 }}>
-                                                <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />
-                                            </View>) : null
+                                            ? (
+                                                <TouchableOpacity
+                                                    onPress={openImagePickerAsync}
+                                                >
+                                                    {
+                                                        isLoadingImage
+                                                            ? <ActivityIndicator
+                                                                size={25}
+                                                                color="black"
+                                                                style={{
+                                                                    alignSelf: "center",
+                                                                    width: 100,
+                                                                    height: 100
+
+                                                                }} />
+                                                            : (<View style={{ marginRight: 15 }}>
+                                                                <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />
+                                                            </View>)
+                                                    }
+
+                                                </TouchableOpacity>)
+
+                                            : <TouchableOpacity
+                                                style={[styles.uploadButton,]}
+                                                onPress={openImagePickerAsync}
+                                            >
+                                                <AntDesign
+                                                    name="plus"
+                                                    size={92}
+                                                    style={{
+                                                        flexDirection: "column",
+                                                        alignSelf: "center",
+                                                        color: StatisticColor.CANCELLATION
+                                                    }}
+                                                />
+                                            </TouchableOpacity>
                                         }
 
-                                        <TouchableOpacity
-                                            style={[styles.uploadButton,]}
-                                            onPress={openImagePickerAsync}
-                                        >
-                                            <AntDesign
-                                                name="plus"
-                                                size={92}
-                                                style={{
-                                                    flexDirection: "column",
-                                                    alignSelf: "center",
-                                                    color: StatisticColor.CANCELLATION
-                                                }}
-                                            />
-                                        </TouchableOpacity>
+
                                     </View>
 
                                 </View>
@@ -332,14 +423,22 @@ const RegisterAccountScreen = (props) => {
                                 }
                                 <View style={[styles.rowContainer,]}>
                                     <View style={{
-                                        justifyContent: "flex-end",
-                                        width: "48.5%",
+                                        // justifyContent: "flex-end",
+                                        width: "30%",
                                         flexDirection: "row",
+
                                     }}>
-                                        <Text style={styles.requireText}>*</Text>
-                                        <Text style={[
-                                            styles.labelText,
-                                            { textAlign: 'right', marginRight: 18, }]}>
+                                        <Text style={{ ...styles.requireText }}>*</Text>
+                                        <Text style={
+                                            {
+                                                ...styles.labelText,
+                                                width: "100%",
+                                                alignSelf: "baseline",
+                                                paddingVertical: 33
+                                            }
+
+                                        }
+                                        >
                                             Địa chỉ cửa hàng
                                     </Text>
                                     </View>
@@ -351,6 +450,7 @@ const RegisterAccountScreen = (props) => {
                                         autoCorrect={false}
                                         listViewDisplayed="auto" // true/false/undefined
                                         fetchDetails={true}
+                                        listViewDisplayed="auto"
                                         keyboardShouldPersistTaps="handled"
                                         onPress={async (data, details = null) => {
                                             setAddress({
@@ -373,7 +473,8 @@ const RegisterAccountScreen = (props) => {
                                         }}
                                         styles={{
                                             container: {
-                                                marginRight: 11
+                                                marginRight: 11,
+                                                marginLeft: 30
                                             },
                                             description: {
                                                 // fontWeight: "bold",
@@ -389,14 +490,16 @@ const RegisterAccountScreen = (props) => {
                                             },
                                             textInput: {
                                                 height: 100,
-                                                color: "#5d5d5d",
+                                                color: "#000",
                                                 fontSize: HEADER_FONT_SIZE,
                                                 borderWidth: 1,
 
 
                                             },
                                             listView: {
-                                                backgroundColor: "rgba(192,192,192,0.9)",
+                                                // backgroundColor: "rgba(192,192,192,0.9)",
+                                                backgroundColor: "#fff",
+                                                marginBottom: 0
                                             },
                                         }}
                                     />
@@ -417,16 +520,19 @@ const RegisterAccountScreen = (props) => {
                                 style={{ ...styles.button, marginTop: 15 }}
                                 underlayColor={PRIMARY_COLOR}
                                 activeOpacity={0.9}
-                                onPress={() => {
-                                    handleRegisterAccount(
-                                        data.numberPhone,
-                                        data.password,
-                                        data.confirmPassword,
-                                        data.storeName,
-                                        selectedImage,
-                                        address
-                                    )
-                                }}
+                                onPress={
+
+                                    () => {
+                                        handleRegisterAccount(
+                                            data.numberPhone,
+                                            data.password,
+                                            data.confirmPassword,
+                                            data.storeName,
+                                            selectedImage,
+                                            address
+                                        )
+                                    }
+                                }
                             >
                                 <Text style={[styles.text, styles.textButton, styles.boldText]}>
                                     Đăng ký
