@@ -25,8 +25,6 @@ import {
 } from "expo-firebase-recaptcha";
 
 export default function OtpSmsScreen(props) {
-  const newAccount = props.route.params.newAccount.newAccount;
-
   const [duration, setDuration] = useState(10);
   const [isShowButton, setIsShowButton] = useState(false);
   const [key, setKey] = useState(0);
@@ -36,9 +34,10 @@ export default function OtpSmsScreen(props) {
   const [onPressed, setOnPressed] = useState(false);
   const attemptInvisibleVerification = true;
 
-  const onComplete = () => {
-    setIsShowButton(true);
-  };
+  // console.log("props of otp:", props);
+  const newAccount = props.route.params.newAccount.newAccount;
+  const numberPhoneValue = props.route.params.numberPhoneValue;
+  // console.log("numberphone value", numberPhoneValue);
 
   const handleTextChange = (text) => {
     if (text.length === 6) {
@@ -57,7 +56,7 @@ export default function OtpSmsScreen(props) {
     try {
       const phoneProvider = new firebase.auth.PhoneAuthProvider();
       phoneProvider
-        .verifyPhoneNumber(newAccount.numberPhone, recaptchaVerifier.current)
+        .verifyPhoneNumber(numberPhoneValue, recaptchaVerifier.current)
         .then(setVerificationId);
       console.log("send success");
     } catch (error) {
@@ -77,6 +76,9 @@ export default function OtpSmsScreen(props) {
         .signInWithCredential(credential)
         .then((result) => {
           console.log(result);
+        })
+        .catch((err) => {
+          alert("error");
         });
     } catch (error) {
       console.error("confirm code err: ", error);
@@ -112,7 +114,7 @@ export default function OtpSmsScreen(props) {
                   số điện thoại
                   <Text>{newAccount.numberPhone}</Text>
                 </Text> */}
-                <Text>Gửi mã xác nhận đến {newAccount.numberPhone}</Text>
+                <Text>Gửi mã xác nhận đến {numberPhoneValue}</Text>
                 <Button
                   title="Gửi"
                   onPress={() => {
@@ -174,7 +176,9 @@ export default function OtpSmsScreen(props) {
                   duration={duration}
                   strokeWidth={0}
                   size={28}
-                  onComplete={onComplete}
+                  onComplete={() => {
+                    setIsShowButton(true);
+                  }}
                   colors={[["#004777", 1]]}
                 >
                   {({ remainingTime, animatedColor }) => {
