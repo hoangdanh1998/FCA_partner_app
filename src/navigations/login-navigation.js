@@ -24,7 +24,7 @@ function LoginNavigation() {
     const isSignOut = useSelector(state => state.account.isSignOut);
     const token = useSelector(state => state.account.token);
     const dispatch = useDispatch();
-    
+
 
     const handleGetToken = async () => {
         try {
@@ -34,17 +34,17 @@ function LoginNavigation() {
                 token = JSON.parse(token);
                 partner = JSON.parse(partner)
                 await dispatch(restoreToken(token, partner));
-            } 
+            }
             await dispatch(finishLoading());
         } catch (e) {
             console.error("get token from store: ", e);
         }
-        
-        
+
+
     }
 
     const handleLogOut = () => {
-        
+
         return dispatch(signOut());
     }
 
@@ -58,23 +58,27 @@ function LoginNavigation() {
         <NavigationContainer>
             <LoginStack.Navigator
                 headerMode="none"
-                
+
             >
-                {isLoading ? (<LoginStack.Screen name="LOADING_PAGE" component={LoadingPage} />)
-                    : token == null ? <LoginStack.Screen name="LOGIN" 
-                    component={LoginStackScreen} 
-                    options = {{
-                        title:"Sign in",
-                        animationTypeForReplace: isSignOut ? 'pop' : 'push'
-                    }} /> 
-                    : <LoginStack.Screen
-                        name="HOME_STACK"
-                        component={MenuDrawer} 
+                {isLoading ? <LoginStack.Screen
+                    name="LOADING_PAGE"
+                    component={LoadingPage}
+                />
+                    : token == null ? <LoginStack.Screen name="LOGIN"
+                        component={LoginStackScreen}
+                        initialParams={{ handleLogOut }}
+                        options={{
+                            title: "Sign in",
+                            animationTypeForReplace: isSignOut ? 'pop' : 'push'
+                        }} />
+                        : <LoginStack.Screen
+                            name="HOME_STACK"
+                            component={MenuDrawer}
                             initialParams={{ handleLogOut }}
                         />}
 
             </LoginStack.Navigator>
-        
+
         </NavigationContainer>
     )
 

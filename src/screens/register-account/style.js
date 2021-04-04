@@ -11,19 +11,23 @@ export const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         marginTop: 15,
+        
 
 
     },
 
     formContainer: {
-        width: "80%",
-
+        width: "50%",
+        // backgroundColor: "red",
+        alignSelf:"center",
     },
 
     labelText: {
         fontSize: HEADER_FONT_SIZE,
-        // width: "16%",
+        width: "30%",
+        textAlign: "left",
         fontWeight: "bold",
+        alignSelf: "center"
     },
 
     titleText: {
@@ -33,10 +37,10 @@ export const styles = StyleSheet.create({
 
     textInput: {
         // flex: 1,
-        width: "50%",
-        borderWidth: 1,
+        width: "60%",
+        borderBottomWidth: 1,
         paddingLeft: 10,
-        paddingVertical: 12,
+        paddingVertical: 15,
         marginLeft: 20
 
     },
@@ -44,7 +48,8 @@ export const styles = StyleSheet.create({
     requireText: {
         fontSize: HEADER_FONT_SIZE,
         alignSelf: "baseline",
-        color: "red"
+        color: "red",
+        alignSelf:"center"
     },
     thumbnail: {
         width: 100,
@@ -58,6 +63,7 @@ export const styles = StyleSheet.create({
         padding:10,
         elevation: 2,
         alignItems:"center",
+        marginBottom: "3%"
     },
     buttonText: {
         fontSize: 20,
@@ -85,10 +91,37 @@ export const styles = StyleSheet.create({
     }, 
     errorMessage: {
         color: "red",
-        alignSelf: "center",
-        width: "50%",
+        // alignSelf: "center",
+        width: "100%",
         // backgroundColor: "red",
-        fontSize: HEADER_FONT_SIZE,
-        marginRight:15
+        fontSize: 18,
+        marginRight:0
+    },
+
+    flagButtonStyle: {
+        width: 80
+    },
+
+    phoneInputStyle: {
+        // height: 100,
+        // backgroundColor:"red"
+        fontSize: HEADER_FONT_SIZE
+    },
+    phoneInputContainer: {
+        // backgroundColor:"red",
+        width: "47%",
+        fontSize: HEADER_FONT_SIZE
+        // backgroundColor:"red",
+        
+    },
+    textContainerStyle: {
+        backgroundColor: "#fff",
+        borderBottomWidth: 1,
+        paddingHorizontal: 0
+        
+    },
+
+    codeTextStyle: {
+        fontSize: HEADER_FONT_SIZE
     }
 })
