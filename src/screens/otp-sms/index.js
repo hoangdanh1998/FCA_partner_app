@@ -1,7 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
+  TextInput,
+  Button,
   SafeAreaView,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
@@ -12,10 +14,14 @@ import { styles } from "./style";
 import OTPInput from "react-native-otp-textinput";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Animated } from "react-native";
-import firebase from "../../service/firebase/firebase-authentication";
+// import firebase from "../../service/firebase/firebase-authentication";
+import * as firebase from "firebase";
 import {
-  FirebaseRecaptchaVerifierModal,
+  FirebaseRecaptcha,
   FirebaseRecaptchaBanner,
+  FirebaseRecaptchaVerifier,
+  FirebaseRecaptchaVerifierModal,
+  FirebaseAuthApplicationVerifier,
 } from "expo-firebase-recaptcha";
 
 export default function OtpSmsScreen(props) {
@@ -24,8 +30,11 @@ export default function OtpSmsScreen(props) {
   const [duration, setDuration] = useState(10);
   const [isShowButton, setIsShowButton] = useState(false);
   const [key, setKey] = useState(0);
+  const [verificationCode, setVerificationCode] = useState();
   const recaptchaVerifier = useRef(null);
   const [verificationId, setVerificationId] = useState();
+  const [onPressed, setOnPressed] = useState(false);
+  const attemptInvisibleVerification = true;
 
   const onComplete = () => {
     setIsShowButton(true);
@@ -57,6 +66,7 @@ export default function OtpSmsScreen(props) {
   };
 
   const confirmCode = (code) => {
+    console.log("verificationId", verificationId);
     try {
       const credential = firebase.auth.PhoneAuthProvider.credential(
         verificationId,
@@ -66,7 +76,6 @@ export default function OtpSmsScreen(props) {
         .auth()
         .signInWithCredential(credential)
         .then((result) => {
-          // Do something with the results here
           console.log(result);
         });
     } catch (error) {
@@ -74,19 +83,19 @@ export default function OtpSmsScreen(props) {
     }
   };
 
-  useEffect(() => {
-    sendVerification();
-  }, []);
+  // useEffect(() => {
+  //   async function onUseEffect() {
+  //     console.log("onUseEffect");
+  //     if (onPressed) await sendVerification();
+  //   }
+  //   onUseEffect();
+  // }, [onPressed]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
         <TouchableWithoutFeedback>
           <View style={styles.container}>
-            <FirebaseRecaptchaVerifierModal
-              ref={recaptchaVerifier}
-              firebaseConfig={firebase.app().options}
-            />
             <View style={styles.formContainer}>
               <View>
                 <Text
@@ -96,25 +105,35 @@ export default function OtpSmsScreen(props) {
                 </Text>
               </View>
               <View style={{ marginTop: "2%" }}>
-                <Text style={styles.title}>
+                {/* <Text style={styles.title}>
                   Một mã xác nhận gồm 6 số đã được gửi đến
                 </Text>
                 <Text style={styles.title}>
                   số điện thoại
-                  <Text> 0364133838</Text>
-                </Text>
-              </View>
-              <View style={styles.marginContainer}>
-                <View>
-                  <Text style={styles.title}>Nhập mã để tiếp tục</Text>
-                </View>
-                <OTPInput
-                  inputCount={6}
-                  handleTextChange={(text) => {
-                    handleTextChange(text);
+                  <Text>{newAccount.numberPhone}</Text>
+                </Text> */}
+                <Text>Gửi mã xác nhận đến {newAccount.numberPhone}</Text>
+                <Button
+                  title="Gửi"
+                  onPress={() => {
+                    setOnPressed(true);
+                    sendVerification();
                   }}
                 />
               </View>
+              {onPressed ? (
+                <View style={styles.marginContainer}>
+                  <View>
+                    <Text style={styles.title}>Nhập mã để tiếp tục</Text>
+                  </View>
+                  <OTPInput
+                    inputCount={6}
+                    handleTextChange={(text) => {
+                      handleTextChange(text);
+                    }}
+                  />
+                </View>
+              ) : null}
 
               <View
                 style={[
@@ -170,6 +189,14 @@ export default function OtpSmsScreen(props) {
                 </CountdownCircleTimer>
               </View>
             </View>
+            {onPressed ? (
+              <FirebaseRecaptchaVerifierModal
+                ref={recaptchaVerifier}
+                firebaseConfig={firebase.app().options}
+                attemptInvisibleVerification={attemptInvisibleVerification}
+              />
+            ) : null}
+            {attemptInvisibleVerification && <FirebaseRecaptchaBanner />}
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
