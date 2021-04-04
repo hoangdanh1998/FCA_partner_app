@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -6,18 +6,20 @@ import {
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    TouchableHighlight
-} from 'react-native';
-import { styles } from './style';
-import OTPInput from 'react-native-otp-textinput';
+    TouchableHighlight,
+} from "react-native";
+import { styles } from "./style";
+import OTPInput from "react-native-otp-textinput";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Animated } from "react-native";
-import firebase from '../../service/firebase/firebase-authentication';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
-
-
+import firebase from "../../service/firebase/firebase-authentication";
+import {
+    FirebaseRecaptchaVerifierModal,
+    FirebaseRecaptchaBanner,
+} from "expo-firebase-recaptcha";
 
 export default function OtpSmsScreen(props) {
+
 
     // console.log("props of otp:", props);
     const newAccount = props.route.params.newAccount.newAccount;
@@ -29,25 +31,24 @@ export default function OtpSmsScreen(props) {
     const [key, setKey] = useState(0);
     const recaptchaVerifier = useRef(null);
     const [verificationId, setVerificationId] = useState();
-    
 
 
     const onComplete = () => {
         setIsShowButton(true);
-    }
+    };
 
     const handleTextChange = (text) => {
         if (text.length === 6) {
             confirmCode(text);
         }
-    }
+    };
 
     const handleReSendOtp = () => {
         setIsShowButton(false);
         sendVerification();
-        setKey(preventKey => preventKey + 1);
+        setKey((preventKey) => preventKey + 1);
         console.log("hello");
-    }
+    };
 
     const sendVerification = () => {
         try {
@@ -55,7 +56,7 @@ export default function OtpSmsScreen(props) {
             phoneProvider
                 .verifyPhoneNumber(numberPhoneValue, recaptchaVerifier.current)
                 .then(setVerificationId);
-                console.log("send success");
+            console.log("send success");
         } catch (error) {
             console.error("err sendVerification: ", error);
         }
@@ -73,7 +74,7 @@ export default function OtpSmsScreen(props) {
                 .signInWithCredential(credential)
                 .then((result) => {
                     // Do something with the results here
-                    
+
                     console.log(result);
                 });
         } catch (error) {
