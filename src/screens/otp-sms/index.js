@@ -11,6 +11,13 @@ import OTPInput from "react-native-otp-textinput";
 import { useDispatch } from 'react-redux';
 import { registerAccount } from '../../redux/actions/account';
 import firebase from "../../service/firebase/firebase-authentication";
+import {
+    FirebaseRecaptchaVerifierModal,
+    FirebaseRecaptchaBanner,
+} from "expo-firebase-recaptcha";
+import { useDispatch } from 'react-redux'
+import { registerAccount } from "../../redux/actions/account";
+
 import { styles } from "./style";
 export default function OtpSmsScreen(props) {
 
@@ -18,6 +25,9 @@ export default function OtpSmsScreen(props) {
     // console.log("props of otp:", props);
     const newAccount = props.route.params.newAccount.newAccount;
     const numberPhoneValue = props.route.params.numberPhoneValue;
+    const numberPhone = newAccount.numberPhone;
+    const password = newAccount.password;
+
     // console.log("numberphone value", numberPhoneValue);
 
     const [duration, setDuration] = useState(10);
@@ -67,10 +77,15 @@ export default function OtpSmsScreen(props) {
                 .auth()
                 .signInWithCredential(credential)
                 .then((result) => {
-                    // Do something with the results công
-                    alert('Đăng ký thành công')
-                    dispatch(registerAccount(newAccount))
-                    props.navigation.navigate('LOGIN')
+                    dispatch(registerAccount(
+                        { numberPhone, password },
+                        newAccount.storeName,
+                        newAccount.selectedImage,
+                        newAccount.address));
+
+                        alert('Đăng ký thành công');
+                        props.navigation.navigate('LOGIN');
+                    // console.log(result);
                 }).catch(error => {
                     console.error(error);
                     alert('Mã xác thực không chính xác')

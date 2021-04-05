@@ -9,7 +9,8 @@ const LoginStack = createStackNavigator();
 
 
 function LoginStackScreen(props) {
-    console.log("props of login stack ", props.route);
+    // console.log("props of login stack ", props.route.params.handleLogOut);
+    const handleLogOut = props.route.params.handleLogOut;
     // const handleLogOut = props.route.params.handleLogOut;
     return (
 
@@ -20,11 +21,12 @@ function LoginStackScreen(props) {
             <LoginStack.Screen name="LOGIN" component={Login} options={{ headerShown: false }} />
             <LoginStack.Screen name="REGISTER_ACCOUNT"
                 options={{ title: "Đăng ký tài khoản" }}
+                
                 component={RegisterAccountScreen} />
             <LoginStack.Screen name="OTP_SMS"
                 component={OtpSmsScreen}
                 options={{ title: "" }}
-                
+                initialParams={{ handleLogOut }}
             />
         </LoginStack.Navigator>
 
