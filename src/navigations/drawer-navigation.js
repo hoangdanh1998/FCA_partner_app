@@ -1,15 +1,8 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import Login from '../screens/login/index';
-import Register from '../screens/register-account/index';
-import React from 'react'
+import React from 'react';
+import { BACKGROUND_COLOR, HEADER_FONT_SIZE } from '../constance/constance';
+import ProfileDrawerContent from './drawer-content/index';
 import HomeStackScreen from './home-stack-screen';
-import { BACKGROUND_COLOR, HEADER_FONT_SIZE, LIGHT_COLOR } from '../constance/constance';
-import OrderManagementStackScreen from './order-management-stack';
-import TabProfileNavigation from './tab-profile-navigation';
-import ProfileStackScreen from './stack-profile-navigation';
-import ProfileDrawerContent from './drawer-content/index'
-import AccordionExample from '../screens/order-statistic';
-import OrderStatistic from '../screens/order-statistic';
 import OrderStatisticScreen from './order-statistic/order-statistic-stack';
 
 
@@ -56,7 +49,7 @@ const MenuDrawer = (props) => {
                 }}
                 name="ORDER_MANAGEMENT"
                 component={OrderStatisticScreen} />
-            <Drawer.Screen
+            {/* <Drawer.Screen
                 name="STORE_PROFILE"
                 initialParams={{ handleLogOut }}
                 component={ProfileStackScreen}
@@ -64,7 +57,7 @@ const MenuDrawer = (props) => {
                     title: "THÔNG TIN CỬA HÀNG",
 
                 }}
-            />
+            /> */}
 
 
         </Drawer.Navigator>

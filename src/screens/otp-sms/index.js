@@ -11,14 +11,8 @@ import OTPInput from "react-native-otp-textinput";
 import { useDispatch } from 'react-redux';
 import { registerAccount } from '../../redux/actions/account';
 import firebase from "../../service/firebase/firebase-authentication";
-import {
-    FirebaseRecaptchaVerifierModal,
-    FirebaseRecaptchaBanner,
-} from "expo-firebase-recaptcha";
-import { useDispatch } from 'react-redux'
-import { registerAccount } from "../../redux/actions/account";
-
 import { styles } from "./style";
+
 export default function OtpSmsScreen(props) {
 
     const dispatch = useDispatch();
