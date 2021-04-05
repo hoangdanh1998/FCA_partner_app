@@ -22,7 +22,7 @@ const OrderCardUpComing = (props) => {
     firebase.listenOrder(order.id, (orderListened) => {
       if (orderListened) {
         setListenedOrder(orderListened);
-        setTimeRemain(orderListened.timeRemain);
+        setTimeRemain(orderListened.timeRemain?.split(' ')[0]);
         if (orderListened.status === OrderStatus.WAITING) {
           setStatus(orderListened.status);
         }
@@ -68,7 +68,7 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {status ? 'đang đợi' : timeRemain} phút
+            {status ? 'đang đợi' : (timeRemain ? timeRemain + ' phút': '') }
           </Text>
           <Right></Right>
         </CardItem>
