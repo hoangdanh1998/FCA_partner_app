@@ -3,6 +3,12 @@ export const BACKGROUND_COLOR = "#603a18";
 export const LIGHT_COLOR = "#e6d7ab";
 export const PROFILE_COLOR = "#cc6600";
 
+export const ResponseStatus = {
+  SUCCESS: "SUCCESS",
+  INVALID: "INVALID",
+};
+
+
 export const TimeRemainTo = {
   PREPARATION: 7,
   ARRIVAL: 2,
