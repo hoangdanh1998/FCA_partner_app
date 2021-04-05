@@ -210,13 +210,11 @@ const RegisterAccountScreen = (props) => {
       setAddressErr(null);
       setPasswordErr(null);
 
-      console.log("number phone:", numberPhone);
-
       const isNumberPhone = checkValuePhoneNumber(numberPhone);
-
       const isStoreName = checkStoreName(storeName);
       const isPassword = checkPassword(password);
       const isConfirmPass = checkConfirmPassword(confirmPassword);
+
       if (!image) {
         setImageErr("Hình ảnh cửa hàng là bắt buộc")
       } if (!address) {
@@ -226,32 +224,42 @@ const RegisterAccountScreen = (props) => {
         && isConfirmPass && image && address
       ) {
 
-        console.log("bi loi roi ne");
+        // console.log("bi loi roi ne");
         // dispatch(registerAccount(    
         //     {numberPhone: data.numberPhone, password: data.password},
         //     storeName, 
         //     selectedImage,
         //     address
         // ));
-
-
-
-        const newAccount = {
-          numberPhone: data.numberPhone,
-          password: data.password,
-          storeName,
-          selectedImage,
-          address
+        let newAccount = null;
+        const chars = numberPhone.split("");
+        let phone = "";
+        let phoneValue = "";
+        if (chars[0] === "0") {
+          phone = numberPhone.replace(/^0/, "");
+          phone = "+84" + phone;
+          
+          newAccount = {
+            numberPhone: data.numberPhone,
+            password: data.password,
+            storeName,
+            selectedImage,
+            address
+          }
+          props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: phone });
+        } else {
+          console.log("so ko co so 0:", numberPhone);
+          phone = "0" +  numberPhone;
+          newAccount = {
+            numberPhone: phone,
+            password: data.password,
+            storeName,
+            selectedImage,
+            address
+          }
+          props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: numberPhoneValue });
         }
-        console.log(123);
-
-        props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: numberPhoneValue });
-
-
-
       }
-
-
     } catch (error) {
       console.error(error);
     }

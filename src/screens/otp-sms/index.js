@@ -17,13 +17,18 @@ import {
     FirebaseRecaptchaVerifierModal,
     FirebaseRecaptchaBanner,
 } from "expo-firebase-recaptcha";
+import { useDispatch } from 'react-redux'
+import { registerAccount } from "../../redux/actions/account";
 
 export default function OtpSmsScreen(props) {
 
-
+    const dispatch = useDispatch();
     // console.log("props of otp:", props);
     const newAccount = props.route.params.newAccount.newAccount;
     const numberPhoneValue = props.route.params.numberPhoneValue;
+    const numberPhone = newAccount.numberPhone;
+    const password = newAccount.password;
+
     // console.log("numberphone value", numberPhoneValue);
 
     const [duration, setDuration] = useState(10);
@@ -55,7 +60,8 @@ export default function OtpSmsScreen(props) {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             phoneProvider
                 .verifyPhoneNumber(numberPhoneValue, recaptchaVerifier.current)
-                .then(setVerificationId);
+                .then(setVerificationId)
+                .catch((error) => { console.error(error); });
             console.log("send success");
         } catch (error) {
             console.error("err sendVerification: ", error);
@@ -73,10 +79,15 @@ export default function OtpSmsScreen(props) {
                 .auth()
                 .signInWithCredential(credential)
                 .then((result) => {
-                    // Do something with the results here
+                    dispatch(registerAccount(
+                        { numberPhone, password },
+                        newAccount.storeName,
+                        newAccount.selectedImage,
+                        newAccount.address));
 
-                    console.log(result);
-                });
+                        
+                    // console.log(result);
+                }).catch(console.log("sai ma code"));
         } catch (error) {
             console.error("confirm code err: ", error);
         }

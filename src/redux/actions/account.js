@@ -54,6 +54,7 @@ export const restoreToken = (token, partner) => {
 };
 
 export const registerAccount = (account, name, imageLink, address) => {
+
     return async dispatch => {
         try {
             const response = await fca.post('/partner',
@@ -63,13 +64,17 @@ export const registerAccount = (account, name, imageLink, address) => {
                         password: account.password
                     },
                     name,
-                    imageLink:"",
-                    address
+                    imageLink: imageLink.localUri,
+                    address: {
+                        latitude: address.latitude,
+                        longitude: address.longitude,
+                        description:address.description,
+                    }
                 }
             )
             console.log("response registerAccount", response);
         } catch (error) {
-            console.error(error);
+            console.error("loi khi tao partner", error);``
         }
     }
 }
