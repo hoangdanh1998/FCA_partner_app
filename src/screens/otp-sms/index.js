@@ -1,17 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
 import {
-    View,
-    Text,
-    SafeAreaView,
-    KeyboardAvoidingView,
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-    TouchableHighlight,
+    FirebaseRecaptchaVerifierModal
+} from "expo-firebase-recaptcha";
+import React, { useEffect, useRef, useState } from "react";
+import {
+    Animated, KeyboardAvoidingView, SafeAreaView, Text,
+    TouchableHighlight, TouchableWithoutFeedback, View
 } from "react-native";
-import { styles } from "./style";
-import OTPInput from "react-native-otp-textinput";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
-import { Animated } from "react-native";
+import OTPInput from "react-native-otp-textinput";
+import { useDispatch } from 'react-redux';
+import { registerAccount } from '../../redux/actions/account';
 import firebase from "../../service/firebase/firebase-authentication";
 import {
     FirebaseRecaptchaVerifierModal,
@@ -20,6 +18,7 @@ import {
 import { useDispatch } from 'react-redux'
 import { registerAccount } from "../../redux/actions/account";
 
+import { styles } from "./style";
 export default function OtpSmsScreen(props) {
 
     const dispatch = useDispatch();
@@ -60,8 +59,7 @@ export default function OtpSmsScreen(props) {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
             phoneProvider
                 .verifyPhoneNumber(numberPhoneValue, recaptchaVerifier.current)
-                .then(setVerificationId)
-                .catch((error) => { console.error(error); });
+                .then(setVerificationId).catch(error => { console.error(error); });
             console.log("send success");
         } catch (error) {
             console.error("err sendVerification: ", error);
@@ -85,9 +83,13 @@ export default function OtpSmsScreen(props) {
                         newAccount.selectedImage,
                         newAccount.address));
 
-                        
+                        alert('Đăng ký thành công');
+                        props.navigation.navigate('LOGIN');
                     // console.log(result);
-                }).catch(console.log("sai ma code"));
+                }).catch(error => {
+                    console.error(error);
+                    alert('Mã xác thực không chính xác')
+                });
         } catch (error) {
             console.error("confirm code err: ", error);
         }
@@ -143,8 +145,8 @@ export default function OtpSmsScreen(props) {
                                 {
                                     isShowButton
                                         ? (<TouchableHighlight
-                                            onPress={() => { console.log('click'); handleReSendOtp() }}
-                                            style={{ backgroundColor: "red", width: 100, height: 50 }}
+                                            onPress={() => { handleReSendOtp() }}
+                                            style={{ width: 100, height: 50 }}
                                         >
                                             <Text style={[[styles.title, { marginRight: 5, color: "#004777" }]]}> Gửi lại</Text>
                                         </TouchableHighlight>)
