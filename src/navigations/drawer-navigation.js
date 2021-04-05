@@ -1,15 +1,26 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import React from 'react';
+import { default as React, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { BACKGROUND_COLOR, HEADER_FONT_SIZE } from '../constance/constance';
+import { updateExpoToken } from "../service/account/account";
+import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
 import ProfileDrawerContent from './drawer-content/index';
 import HomeStackScreen from './home-stack-screen';
 import OrderStatisticScreen from './order-statistic/order-statistic-stack';
-
-
 const Drawer = createDrawerNavigator();
 
 const MenuDrawer = (props) => {
-    console.log("dawer props", props);
+    const partnerProfile = useSelector(state => state.account.partner);
+    const handleSetDeviceKey = async () => {
+        const deviceKey = await registerForPushNotificationsAsync();
+        console.log("device token:", deviceKey);
+        updateExpoToken(deviceKey, partnerProfile.account.id);
+    }
+
+    useEffect(() => {
+        handleSetDeviceKey();
+    }, [])
+
     const handleLogOut = props.route.params.handleLogOut;
     return (
         <Drawer.Navigator
