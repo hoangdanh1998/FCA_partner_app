@@ -8,6 +8,7 @@ import { listenOrder } from '../../../firebase/firebase-realtime';
 import { sendQRCode, setOrderStatus } from '../../../redux/actions/order-list';
 import { styles } from './style';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import NumberFormat from 'react-number-format';
 
 
 const OrderCardReady = (props) => {
@@ -161,7 +162,15 @@ const OrderCardReady = (props) => {
                                                 <Text style={styles.itemText}>{item.quantity}</Text>
                                             </Left>
                                             <Right>
-                                                <Text style={styles.itemText}>{item.price * item.quantity}</Text>
+                                                <NumberFormat
+                                                    value={item.price * item.quantity}
+                                                    displayType={"text"}
+                                                    thousandSeparator={true}
+                                                    renderText={(formattedValue) => (
+                                                        <Text style={styles.itemText}>{formattedValue}</Text>
+                                                    )}
+                                                />
+                                                
                                             </Right>
                                         </Right>
                                     </CardItem>
@@ -178,7 +187,15 @@ const OrderCardReady = (props) => {
                                         <Text></Text>
                                     </Left>
                                     <Right>
-                                        <Text style={[styles.itemText, styles.title_font_weight]}>{order.total}</Text>
+                                    <NumberFormat
+                                                    value={order.total}
+                                                    displayType={"text"}
+                                                    thousandSeparator={true}
+                                                    renderText={(formattedValue) => (
+                                                        <Text style={[styles.itemText, styles.title_font_weight]}>{formattedValue}</Text>
+                                                    )}
+                                                />
+                                        
                                     </Right>
                                 </Right>
                             </CardItem>
