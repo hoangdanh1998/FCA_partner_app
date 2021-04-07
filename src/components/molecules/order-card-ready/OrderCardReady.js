@@ -11,23 +11,30 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 const OrderCardReady = (props) => {
-    const { handleUpdateStatus } = props;
+    const { handleUpdateStatus, handleUpdateListApterChangeStatus } = props;
     let order = props.order;
     const [status, setStatus] = useState()
     const dispatch = useDispatch();
     const [timeRemain, setTimeRemain] = useState(0);
     const [isShowAlert, setIsShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState();
+    const [listenedOrder, setListenedOrder] = useState();
+
+
     useEffect(() => {
         (async () => {
             listenOrder(order.id, (orderListened) => {
-                if (orderListened.status === OrderStatus.ARRIVAL) {
-                    setStatus(orderListened.status);
+                if (orderListened) {
+                    if (orderListened.status === OrderStatus.ARRIVAL) {
+                        setStatus(orderListened.status);
+                    }
+                    handleUpdateStatusWithTime(orderListened);
+                    setTimeRemain(orderListened.timeRemain);
                 }
-                handleUpdateStatusWithTime(orderListened);
-                setTimeRemain(orderListened.timeRemain);
+
             })
         })();
-    }, [])
+    }, [listenOrder])
 
     const handleUpdateStatusWithTime = (orderListened) => {
         let tmpTimeRemain = orderListened.timeRemain + '';
@@ -38,9 +45,10 @@ const OrderCardReady = (props) => {
         } if (orderListened.status === OrderStatus.CANCELLATION
             || orderListened.status === OrderStatus.RECEPTION) {
             console.log("update order list");
-            handleUpdateStatus(orderListened.status, order);
+            handleUpdateListApterChangeStatus(order, orderListened.status);
         }
     }
+
 
     const showAlert = () => {
         setIsShowAlert(true);
@@ -56,32 +64,30 @@ const OrderCardReady = (props) => {
         return Linking.openURL(phoneNumber);
     }
 
-    const showModal = () => {
+    // const showModal = () => {
 
+    //     Alert.alert(
+    //         "Xác nhận",
+    //         "Bạn chắc chắn muốn giao hàng?",
+    //         [
 
+    //             {
+    //                 text: "Xác nhận",
+    //                 onPress: async () => await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION)),
 
-        Alert.alert(
-            "Xác nhận",
-            "Bạn chắc chắn muốn giao hàng?",
-            [
+    //             },
+    //             {
+    //                 text: "Gọi điện",
 
-                {
-                    text: "Xác nhận",
-                    onPress: async () => await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION)),
+    //                 onPress: () => {
+    //                     console.log("OK Pressed");
+    //                     makeCall("0364133838");
+    //                 }
+    //             }
+    //         ]
+    //     );
 
-                },
-                {
-                    text: "Gọi điện",
-
-                    onPress: () => {
-                        console.log("OK Pressed");
-                        makeCall("0364133838");
-                    }
-                }
-            ]
-        );
-
-    };
+    // };
 
     return (
         <Content padder>
@@ -110,7 +116,7 @@ const OrderCardReady = (props) => {
                     hideAlert();
                 }}
                 onConfirmPressed={() => {
-                    makeCall("0364133838");
+                    makeCall(order.customer.account.phone);
                 }}
                 confirmButtonTextStyle={[styles.title_font_size, styles.title_font_weight]}
                 cancelButtonTextStyle={[styles.title_font_size, styles.title_font_weight]}
