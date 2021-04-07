@@ -18,6 +18,8 @@ const TabReadyScreen = () => {
     const [error, setError] = useState();
     const [isShowAlert, setIsShowAlert] = useState(false);
     const [titleAlert, setTitleAlert] = useState();
+    const [alertMessage, setAlertMessage] = useState();
+
 
     const readyList = useSelector(state => state.orderList.filterReadyList);
     const isFocused = useIsFocused();
@@ -28,7 +30,7 @@ const TabReadyScreen = () => {
     }
 
     const showAlert = () => {
-        // console.log("hien alert len");
+        console.log("hien alert len");
         setIsShowAlert(true);
     };
 
@@ -42,35 +44,7 @@ const TabReadyScreen = () => {
                 case OrderStatus.ARRIVAL:
                     dispatch(setOrderStatus(order.id, OrderStatus.ARRIVAL));
                     break;
-                case OrderStatus.CANCELLATION: {
-                    try {
-                        dispatch(updateListApterChangeStatus(order.id, status));
-                        showAlert();
-                        setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
-                        if (realtimeStatus === OrderStatus.CANCELLATION) {
-                            setAlertMessage(
-                                `Đã được nhân viên huỷ thành công`
-                            )
-                        } else if (realtimeStatus === OrderStatus.RECEPTION) {
-                            setAlertMessage(
-                                `Đã được nhân viên xác nhận thành công`
-                            )
-                        }
-                    } catch (error) {
-                        setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
-                        if (realtimeStatus === OrderStatus.CANCELLATION) {
-                            setAlertMessage(
-                                `Huỷ thất bại`
-                            )
-                        } else if (realtimeStatus === OrderStatus.RECEPTION) {
-                            setAlertMessage(
-                                `Xác nhận thất bại`
-                            )
-                        }
-                    }
 
-                    break;
-                }
                 default:
                     break;
             }
@@ -82,6 +56,44 @@ const TabReadyScreen = () => {
                 type: "warning"
             })
         }
+    }
+
+    const handleUpdateListApterChangeStatus = async (order, realtimeStatus) => {
+        try {
+            await dispatch(updateListApterChangeStatus(order.id, order.status));
+
+            // showAlert();
+            console.log({isShowAlert})
+            console.log("hien ra roi ne");
+            setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
+            if (realtimeStatus === OrderStatus.CANCELLATION) {
+                console.log("huy don nha");
+                setAlertMessage(
+                    `Đã được nhân viên huỷ thành công`
+                )
+            } else if (realtimeStatus === OrderStatus.RECEPTION) {
+                console.log("nay la nhan don nha");
+                setAlertMessage(
+                    `Đã được nhân viên xác nhận thành công`
+                )
+            }
+
+
+        } catch (error) {
+            console.error(error);
+            // showAlert();
+            setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
+            if (realtimeStatus === OrderStatus.CANCELLATION) {
+                setAlertMessage(
+                    `Huỷ thất bại`
+                )
+            } else if (realtimeStatus === OrderStatus.RECEPTION) {
+                setAlertMessage(
+                    `Xác nhận thất bại`
+                )
+            }
+        }
+
     }
 
 
@@ -115,6 +127,7 @@ const TabReadyScreen = () => {
     };
     return (
         <View style={{ flex: 1, backgroundColor: "#ffff" }}>
+            {console.log(isShowAlert)}
             <AwesomeAlert
                 show={isShowAlert}
                 showProgress={false}
@@ -133,7 +146,10 @@ const TabReadyScreen = () => {
                 confirmButtonTextStyle={[styles.title_font_size, styles.boldText]}
             />
             <SearchBar handelSearchReadyList={handelSearchReadyList} />
-            <TabReady toDoOrderList={searchList} handleUpdateStatus={handleUpdateStatus} />
+            <TabReady toDoOrderList={searchList}
+                handleUpdateStatus={handleUpdateStatus}
+                handleUpdateListApterChangeStatus={handleUpdateListApterChangeStatus}
+            />
         </View>
     );
 }
