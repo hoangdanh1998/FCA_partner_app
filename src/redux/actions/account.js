@@ -5,6 +5,7 @@ export const SIGN_OUT = "SIGN_OUT";
 export const FINISH_LOADING = "FINISH_LOADING";
 export const CHANGE_ERROR = "CHANGE_ERROR";
 export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
+export const OPEN_STORE = "OPEN_STORE";
 
 
 import fca from "../../service/fca-api/fca";
@@ -75,6 +76,26 @@ export const registerAccount = (account, name, imageLink, address) => {
             console.log("response registerAccount", response);
         } catch (error) {
             console.error("loi khi tao partner", error);``
+        }
+    }
+}
+
+export const openStore = (id, isOpen) => {
+    return async dispatch => {
+        try {
+            const response = await fca.put(`/partner/${id}/opening`,
+                {
+                    isOpen
+                }
+            );
+            
+            // console.log("response open store", response.data.data.partner);
+            dispatch({
+                type:OPEN_STORE,
+                payload: response.data.data.partner
+            })
+        } catch (error) {
+            console.error("err open store", error);
         }
     }
 }
