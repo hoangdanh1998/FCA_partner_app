@@ -30,9 +30,6 @@ export default function ProfileDrawerContent(props) {
     const filterReadyList = useSelector(state => state.orderList.filterReadyList);
     const filterArrivalList = useSelector(state => state.orderList.filterArrivalList);
 
-    let expirationDate = moment(partner.expirationDate).format('DD-MM-YYYY');
-    let currentDate = moment().format('DD-MM-YYYY');
-
 
     const handleOpenStore = async () => {
         if (partner) {
@@ -128,28 +125,33 @@ export default function ProfileDrawerContent(props) {
                             >Mở cửa</Text>)
                     )}
                     onPress={() => {
-                        if (partner.isOpen) {
-                            if (filterToDoList.length == 0 && filterDoingList.length == 0
-                                && filterReadyList.length == 0 && filterArrivalList.length == 0) {
-                                setIsShowAlert(true);
-                                console.log("dong duoc cua");
-                                setAlertMessage("Bạn chắc chắn muốn đóng cửa hàng?")
-                            } else {
-                                console.log("con don hang chua hoan thanh");
-                                setIsShowFailAlert(true);
-                                setAlertMessageFail("Bạn còn đơn hàng chưa hoàn thành!");
+                        if (partner) {
+                            let expirationDate = moment(partner.expirationDate).format('DD-MM-YYYY');
+                            let currentDate = moment().format('DD-MM-YYYY');
+                            if (partner.isOpen) {
+                                if (filterToDoList.length == 0 && filterDoingList.length == 0
+                                    && filterReadyList.length == 0 && filterArrivalList.length == 0) {
+                                    setIsShowAlert(true);
+                                    console.log("dong duoc cua");
+                                    setAlertMessage("Bạn chắc chắn muốn đóng cửa hàng?")
+                                } else {
+                                    console.log("con don hang chua hoan thanh");
+                                    setIsShowFailAlert(true);
+                                    setAlertMessageFail("Bạn còn đơn hàng chưa hoàn thành!");
+                                }
+                            }
+                            else if (!partner.isOpen) {
+                                if (moment(expirationDate).isSameOrAfter(currentDate)) {
+                                    setIsShowAlert(true);
+                                    setAlertMessage("Bạn chắc chắn muốn mở cửa hàng?")
+                                } else {
+                                    setIsShowFailAlert(true);
+                                    setAlertMessageFail("Gói bản quyền của bạn đã hết hạn, gia hạn để tiếp tục!");
+                                }
+
                             }
                         }
-                        else if (!partner.isOpen) {
-                            if(moment(expirationDate).isSameOrAfter(currentDate)){
-                                setIsShowAlert(true);
-                                setAlertMessage("Bạn chắc chắn muốn mở cửa hàng?")
-                            } else {
-                                setIsShowFailAlert(true);
-                                setAlertMessageFail("Gói bản quyền của bạn đã hết hạn, gia hạn để tiếp tục!");
-                            }
-                            
-                        } 
+
                     }}
                 />
                 <DrawerItem

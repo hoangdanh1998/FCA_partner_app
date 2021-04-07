@@ -23,6 +23,17 @@ const removeToken = async () => {
     console.log('Done.')
 }
 
+const refreshStore = async (partner) => {
+    try {
+        await AsyncStorage.removeItem('@storage_Partner');
+        const jsonPartner = JSON.stringify(partner);
+        await AsyncStorage.setItem('@storage_Partner', jsonPartner);
+    } catch (error) {
+        console.error("err refreshStore:", error);
+    }
+
+}
+
 const storeToken = async (token, partner) => {
     try {
         const jsonToken = JSON.stringify(token);
@@ -51,10 +62,11 @@ const accountReducer = (state = initialState, action) => {
             return { ...state, isLoading: false };
         case CHANGE_ERROR:
             return { ...state, errMessage: action.payload }
-        case OPEN_STORE:{
+        case OPEN_STORE: {
             console.log("cua hang oi");
+            refreshStore(action.payload);
             return { ...state, partner: action.payload }
-        } 
+        }
         default:
             return state;
     }
