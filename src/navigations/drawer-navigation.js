@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { BACKGROUND_COLOR, HEADER_FONT_SIZE } from '../constance/constance';
 import { updateExpoToken } from "../service/account/account";
 import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
+import ContactUsStackScreen from './contact-us/contact-us-stack';
 import ProfileDrawerContent from './drawer-content/index';
 import HomeStackScreen from './home-stack-screen';
 import OrderStatisticScreen from './order-statistic/order-statistic-stack';
@@ -60,15 +61,14 @@ const MenuDrawer = (props) => {
                 }}
                 name="ORDER_MANAGEMENT"
                 component={OrderStatisticScreen} />
-            {/* <Drawer.Screen
-                name="STORE_PROFILE"
+            <Drawer.Screen
+                name="CONTACT_US"
                 initialParams={{ handleLogOut }}
-                component={ProfileStackScreen}
+                component={ContactUsStackScreen}
                 options={{
-                    title: "THÔNG TIN CỬA HÀNG",
-
+                    title: "VỀ CHÚNG TÔI",
                 }}
-            /> */}
+            />
 
 
         </Drawer.Navigator>

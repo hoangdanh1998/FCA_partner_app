@@ -101,7 +101,7 @@ const OrderCardReady = (props) => {
                 closeOnHardwareBackPress={false}
                 showCancelButton={true}
                 showConfirmButton={true}
-                cancelText="Xác nhận"
+                cancelText="Đồng ý"
                 titleStyle={[styles.titleAlert, styles.title_font_weight]}
                 messageStyle={[styles.title_font_size]}
                 confirmText="Gọi điện"
