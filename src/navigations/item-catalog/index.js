@@ -1,28 +1,31 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { MyHeader } from '../../components/atoms/header/Header';
-import ContactUsScreen from '../../screens/contact-us';
+import NewItemModal from '../../components/atoms/new-item-modal';
+import ItemCatalogScreen from '../../screens/item-catalog';
 
 
-const ContactUsStack = createStackNavigator();
+const ItemCatalog = createStackNavigator();
 
-function ContactUsStackScreen(props) {
+
+function ItemCatalogStackScreen(props) {
     const handleLogOut = props.route.params.handleLogOut;
     return (
         // <NavigationContainer>
-            <ContactUsStack.Navigator
+            <ItemCatalog.Navigator
                 screenOptions={{
                     header: (props) => (
                         <MyHeader {...props} handleLogOut = {handleLogOut} />
                     )
                 }}
             >
-                <ContactUsStack.Screen name="ODER_STATISTIC_STACK" component={ContactUsScreen} />    
-            </ContactUsStack.Navigator>
+                <ItemCatalog.Screen name="ITEM_CATALOG" component={ItemCatalogScreen} /> 
+                <ItemCatalog.Screen name="NEW_ITEMS" component={NewItemModal} />    
+            </ItemCatalog.Navigator>
             
         // </NavigationContainer>
 
     );
 };
 
-export default ContactUsStackScreen;
+export default ItemCatalogStackScreen;
