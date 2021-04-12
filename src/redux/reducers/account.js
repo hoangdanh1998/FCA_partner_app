@@ -1,4 +1,11 @@
-const { LOGIN, RESTORE_TOKEN, SIGN_OUT, FINISH_LOADING, CHANGE_ERROR, OPEN_STORE } = require("../actions/account");
+const { LOGIN,
+    RESTORE_TOKEN,
+    SIGN_OUT,
+    FINISH_LOADING,
+    CHANGE_ERROR,
+    OPEN_STORE,
+    REGISTER_ITEM
+} = require("../actions/account");
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
@@ -63,9 +70,12 @@ const accountReducer = (state = initialState, action) => {
         case CHANGE_ERROR:
             return { ...state, errMessage: action.payload }
         case OPEN_STORE: {
-            console.log("cua hang oi");
+            
             refreshStore(action.payload);
             return { ...state, partner: action.payload }
+        } case REGISTER_ITEM: {
+            refreshStore(action.payload);
+            return { ...state, partner: action.payload}
         }
         default:
             return state;

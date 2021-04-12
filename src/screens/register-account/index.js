@@ -121,7 +121,7 @@ const RegisterAccountScreen = (props) => {
     const phoneReg = /^[0-9]+$/;
 
     if (!numberPhone.match(phoneReg)) {
-      setNumberErr("Số điện thoại không được bỏ trống");
+      setNumberErr("Số điện thoại không hợp lệ");
       return false;
     } else {
       return true;

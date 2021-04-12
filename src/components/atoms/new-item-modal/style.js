@@ -57,7 +57,8 @@ export const styles = StyleSheet.create({
         width:"100%",
         // backgroundColor:"red",
         alignItems: "center",
-        alignSelf:"center"
+        alignSelf:"center",
+        marginTop:"4%"
     },
     textInput: {
         width: "50%",
@@ -84,7 +85,36 @@ export const styles = StyleSheet.create({
         
     },
     textButton: {
-        color:"#fff"
+        color:"#fff",
+        fontWeight:"bold",
+    },
+    thumbnail: {
+        width: 100,
+        height: 100,
+        resizeMode: "cover",
+    },
+    errorMessage: {
+        color: "red",
+        // alignSelf: "center",
+        width: "100%",
+        // backgroundColor: "red",
+        fontSize: 18,
+        marginRight:0
+    },
+    buttonContainer: {
+        flex: 1,
+        alignItems: "center",
+        marginTop: "4%"
+    }, 
+
+    button: {
+        width:175,
+        backgroundColor: BACKGROUND_COLOR,
+        borderRadius: 30,
+        padding:10,
+        elevation: 2,
+        alignItems:"center",
+        marginBottom: "3%"
     },
 
 })
