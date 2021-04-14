@@ -25,6 +25,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useDispatch } from 'react-redux'
 import { registerAccount } from '../../redux/actions/account';
 import PhoneInput from "react-native-phone-number-input";
+import {checkPhoneExisted} from '../../service/account/account';
 
 
 
@@ -116,7 +117,7 @@ const RegisterAccountScreen = (props) => {
     )
   }
 
-  const checkValuePhoneNumber = (numberPhone) => {
+  const checkValuePhoneNumber = async(numberPhone) => {
 
     const phoneReg = /^[0-9]+$/;
 
@@ -124,7 +125,15 @@ const RegisterAccountScreen = (props) => {
       setNumberErr("Số điện thoại không hợp lệ");
       return false;
     } else {
-      return true;
+      try {
+        await checkPhoneExisted(numberPhone);
+        setNumberErr("Số điện thoại đã được đăng ký");
+        return false;
+      } catch (error) {
+        console.error("check phone exist err: ", error);
+        return true;
+      }
+      
     }
   }
 

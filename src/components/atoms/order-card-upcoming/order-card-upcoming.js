@@ -6,6 +6,7 @@ import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import * as firebase from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 const OrderCardUpComing = (props) => {
 
@@ -48,8 +49,8 @@ const OrderCardUpComing = (props) => {
 
       if (listenedOrder.status === OrderStatus.CANCELLATION
         || listenedOrder.status === OrderStatus.RECEPTION) {
-          console.log("update order list");
-          handleUpdateListApterChangeStatus(order, listenedOrder.status);
+        console.log("update order list");
+        handleUpdateListApterChangeStatus(order, listenedOrder.status);
       }
     }
   }, [listenedOrder])
@@ -68,9 +69,14 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {status ? 'đang đợi' : (timeRemain ? timeRemain + ' phút': '') }
+            {status ? 'đang đợi' : (timeRemain ? timeRemain + ' phút' : '')}
           </Text>
-          <Right></Right>
+          <Right>
+            <AntDesign
+              size={ 25 }
+              name = "clockcircleo"
+            />
+          </Right>
         </CardItem>
         <CardItem style={styles.cardBody} body bordered>
           <Left>

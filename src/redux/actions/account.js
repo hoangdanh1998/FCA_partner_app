@@ -7,6 +7,7 @@ export const CHANGE_ERROR = "CHANGE_ERROR";
 export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
 export const OPEN_STORE = "OPEN_STORE";
 export const REGISTER_ITEM = "REGISTER_ITEM";
+export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
 
 
 import fca from "../../service/fca-api/fca";
@@ -123,3 +124,10 @@ export const registerItem = (fcaItemId,partnerId, name, price, imageLink) => {
         }
     }
 }
+
+export const setDeviceKey = (deviceKey) => {
+    return {
+        type: SET_DEVICE_KEY,
+        payload: deviceKey,
+    };
+};

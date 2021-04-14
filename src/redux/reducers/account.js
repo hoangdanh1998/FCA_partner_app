@@ -4,7 +4,8 @@ const { LOGIN,
     FINISH_LOADING,
     CHANGE_ERROR,
     OPEN_STORE,
-    REGISTER_ITEM
+    REGISTER_ITEM,
+    SET_DEVICE_KEY
 } = require("../actions/account");
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -54,7 +55,7 @@ const storeToken = async (token, partner) => {
 };
 
 const accountReducer = (state = initialState, action) => {
-    console.log("action type:", action.type);
+    // console.log("action type:", action.type);
     switch (action.type) {
         case LOGIN:
             const data = action.payload.data;
@@ -64,18 +65,20 @@ const accountReducer = (state = initialState, action) => {
             return { ...state, token: action.payload.token, partner: action.payload.partner, isLoading: false };
         case SIGN_OUT:
             removeToken();
-            return { ...state, isSignOut: true, partner: null, token: null, errMessage: null };
+            return { state: null, isSignOut: true, partner: null, token: null, errMessage: null };
         case FINISH_LOADING:
             return { ...state, isLoading: false };
         case CHANGE_ERROR:
             return { ...state, errMessage: action.payload }
         case OPEN_STORE: {
-            
+
             refreshStore(action.payload);
             return { ...state, partner: action.payload }
         } case REGISTER_ITEM: {
             refreshStore(action.payload);
-            return { ...state, partner: action.payload}
+            return { ...state, partner: action.payload }
+        } case SET_DEVICE_KEY: {
+            return { ...state, deviceKey: action.payload };
         }
         default:
             return state;
