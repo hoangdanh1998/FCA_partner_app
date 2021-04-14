@@ -6,6 +6,8 @@ export const FINISH_LOADING = "FINISH_LOADING";
 export const CHANGE_ERROR = "CHANGE_ERROR";
 export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
 export const OPEN_STORE = "OPEN_STORE";
+export const REGISTER_ITEM = "REGISTER_ITEM";
+export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
 
 
 import fca from "../../service/fca-api/fca";
@@ -99,3 +101,33 @@ export const openStore = (id, isOpen) => {
         }
     }
 }
+
+export const registerItem = (fcaItemId,partnerId, name, price, imageLink) => {
+    return async dispatch => {
+        try {
+            const response = await fca.post(`/partner/${partnerId}/partner-item`,
+                {
+                    fcaItemId,
+                    partnerId,
+                    name,
+                    price,
+                    imageLink
+                }
+            )
+            console.log("response register item ", response);
+            dispatch({
+                type:REGISTER_ITEM,
+                payload: response.data.data.partner
+            })
+        } catch (error) {
+            console.error("loi khi tao partner", error);``
+        }
+    }
+}
+
+export const setDeviceKey = (deviceKey) => {
+    return {
+        type: SET_DEVICE_KEY,
+        payload: deviceKey,
+    };
+};

@@ -52,6 +52,14 @@ export const OrderStatusVN = {
   WAIT: "Trễ"
 }
 
+//status items
+
+export const itemStatus = {
+  ACTIVE: "ACTIVE",
+  PROCESS: "PROCESS",
+  ARCHIVE: "ARCHIVE",
+}
+
 //name of navigation
 
 export const nameOfNavigation = {
