@@ -13,9 +13,9 @@ export const styles = StyleSheet.create({
         // backgroundColor:"red"
     },
     modalView: {
-        width:"80%",
+        width: "80%",
         height: 600,
-        marginVertical:10,
+        marginVertical: 10,
         alignItems: "center",
         backgroundColor: "white",
         borderRadius: 20,
@@ -35,30 +35,30 @@ export const styles = StyleSheet.create({
         textAlign: "center"
     },
     header: {
-        color:"#fff",
-        fontSize:20
+        color: "#fff",
+        fontSize: 20
     },
     headerContainer: {
         backgroundColor: BACKGROUND_COLOR,
-        width:"100%",
+        width: "100%",
         alignItems: "center",
-        paddingVertical:10
+        paddingVertical: 10
     },
     title: {
-        fontSize:HEADER_FONT_SIZE
+        fontSize: HEADER_FONT_SIZE
     },
     rowContainer: {
-        flexDirection:"row",
-        width:"60%",
+        flexDirection: "row",
+        width: "60%",
         marginTop: 20,
         // backgroundColor:"red"
     },
     formContainer: {
-        width:"100%",
+        width: "100%",
         // backgroundColor:"red",
         alignItems: "center",
-        alignSelf:"center",
-        marginTop:"4%"
+        alignSelf: "center",
+        marginTop: "4%"
     },
     textInput: {
         width: "50%",
@@ -67,26 +67,26 @@ export const styles = StyleSheet.create({
     },
     labelTextInput: {
         textAlign: "left",
-        alignSelf: "center", 
+        alignSelf: "center",
         width: "25%"
     },
     requireText: {
         fontSize: HEADER_FONT_SIZE,
         alignSelf: "baseline",
         color: "red",
-        alignSelf:"center",
-        marginRight:2
+        alignSelf: "center",
+        marginRight: 2
     },
 
     uploadButton: {
         borderWidth: 1,
         width: 100,
         height: 100,
-        
+
     },
     textButton: {
-        color:"#fff",
-        fontWeight:"bold",
+        color: "#fff",
+        fontWeight: "bold",
     },
     thumbnail: {
         width: 100,
@@ -99,22 +99,31 @@ export const styles = StyleSheet.create({
         width: "100%",
         // backgroundColor: "red",
         fontSize: 18,
-        marginRight:0
+        marginRight: 0
     },
     buttonContainer: {
         flex: 1,
         alignItems: "center",
         marginTop: "4%"
-    }, 
+    },
 
     button: {
-        width:175,
+        width: 175,
         backgroundColor: BACKGROUND_COLOR,
         borderRadius: 30,
-        padding:10,
+        padding: 10,
         elevation: 2,
-        alignItems:"center",
+        alignItems: "center",
         marginBottom: "3%"
+    },
+    boldText: {
+        fontWeight: "bold"
+    },
+    titleAlert: {
+        fontSize: 25
+    },
+    title_font_size: {
+        fontSize: HEADER_FONT_SIZE
     },
 
 })

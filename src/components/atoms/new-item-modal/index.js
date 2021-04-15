@@ -23,7 +23,8 @@ import { PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
 import * as ImagePicker from 'expo-image-picker';
 import "react-native-get-random-values";
 import { registerItem } from '../../../redux/actions/account';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 export default function NewItemModal(props) {
@@ -36,6 +37,9 @@ export default function NewItemModal(props) {
     const [isLoadingImage, setIsLoadingImage] = useState(false);
     const [price, setPrice] = useState("");
     const [itemName, setItemName] = useState("");
+    const [alertMessage, setAlertMessage] = useState();
+    const [isShowAlert, setIsShowAlert] = useState(false);
+    const [isErr, setIsErr] = useState(false);
 
     const [imageErr, setImageErr] = useState(null);
     const [priceErr, setPriceErr] = useState(null);
@@ -68,6 +72,14 @@ export default function NewItemModal(props) {
         }
     ]
 
+    const showAlert = () => {
+        console.log("hien alert len");
+        setIsShowAlert(true);
+    };
+
+    const hideAlert = () => {
+        setIsShowAlert(false);
+    };
 
     let openImagePickerAsync = async () => {
         try {
@@ -138,13 +150,13 @@ export default function NewItemModal(props) {
     }
 
     const checkItemName = (name) => {
-    
+
         if (name.length === 0) {
-            
+
             setItemNameErr("Tên sản phẩm là bắt buộc");
             return false;
         } else {
-            
+
             return true;
         }
     }
@@ -179,15 +191,15 @@ export default function NewItemModal(props) {
     }
 
 
-    const handleRegisterItem = (fcaItemId, partnerId, name, price, imageLink) => {
+    const handleRegisterItem = async (fcaItemId, partnerId, name, price, imageLink) => {
 
-        
+
         try {
-
+            setIsErr(false);
             setImageErr(null);
             setItemGroupErr(null);
             setItemNameErr(null);
-            setPriceErr(null); 
+            setPriceErr(null);
             console.log("tao item roi nè");
 
             const isFcaItemId = checkSelectGroup(fcaItemId);
@@ -196,18 +208,23 @@ export default function NewItemModal(props) {
             const isImageLink = checkImage(imageLink);
 
             console.log("isFcaItemId", fcaItemId);
-            console.log("isPrice",isPrice);
+            console.log("isPrice", isPrice);
             console.log("isName", isName);
             console.log("isImageLink", imageLink);
 
             if (isFcaItemId && isPrice && isName && isImageLink) {
                 console.log("tao item");
-                dispatch(registerItem(fcaItemId, partnerId, name,
+                await dispatch(registerItem(fcaItemId, partnerId, name,
                     price, imageLink));
-                props.navigation.navigate("ITEM_CATALOG");
+                setAlertMessage("Gửi yêu cầu thành công")
+                setIsErr(false);
+                showAlert();
             }
 
         } catch (error) {
+            setAlertMessage("Gửi yêu cầu thất bại")
+            setIsErr(true);
+            showAlert();
             console.error("error register item", error);
         }
     }
@@ -219,181 +236,214 @@ export default function NewItemModal(props) {
             behavior="height"
             enabled
         >
+            <AwesomeAlert
+                show={isShowAlert}
+                showProgress={false}
+                title="Thông báo"
+                message={alertMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showConfirmButton={true}
+                titleStyle={[styles.titleAlert, styles.boldText]}
+                messageStyle={[styles.title_font_size]}
+                confirmText="OK"
+                confirmButtonColor="#DD6B55"
+                onDismiss={() => {
+                    if (isErr) {
+                        hideAlert()
+                    } else {
+                        hideAlert();
+                        props.navigation.navigate("ITEM_CATALOG");
+
+                    }
+
+                }}
+                onConfirmPressed={() => {
+                    if (isErr) {
+                        hideAlert()
+                    } else {
+                        hideAlert();
+                        props.navigation.navigate("ITEM_CATALOG");
+
+                    }
+                }}
+                confirmButtonTextStyle={[styles.title_font_size, styles.boldText]}
+            />
             <ScrollView
                 keyboardShouldPersistTaps="handled"
                 style={{ flex: 1, backgroundColor: "white" }}
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <ScrollView style = {{width: "100%", height: "100%"}}>
-                        <View style={styles.headerContainer}>
-                            <Text style={[styles.header]}>
-                                ĐĂNG KÍ MÓN
+                        <ScrollView style={{ width: "100%", height: "100%" }}>
+                            <View style={styles.headerContainer}>
+                                <Text style={[styles.header]}>
+                                    ĐĂNG KÍ MÓN
                             </Text>
-                        </View>
-                        <View style={styles.formContainer}>
-                            <View style={styles.rowContainer}>
-                                <Text style={styles.requireText}>*</Text>
-                                <Text
-                                    style={[styles.title, styles.labelTextInput]}
-                                >
-                                    Tên món
+                            </View>
+                            <View style={styles.formContainer}>
+                                <View style={styles.rowContainer}>
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text
+                                        style={[styles.title, styles.labelTextInput]}
+                                    >
+                                        Tên món
                             </Text>
-                                <TextInput
-                                    placeholder="Nhập tên món"
-                                    placeholderTextColor="#666666"
-                                    style={[
-                                        styles.textInput,
-                                        styles.title,
-                                        { color: "#000", marginRight: 15 }]}
-                                    autoCapitalize="none"
+                                    <TextInput
+                                        placeholder="Nhập tên món"
+                                        placeholderTextColor="#666666"
+                                        style={[
+                                            styles.textInput,
+                                            styles.title,
+                                            { color: "#000", marginRight: 15 }]}
+                                        autoCapitalize="none"
 
-                                    // defaultValue={}
-                                    onChangeText={(val) => handleChangeName(val)}
-                                />
-                            </View>
-                            {itemNameErr
-                                ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                    <View style={{width: "27%"}}></View>
-                                    <Text style={[styles.errorMessage]}>
-                                        {itemNameErr}
-                                    </Text>
-                                </View>)
-                                : null
-                            }
-                            <View style={styles.rowContainer}>
-                                <Text style={styles.requireText}>*</Text>
-                                <Text style={[styles.title, styles.labelTextInput]}>
-                                    Giá bán
+                                        // defaultValue={}
+                                        onChangeText={(val) => handleChangeName(val)}
+                                    />
+                                </View>
+                                {itemNameErr
+                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
+                                        <View style={{ width: "27%" }}></View>
+                                        <Text style={[styles.errorMessage]}>
+                                            {itemNameErr}
+                                        </Text>
+                                    </View>)
+                                    : null
+                                }
+                                <View style={styles.rowContainer}>
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text style={[styles.title, styles.labelTextInput]}>
+                                        Giá bán
                                 </Text>
-                                <TextInput
-                                    placeholder="Nhập giá bán"
-                                    placeholderTextColor="#666666"
-                                    style={[
-                                        styles.textInput,
-                                        styles.title,
-                                        { color: "#000", marginRight: 15, width: "40%" }]}
-                                    autoCapitalize="none"
-                                    onChangeText={(val) => handleChangePrice(val)}
-                                />
-                            </View>
-                            {priceErr
-                                ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                    <View style={{width: "27%"}}></View>
-                                    <Text style={[styles.errorMessage]}>
-                                        {priceErr}
-                                    </Text>
-                                </View>)
-                                : null
-                            }
-                            <View style={styles.rowContainer}>
-                                <Text style={styles.requireText}>*</Text>
-                                <Text style={[styles.title, styles.labelTextInput]}>
-                                    Danh mục
+                                    <TextInput
+                                        placeholder="Nhập giá bán"
+                                        placeholderTextColor="#666666"
+                                        style={[
+                                            styles.textInput,
+                                            styles.title,
+                                            { color: "#000", marginRight: 15, width: "23%" }]}
+                                        autoCapitalize="none"
+                                        onChangeText={(val) => handleChangePrice(val)}
+                                    />
+                                </View>
+                                {priceErr
+                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
+                                        <View style={{ width: "27%" }}></View>
+                                        <Text style={[styles.errorMessage]}>
+                                            {priceErr}
+                                        </Text>
+                                    </View>)
+                                    : null
+                                }
+                                <View style={styles.rowContainer}>
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text style={[styles.title, styles.labelTextInput]}>
+                                        Danh mục
                                 </Text>
-                                <DropDownPicker
-                                    placeholder="Chọn một danh mục"
-                                    items={itemGroupArr}
-                                    // defaultValue={}
-                                    containerStyle={{ height: 40, width: "40%" }}
-                                    style={{ backgroundColor: '#fafafa' }}
-                                    itemStyle={{
-                                        justifyContent: 'flex-start'
-                                    }}
-                                    dropDownStyle={{ backgroundColor: '#fafafa' }}
-                                    onChangeItem={item => {
-                                        setItemGroupErr(null);
-                                        setSelectItem(item.value)
-                                    }}
-                                    placeholderStyle={styles.title}
-                                    labelStyle={styles.title}
-                                />
-                            </View>
-                            {itemGroupErr
-                                ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                    <View style={{width: "27%"}}></View>
-                                    <Text style={[styles.errorMessage]}>
-                                        {itemGroupErr}
+                                    <DropDownPicker
+                                        placeholder="Chọn một danh mục"
+                                        items={itemGroupArr}
+                                        // defaultValue={}
+                                        containerStyle={{ height: 40, width: "40%" }}
+                                        style={{ backgroundColor: '#fafafa' }}
+                                        itemStyle={{
+                                            justifyContent: 'flex-start'
+                                        }}
+                                        dropDownStyle={{ backgroundColor: '#fafafa' }}
+                                        onChangeItem={item => {
+                                            setItemGroupErr(null);
+                                            setSelectItem(item.value)
+                                        }}
+                                        placeholderStyle={styles.title}
+                                        labelStyle={styles.title}
+                                    />
+                                </View>
+                                {itemGroupErr
+                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
+                                        <View style={{ width: "27%" }}></View>
+                                        <Text style={[styles.errorMessage]}>
+                                            {itemGroupErr}
+                                        </Text>
+                                    </View>)
+                                    : null
+                                }
+                                <View style={[styles.rowContainer, { height: 100 }]}>
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text style={[styles.title, styles.labelTextInput]}>
+                                        Ảnh sản phẩm
                                     </Text>
-                                </View>)
-                                : null
-                            }
-                            <View style={[styles.rowContainer, { height: 100 }]}>
-                                <Text style={styles.requireText}>*</Text>
-                                <Text style={[styles.title, styles.labelTextInput]}>
-                                    Ảnh sản phẩm
-                                    </Text>
-                                <View style={{
-                                    width: "51.5%", marginLeft: 23,
-                                    flexDirection: "row",
-                                    justifyContent: "flex-start",
-                                }}>
-                                    {/* {console.log("isloading", isLoadingImage)} */}
-                                    {selectedImage !== null
-                                        ? (
-                                            <TouchableOpacity
+                                    <View style={{
+                                        width: "51.5%", marginLeft: 23,
+                                        flexDirection: "row",
+                                        justifyContent: "flex-start",
+                                    }}>
+                                        {/* {console.log("isloading", isLoadingImage)} */}
+                                        {selectedImage !== null
+                                            ? (
+                                                <TouchableOpacity
+                                                    onPress={openImagePickerAsync}
+                                                >
+                                                    {
+                                                        isLoadingImage
+                                                            ? <ActivityIndicator
+                                                                size={25}
+                                                                color="black"
+                                                                style={{
+                                                                    alignSelf: "center",
+                                                                    width: 100,
+                                                                    height: 100
+
+                                                                }} />
+                                                            : (<View style={{ marginRight: 15 }}>
+                                                                <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />
+                                                            </View>)
+                                                    }
+
+                                                </TouchableOpacity>)
+
+                                            : <TouchableOpacity
+                                                style={[styles.uploadButton,]}
                                                 onPress={openImagePickerAsync}
                                             >
-                                                {
-                                                    isLoadingImage
-                                                        ? <ActivityIndicator
-                                                            size={25}
-                                                            color="black"
-                                                            style={{
-                                                                alignSelf: "center",
-                                                                width: 100,
-                                                                height: 100
+                                                <AntDesign
+                                                    name="plus"
+                                                    size={92}
+                                                    style={{
+                                                        flexDirection: "column",
+                                                        alignSelf: "center",
+                                                        color: StatisticColor.CANCELLATION
+                                                    }}
+                                                />
+                                            </TouchableOpacity>
+                                        }
+                                    </View>
 
-                                                            }} />
-                                                        : (<View style={{ marginRight: 15 }}>
-                                                            <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />
-                                                        </View>)
-                                                }
-
-                                            </TouchableOpacity>)
-
-                                        : <TouchableOpacity
-                                            style={[styles.uploadButton,]}
-                                            onPress={openImagePickerAsync}
-                                        >
-                                            <AntDesign
-                                                name="plus"
-                                                size={92}
-                                                style={{
-                                                    flexDirection: "column",
-                                                    alignSelf: "center",
-                                                    color: StatisticColor.CANCELLATION
-                                                }}
-                                            />
-                                        </TouchableOpacity>
-                                    }
                                 </View>
-
-                            </View>
-                            {imageErr
-                                ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                    <View style={{width: "27%"}}></View>
-                                    <Text style={[styles.errorMessage]}>
-                                        {imageErr}
-                                    </Text>
-                                </View>)
-                                : null
-                            }
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <TouchableHighlight
-                                style={{ ...styles.button, marginTop: 15 }}
-                                underlayColor={PRIMARY_COLOR}
-                                activeOpacity={0.9}
-                                onPress={
-                                    () =>  handleRegisterItem(selectItem, partner?.id, itemName, price, selectedImage?.localUri)
+                                {imageErr
+                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
+                                        <View style={{ width: "27%" }}></View>
+                                        <Text style={[styles.errorMessage]}>
+                                            {imageErr}
+                                        </Text>
+                                    </View>)
+                                    : null
                                 }
-                            >
-                                <Text style={[styles.title, styles.textButton, styles.boldText]}>
-                                    Đăng ký
+                            </View>
+                            <View style={styles.buttonContainer}>
+                                <TouchableHighlight
+                                    style={{ ...styles.button, marginTop: 15 }}
+                                    underlayColor={PRIMARY_COLOR}
+                                    activeOpacity={0.9}
+                                    onPress={
+                                        () => handleRegisterItem(selectItem, partner?.id, itemName, price, selectedImage?.localUri)
+                                    }
+                                >
+                                    <Text style={[styles.title, styles.textButton, styles.boldText]}>
+                                        Đăng ký
                                     </Text>
-                            </TouchableHighlight>
-                        </View>
+                                </TouchableHighlight>
+                            </View>
                         </ScrollView>
                     </View>
                 </View>

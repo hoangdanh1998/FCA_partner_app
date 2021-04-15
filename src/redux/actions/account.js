@@ -8,6 +8,7 @@ export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
 export const OPEN_STORE = "OPEN_STORE";
 export const REGISTER_ITEM = "REGISTER_ITEM";
 export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
+export const GET_PARTNER = "GET_PARTNER";
 
 
 import fca from "../../service/fca-api/fca";
@@ -131,3 +132,19 @@ export const setDeviceKey = (deviceKey) => {
         payload: deviceKey,
     };
 };
+
+export const getPartner = (id) => {
+    return async dispatch => {
+        try {
+            const response = await fca.get(`/partner/${id}`);
+            
+            console.log("response get store", response.data.data.partner);
+            dispatch({
+                type:OPEN_STORE,
+                payload: response.data.data.partner
+            })
+        } catch (error) {
+            console.error("err open store", error);
+        }
+    }
+}
