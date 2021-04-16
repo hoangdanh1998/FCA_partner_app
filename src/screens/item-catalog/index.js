@@ -11,6 +11,7 @@ import {
 } from "../../constance/constance";
 import { SegmentedControl } from "@ant-design/react-native";
 import NewItemModal from "../../components/atoms/new-item-modal";
+import { getPartner } from "../../redux/actions/account";
 
 export default function ItemCatalogScreen(props) {
   const dispatch = useDispatch();
@@ -35,6 +36,10 @@ export default function ItemCatalogScreen(props) {
   const handleShowModal = () => {
     setModalVisible(!modalVisible);
   };
+
+  useEffect(() => {
+    dispatch(getPartner(partner?.id));
+  }, [dispatch])
 
   const renderItem = () => {
     if (partner) {

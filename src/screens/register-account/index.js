@@ -364,7 +364,7 @@ const RegisterAccountScreen = (props) => {
                     style={[
                       styles.textInput,
                       styles.titleText,
-                      { color: "#000", marginRight: 15 }]}
+                      { color: "#000", marginRight: 15, width:"28%" }]}
                     autoCapitalize="none"
                     secureTextEntry={true}
                     defaultValue={data.password}
@@ -391,7 +391,7 @@ const RegisterAccountScreen = (props) => {
                     style={[
                       styles.textInput,
                       styles.titleText,
-                      { color: "#000", marginRight: 15 }]}
+                      { color: "#000", marginRight: 15, width:"28%" }]}
                     autoCapitalize="none"
                     // keyboardType="phone-pad"
                     secureTextEntry={true}

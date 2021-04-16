@@ -77,19 +77,19 @@ const UpcomingTab = (props) => {
     try {
       switch (status) {
         case OrderStatus.PREPARATION:
-          dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+          await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
           break;
         case OrderStatus.ARRIVAL:
-          dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
+          await dispatch(setOrderStatus(id, OrderStatus.ARRIVAL));
           break;
         case (OrderStatus.WAITING):
-          dispatch(setOrderStatus(id, OrderStatus.WAITING));
+          await dispatch(setOrderStatus(id, OrderStatus.WAITING));
           break;
         case 'doing':
-          dispatch(setOrderStatus(id, OrderStatus.READINESS));
+          await dispatch(setOrderStatus(id, OrderStatus.READINESS));
           break;
         case 'to-do':
-          dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
+          await dispatch(setOrderStatus(id, OrderStatus.PREPARATION));
         // case OrderStatus.A: {
         //   dispatch(updateListApterChangeStatus(id, status));
         // }
@@ -109,6 +109,7 @@ const UpcomingTab = (props) => {
         buttonText: "OK",
         type: "warning"
       })
+      console.error("err update status", error);
     }
   }
 
@@ -188,6 +189,7 @@ const UpcomingTab = (props) => {
         messageStyle={[styles.title_font_size]}
         confirmText="OK"
         confirmButtonColor="#DD6B55"
+        onDismiss={()=>{hideAlert()}}
         onConfirmPressed={() => {
           hideAlert();
         }}

@@ -18,11 +18,13 @@ const OrderCardUpComing = (props) => {
   const [timeRemain, setTimeRemain] = useState(0);
   const [status, setStatus] = useState();
   const [listenedOrder, setListenedOrder] = useState();
+  const [isAutoPrepareOrder, setIsAutoPrepareOrder] = useState(null);
 
   useEffect(() => {
     firebase.listenOrder(order.id, (orderListened) => {
       if (orderListened) {
         setListenedOrder(orderListened);
+        setIsAutoPrepareOrder(orderListened.isAutoPrepareOrder);
         setTimeRemain(orderListened.timeRemain?.split(' ')[0]);
         if (orderListened.status === OrderStatus.WAITING) {
           setStatus(orderListened.status);
@@ -34,6 +36,7 @@ const OrderCardUpComing = (props) => {
 
   useEffect(() => {
     if (listenedOrder) {
+      console.log('id order', listenedOrder.id)
       let tmpTimeRemain = listenedOrder.timeRemain + '';
       const arrTimeString = tmpTimeRemain.split(" ");
       const time = +arrTimeString[0];
@@ -43,9 +46,14 @@ const OrderCardUpComing = (props) => {
         handleUpdateStatus(OrderStatus.PREPARATION, listenedOrder.id);
       }
 
-      if (listenedOrder.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
-        handleUpdateStatus(OrderStatus.WAITING, listenedOrder.id)
+      if (listenedOrder?.isAutoPrepareOrder == null ||
+        (listenedOrder.isAutoPrepareOrder != null && isAutoPrepareOrder == true)) {
+        if (listenedOrder.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
+          handleUpdateStatus(OrderStatus.WAITING, listenedOrder.id)
+        }
       }
+
+
 
       if (listenedOrder.status === OrderStatus.CANCELLATION
         || listenedOrder.status === OrderStatus.RECEPTION) {
@@ -57,8 +65,15 @@ const OrderCardUpComing = (props) => {
 
   return (
     <Content>
-      <Card style={styles.card}>
-        <CardItem style={styles.cardHeader} header bordered>
+      <Card style={
+        styles.card
+
+      }>
+        <CardItem style={
+          isAutoPrepareOrder != null && isAutoPrepareOrder == false
+            ? styles.cardDelay
+            : styles.cardHeader
+        } header bordered>
           <Left>
             <Text style={styles.title}>{order.customer.account.phone}</Text>
           </Left>
@@ -72,13 +87,25 @@ const OrderCardUpComing = (props) => {
             {status ? 'đang đợi' : (timeRemain ? timeRemain + ' phút' : '')}
           </Text>
           <Right>
-            <AntDesign
-              size={ 25 }
-              name = "clockcircleo"
-            />
+            {
+              (isAutoPrepareOrder != null && isAutoPrepareOrder == false)
+                ? <AntDesign
+                  size={25}
+                  name="clockcircleo"
+                />
+                : null
+            }
+
           </Right>
         </CardItem>
-        <CardItem style={styles.cardBody} body bordered>
+        <CardItem
+          style={
+            isAutoPrepareOrder != null && isAutoPrepareOrder == false
+              ? styles.cardBodyDelay
+              : styles.cardBody
+          }
+
+          body bordered>
           <Left>
 
             <List
@@ -86,7 +113,11 @@ const OrderCardUpComing = (props) => {
               dataArray={order.items}
               keyExtractor={order.items.id}
               renderRow={(item) => (
-                <CardItem style={styles.list}>
+                <CardItem style={
+                  isAutoPrepareOrder != null && isAutoPrepareOrder == false
+                    ? styles.listDelay
+                    : styles.list
+                }>
                   <Left>
                     <Text style={styles.itemText}>{item.name}</Text>
                   </Left>

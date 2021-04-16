@@ -1,7 +1,13 @@
 import { StyleSheet } from "react-native";
+import { StatisticColor } from "../../../constance/constance";
 export const styles = StyleSheet.create({
   card: {
     flex: 1,
+    // backgroundColor:"red"
+  },
+  cardDelay: {
+    flex: 1,
+    backgroundColor: "#E8E8E8"
   },
   cardHeader: {
     flex: 1,
@@ -9,6 +15,11 @@ export const styles = StyleSheet.create({
   cardBody: {
     width: "100%",
     flexDirection: "row",
+  },
+  cardBodyDelay: {
+    width: "100%",
+    flexDirection: "row",
+    backgroundColor: "#E8E8E8"
   },
   title: {
     fontWeight: "bold",
@@ -36,4 +47,8 @@ export const styles = StyleSheet.create({
   list: {
     width: "100%",
   },
+  listDelay: {
+    width: "100%",
+    backgroundColor:"#E8E8E8"
+  }
 });

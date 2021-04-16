@@ -5,7 +5,8 @@ const { LOGIN,
     CHANGE_ERROR,
     OPEN_STORE,
     REGISTER_ITEM,
-    SET_DEVICE_KEY
+    SET_DEVICE_KEY,
+    GET_PARTNER
 } = require("../actions/account");
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -79,6 +80,8 @@ const accountReducer = (state = initialState, action) => {
             return { ...state, partner: action.payload }
         } case SET_DEVICE_KEY: {
             return { ...state, deviceKey: action.payload };
+        } case GET_PARTNER: {
+            return { ...state, partner: action.payload}
         }
         default:
             return state;
