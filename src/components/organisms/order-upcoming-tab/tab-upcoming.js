@@ -39,9 +39,9 @@ const UpcomingTab = (props) => {
     setIsLoading(true);
     try {
       setError();
-      dispatch(getAcceptOrderToday(partnerAccount.id));
-      dispatch(getPreparationOrderToday(partnerAccount.id));
-      dispatch(getReadinessOrderToday(partnerAccount.id));
+      dispatch(getAcceptOrderToday(partnerAccount?.id));
+      dispatch(getPreparationOrderToday(partnerAccount?.id));
+      dispatch(getReadinessOrderToday(partnerAccount?.id));
 
 
     } catch (error) {
@@ -148,7 +148,7 @@ const UpcomingTab = (props) => {
 
   useEffect(() => {
     loadOrderList();
-    firebase.listenInComingOrder(partnerAccount.id, async (listInitOrder) => {
+    firebase.listenInComingOrder(partnerAccount?.id, async (listInitOrder) => {
       setListInitOrder(listInitOrder)
       if (listInitOrder) {
         const listInit = Object.values(listInitOrder);

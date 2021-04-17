@@ -126,8 +126,8 @@ export default function ProfileDrawerContent(props) {
                     )}
                     onPress={() => {
                         if (partner) {
-                            let expirationDate = moment(partner.expirationDate).format('DD-MM-YYYY');
-                            let currentDate = moment().format('DD-MM-YYYY');
+                            let expirationDate = moment(partner?.expirationDate);
+                            let currentDate = moment();
                             if (partner.isOpen) {
                                 if (filterToDoList.length == 0 && filterDoingList.length == 0
                                     && filterReadyList.length == 0 && filterArrivalList.length == 0) {
@@ -141,7 +141,7 @@ export default function ProfileDrawerContent(props) {
                                 }
                             }
                             else if (!partner.isOpen) {
-                                if (moment(expirationDate).isSameOrAfter(currentDate)) {
+                                if (expirationDate.isSameOrAfter(currentDate)) {
                                     setIsShowAlert(true);
                                     setAlertMessage("Bạn chắc chắn muốn mở cửa hàng?")
                                 } else {
