@@ -1,15 +1,15 @@
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ALERT_FAIL_MESSAGE, ALERT_SUCCESS_MESSAGE, OrderStatus, TITLE_ALERT } from '../../../constance/constance';
 import { setOrderStatus } from '../../../redux/actions/order-list';
 
 
 export default function QRCode(props) {
-    
-    const dispatch = useDispatch();
 
+    const dispatch = useDispatch();
+    const partner = useSelector((state)=> state.account.partner);
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
 
@@ -21,9 +21,14 @@ export default function QRCode(props) {
     }, []);
 
     const handleBarCodeScanned = async ({ type, data }) => {
-        setScanned(true);
+        const orderId = data.split(',')[0];
+        const partnerId = data.split(',')[1];
+                setScanned(true);
         try {
-            await dispatch(setOrderStatus(data, OrderStatus.RECEPTION));
+            if (partnerId !== partner.id) {
+                throw new Error();
+            }
+            await dispatch(setOrderStatus(orderId, OrderStatus.RECEPTION));
             props.navigation.navigate("READY") 
             Alert.alert(TITLE_ALERT,ALERT_SUCCESS_MESSAGE);
         } catch (error) {

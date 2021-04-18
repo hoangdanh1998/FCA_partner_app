@@ -25,6 +25,7 @@ export const SEND_QR_CODE = "SEND_QR_CODE";
 
 
 export const getAcceptOrderToday = (partnerId) => {
+    console.log({ partnerId })
     return async dispatch => {
 
 
