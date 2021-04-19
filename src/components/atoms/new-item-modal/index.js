@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     View,
     Text,
@@ -22,7 +22,7 @@ import * as firebase from "firebase";
 import { PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
 import * as ImagePicker from 'expo-image-picker';
 import "react-native-get-random-values";
-import { registerItem } from '../../../redux/actions/account';
+import { getFCAItem, registerItem } from '../../../redux/actions/account';
 import { useSelector, useDispatch } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
@@ -39,12 +39,34 @@ export default function NewItemModal(props) {
     const [itemName, setItemName] = useState("");
     const [alertMessage, setAlertMessage] = useState();
     const [isShowAlert, setIsShowAlert] = useState(false);
+    const [listFcaItem, setListFcaItem] = useState([]);
     const [isErr, setIsErr] = useState(false);
 
     const [imageErr, setImageErr] = useState(null);
     const [priceErr, setPriceErr] = useState(null);
     const [itemNameErr, setItemNameErr] = useState(null);
     const [itemGroupErr, setItemGroupErr] = useState(null);
+
+    const fcaItems = useSelector(state => state.account.fcaItems)
+
+    const handleGetFCAItem = async () => {
+        try {
+            
+            const fcaItemList = fcaItems.map((item) => {
+                return { label: item.name, value: item.id }
+            })
+            setListFcaItem(fcaItemList);
+            console.log("fcaItemList: ", fcaItemList);
+        } catch (error) {
+            console.error("err get fcaItemList: ", error);
+        }
+
+    }
+
+    useEffect(() => {
+        // dispatch(getFCAItem(partner?.id));
+        handleGetFCAItem();
+    }, [dispatch])
 
     const itemGroupArr = [
         {
@@ -192,8 +214,7 @@ export default function NewItemModal(props) {
 
 
     const handleRegisterItem = async (fcaItemId, partnerId, name, price, imageLink) => {
-
-
+        console.log("name:" ,name);
         try {
             setIsErr(false);
             setImageErr(null);
@@ -204,21 +225,17 @@ export default function NewItemModal(props) {
 
             const isFcaItemId = checkSelectGroup(fcaItemId);
             const isPrice = checkPrice(price);
-            const isName = checkItemName(name);
+            // const isName = checkItemName(name);
             const isImageLink = checkImage(imageLink);
 
-            console.log("isFcaItemId", fcaItemId);
-            console.log("isPrice", isPrice);
-            console.log("isName", isName);
-            console.log("isImageLink", imageLink);
-
-            if (isFcaItemId && isPrice && isName && isImageLink) {
+            if (isFcaItemId && isPrice && isImageLink) {
                 console.log("tao item");
                 await dispatch(registerItem(fcaItemId, partnerId, name,
                     price, imageLink));
-                setAlertMessage("Gửi yêu cầu thành công")
-                setIsErr(false);
-                showAlert();
+                // setAlertMessage("Gửi yêu cầu thành công")
+                // setIsErr(false);
+                // showAlert();
+                props.navigation.navigate("ITEM_CATALOG");22
             }
 
         } catch (error) {
@@ -282,7 +299,7 @@ export default function NewItemModal(props) {
                             </Text>
                             </View>
                             <View style={styles.formContainer}>
-                                <View style={styles.rowContainer}>
+                                {/* <View style={styles.rowContainer}>
                                     <Text style={styles.requireText}>*</Text>
                                     <Text
                                         style={[styles.title, styles.labelTextInput]}
@@ -310,6 +327,39 @@ export default function NewItemModal(props) {
                                         </Text>
                                     </View>)
                                     : null
+                                } */}
+                                <View style={styles.rowContainer}>
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text style={[styles.title, styles.labelTextInput]}>
+                                    Tên món
+                                </Text>
+                                    <DropDownPicker
+                                        placeholder="Chọn tên món"
+                                        items={listFcaItem}
+                                        // defaultValue={}
+                                        containerStyle={{ height: 40, width: "45%" }}
+                                        style={{ backgroundColor: '#fafafa' }}
+                                        itemStyle={{
+                                            justifyContent: 'flex-start'
+                                        }}
+                                        dropDownStyle={{ backgroundColor: '#fafafa' }}
+                                        onChangeItem={item => {
+                                            setItemGroupErr(null);
+                                            setSelectItem(item.value);
+                                            setItemName(item.label);
+                                        }}
+                                        placeholderStyle={styles.title}
+                                        labelStyle={styles.title}
+                                    />
+                                </View>
+                                {itemGroupErr
+                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
+                                        <View style={{ width: "35%" }}></View>
+                                        <Text style={[styles.errorMessage]}>
+                                            {itemGroupErr}
+                                        </Text>
+                                    </View>)
+                                    : null
                                 }
                                 <View style={styles.rowContainer}>
                                     <Text style={styles.requireText}>*</Text>
@@ -322,52 +372,21 @@ export default function NewItemModal(props) {
                                         style={[
                                             styles.textInput,
                                             styles.title,
-                                            { color: "#000", marginRight: 15, width: "23%" }]}
+                                            { color: "#000", marginRight: 15, width: "30%" }]}
                                         autoCapitalize="none"
                                         onChangeText={(val) => handleChangePrice(val)}
                                     />
                                 </View>
                                 {priceErr
                                     ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                        <View style={{ width: "27%" }}></View>
+                                        <View style={{ width: "35%" }}></View>
                                         <Text style={[styles.errorMessage]}>
                                             {priceErr}
                                         </Text>
                                     </View>)
                                     : null
                                 }
-                                <View style={styles.rowContainer}>
-                                    <Text style={styles.requireText}>*</Text>
-                                    <Text style={[styles.title, styles.labelTextInput]}>
-                                        Danh mục
-                                </Text>
-                                    <DropDownPicker
-                                        placeholder="Chọn một danh mục"
-                                        items={itemGroupArr}
-                                        // defaultValue={}
-                                        containerStyle={{ height: 40, width: "40%" }}
-                                        style={{ backgroundColor: '#fafafa' }}
-                                        itemStyle={{
-                                            justifyContent: 'flex-start'
-                                        }}
-                                        dropDownStyle={{ backgroundColor: '#fafafa' }}
-                                        onChangeItem={item => {
-                                            setItemGroupErr(null);
-                                            setSelectItem(item.value)
-                                        }}
-                                        placeholderStyle={styles.title}
-                                        labelStyle={styles.title}
-                                    />
-                                </View>
-                                {itemGroupErr
-                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                        <View style={{ width: "27%" }}></View>
-                                        <Text style={[styles.errorMessage]}>
-                                            {itemGroupErr}
-                                        </Text>
-                                    </View>)
-                                    : null
-                                }
+
                                 <View style={[styles.rowContainer, { height: 100 }]}>
                                     <Text style={styles.requireText}>*</Text>
                                     <Text style={[styles.title, styles.labelTextInput]}>
@@ -422,7 +441,7 @@ export default function NewItemModal(props) {
                                 </View>
                                 {imageErr
                                     ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                        <View style={{ width: "27%" }}></View>
+                                        <View style={{ width: "35%" }}></View>
                                         <Text style={[styles.errorMessage]}>
                                             {imageErr}
                                         </Text>

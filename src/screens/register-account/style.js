@@ -123,5 +123,20 @@ export const styles = StyleSheet.create({
 
     codeTextStyle: {
         fontSize: HEADER_FONT_SIZE
+    },
+
+    buttonModal: {
+        backgroundColor: BACKGROUND_COLOR,
+        width:170, 
+        height: 50,
+        flexDirection: "row",
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        borderRadius: 30
+    },
+    modalContainer: {
+        flexDirection: "row",
+        width:"60%",
+        justifyContent: "space-evenly"
     }
 })

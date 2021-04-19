@@ -24,7 +24,7 @@ const NewOrderModal = (props) => {
                 transparent={true}
                 visible={visible}
                 onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
+                    // Alert.alert("Modal has been closed.");
                 }}
             >
                 {newOrder ? (<View style={[styles.centeredView, styles.containerView]}>

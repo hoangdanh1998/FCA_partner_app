@@ -11,7 +11,8 @@ import {
 } from "../../constance/constance";
 import { SegmentedControl } from "@ant-design/react-native";
 import NewItemModal from "../../components/atoms/new-item-modal";
-import { getPartner } from "../../redux/actions/account";
+import { getFCAItem, getPartner } from "../../redux/actions/account";
+import { get } from "react-native/Libraries/Utilities/PixelRatio";
 
 export default function ItemCatalogScreen(props) {
   const dispatch = useDispatch();
@@ -19,6 +20,8 @@ export default function ItemCatalogScreen(props) {
   const [selectIndex, setSelectIndex] = useState(0);
   // const [listItem, setListItem] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [waitList, setWaitList] = useState([]);
+  const [activeList, setActiveList] = useState([]);
 
   // console.log(listItem);
 
@@ -39,6 +42,7 @@ export default function ItemCatalogScreen(props) {
 
   useEffect(() => {
     dispatch(getPartner(partner?.id));
+    dispatch(getFCAItem(partner?.id));
   }, [dispatch])
 
   const renderItem = () => {

@@ -4,6 +4,7 @@ import React from 'react';
 import Login from '../../screens/login';
 import RegisterAccountScreen from '../../screens/register-account';
 import OtpSmsScreen from '../../screens/otp-sms/index'
+import { BACKGROUND_COLOR } from '../../constance/constance';
 
 const LoginStack = createStackNavigator();
 
@@ -20,12 +21,26 @@ function LoginStackScreen(props) {
 
             <LoginStack.Screen name="LOGIN" component={Login} options={{ headerShown: false }} />
             <LoginStack.Screen name="REGISTER_ACCOUNT"
-                options={{ title: "Đăng ký tài khoản" }}
-                
+                options={{
+                    title: "Đăng ký tài khoản",
+                    headerStyle: { backgroundColor: BACKGROUND_COLOR },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
+
                 component={RegisterAccountScreen} />
             <LoginStack.Screen name="OTP_SMS"
                 component={OtpSmsScreen}
-                options={{ title: "" }}
+                options={{
+                    title: "Xác thực OTP",
+                    headerStyle: { backgroundColor: BACKGROUND_COLOR },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
                 initialParams={{ handleLogOut }}
             />
         </LoginStack.Navigator>

@@ -6,7 +6,8 @@ const { LOGIN,
     OPEN_STORE,
     REGISTER_ITEM,
     SET_DEVICE_KEY,
-    GET_PARTNER
+    GET_PARTNER,
+    GET_FCA_ITEM
 } = require("../actions/account");
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -15,7 +16,8 @@ const initialState = {
     token: null,
     isLoading: true,
     isSignOut: false,
-    errMessage: null
+    errMessage: null,
+    fcaItems: null,
 };
 
 const removeToken = async () => {
@@ -81,7 +83,9 @@ const accountReducer = (state = initialState, action) => {
         } case SET_DEVICE_KEY: {
             return { ...state, deviceKey: action.payload };
         } case GET_PARTNER: {
-            return { ...state, partner: action.payload}
+            return { ...state, partner: action.payload }
+        } case GET_FCA_ITEM: {
+            return { ...state, fcaItems: action.payload };
         }
         default:
             return state;
