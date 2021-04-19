@@ -91,7 +91,7 @@ export default function ItemCatalogScreen(props) {
               const archiveList = listItem.filter((item) => {
                 return item?.status == itemStatus.ARCHIVE;
               });
-              console.log("archiveList: " + archiveList);
+              // console.log("archiveList: " + archiveList);
               if (archiveList.length === 0) {
                 return (
                   <View
@@ -123,6 +123,7 @@ export default function ItemCatalogScreen(props) {
               const processList = listItem.filter((item) => {
                 return item?.status == itemStatus.PROCESS;
               });
+              // console.log("processList", processList);
               if (processList.length === 0) {
                 return (
                   <View

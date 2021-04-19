@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { v4 as uuidv4 } from "uuid";
 import * as firebase from "firebase";
-import { PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
+import { itemStatus, OrderStatus, PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
 import * as ImagePicker from 'expo-image-picker';
 import "react-native-get-random-values";
 import { getFCAItem, registerItem } from '../../../redux/actions/account';
@@ -51,12 +51,23 @@ export default function NewItemModal(props) {
 
     const handleGetFCAItem = async () => {
         try {
-            
-            const fcaItemList = fcaItems.map((item) => {
-                return { label: item.name, value: item.id }
-            })
-            setListFcaItem(fcaItemList);
-            console.log("fcaItemList: ", fcaItemList);
+            if (partner) {
+                const listPartnerItem = [...partner?.items];
+                // console.log("list partner item", listPartnerItem);
+                const activeAndWaitList = listPartnerItem.filter((item) => {
+                    return item?.status == itemStatus.ACTIVE || item?.status == itemStatus.PROCESS;
+                })
+                const activeAndWaitIDList = activeAndWaitList.map((item) => {return item?.fcaItem?.id});
+                console.log("activeAndWaitList: ", activeAndWaitIDList);
+                const filterList = fcaItems.filter((item) => !activeAndWaitIDList.includes(item?.id));
+                console.log("filter list", filterList);
+                const fcaItemList = filterList.map((item) => {
+                    return { label: item.name, value: item.id }
+                })
+                setListFcaItem(fcaItemList);
+                // console.log("fcaItemList: ", fcaItemList);
+            }
+
         } catch (error) {
             console.error("err get fcaItemList: ", error);
         }
@@ -67,32 +78,6 @@ export default function NewItemModal(props) {
         // dispatch(getFCAItem(partner?.id));
         handleGetFCAItem();
     }, [dispatch])
-
-    const itemGroupArr = [
-        {
-            value: "7d3714d3-f026-46af-82dc-8649f40d96ef",
-            label: "Cà phê sữa"
-        },
-
-        {
-            value: "91d94e22-14e9-4955-b5b7-66ef9a4a36d6",
-            label: "Cà phê"
-        },
-
-        {
-            value: "ce8487fb-7108-40d0-b71e-36b1703043dc",
-            label: "Cam ép",
-        },
-        {
-            value: "3698ea4a-6a22-4691-8ef3-d9b43ffdbc95",
-            label: "Bạc xỉu",
-        },
-
-        {
-            value: "780150fa-185e-41e4-b1ad-c93c39826b29",
-            label: "Chanh đá"
-        }
-    ]
 
     const showAlert = () => {
         console.log("hien alert len");
@@ -214,7 +199,7 @@ export default function NewItemModal(props) {
 
 
     const handleRegisterItem = async (fcaItemId, partnerId, name, price, imageLink) => {
-        console.log("name:" ,name);
+        console.log("name:", name);
         try {
             setIsErr(false);
             setImageErr(null);
@@ -235,7 +220,7 @@ export default function NewItemModal(props) {
                 // setAlertMessage("Gửi yêu cầu thành công")
                 // setIsErr(false);
                 // showAlert();
-                props.navigation.navigate("ITEM_CATALOG");22
+                props.navigation.navigate("ITEM_CATALOG"); 22
             }
 
         } catch (error) {
@@ -331,7 +316,7 @@ export default function NewItemModal(props) {
                                 <View style={styles.rowContainer}>
                                     <Text style={styles.requireText}>*</Text>
                                     <Text style={[styles.title, styles.labelTextInput]}>
-                                    Tên món
+                                        Tên món
                                 </Text>
                                     <DropDownPicker
                                         placeholder="Chọn tên món"
