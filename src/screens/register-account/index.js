@@ -1,33 +1,24 @@
-import React, { useState, useRef } from 'react';
-
-import moment from "moment";
-import * as firebase from "firebase";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
-
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  TouchableHighlight,
-  ActivityIndicator,
-  Modal
-} from 'react-native';
-import { styles } from './style'
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { BACKGROUND_COLOR, HEADER_FONT_SIZE, KEY_GOOGLE_MAP, PRIMARY_COLOR, StatisticColor } from '../../constance/constance';
 import * as ImagePicker from 'expo-image-picker';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useDispatch } from 'react-redux'
-import { registerAccount } from '../../redux/actions/account';
+import * as firebase from "firebase";
+import React, { useRef, useState } from 'react';
+import {
+  ActivityIndicator, Image, KeyboardAvoidingView, ScrollView, Text,Modal,
+  TextInput, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View
+} from 'react-native';
+import "react-native-get-random-values";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import PhoneInput from "react-native-phone-number-input";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useDispatch } from 'react-redux';
+import { v4 as uuidv4 } from "uuid";
+import { HEADER_FONT_SIZE, KEY_GOOGLE_MAP, PRIMARY_COLOR, StatisticColor } from '../../constance/constance';
 import { checkPhoneExisted } from '../../service/account/account';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { styles } from './style';
+
+
+
+
+
 
 const RegisterAccountScreen = (props) => {
   const dispatch = useDispatch();
@@ -444,15 +435,28 @@ const RegisterAccountScreen = (props) => {
                         style={[styles.uploadButton,]}
                         onPress={openImagePickerAsync}
                       >
-                        <AntDesign
-                          name="plus"
-                          size={92}
-                          style={{
-                            flexDirection: "column",
-                            alignSelf: "center",
-                            color: StatisticColor.CANCELLATION
-                          }}
-                        />
+                        {
+                          isLoadingImage
+                            ? <ActivityIndicator
+                              size={25}
+                              color="black"
+                              style={{
+                                alignSelf: "center",
+                                width: 100,
+                                height: 100
+
+                              }} />
+                            : (
+                              <AntDesign
+                                  name="plus"
+                                  size={92}
+                                  style={{
+                                  flexDirection: "column",
+                                  alignSelf: "center",
+                                  color: StatisticColor.CANCELLATION
+                                }}
+                              />)
+                        }
                       </TouchableOpacity>
                     }
 

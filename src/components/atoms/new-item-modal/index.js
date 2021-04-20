@@ -1,30 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import {
-    View,
-    Text,
-    Modal,
-    Pressable,
-    Alert,
-    KeyboardAvoidingView,
-    ScrollView,
-    TouchableOpacity,
-    ActivityIndicator,
-    Image,
-    TouchableHighlight
-} from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
-import { styles } from './style';
-import DropDownPicker from 'react-native-dropdown-picker';
-import Icon from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { v4 as uuidv4 } from "uuid";
-import * as firebase from "firebase";
-import { itemStatus, OrderStatus, PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
 import * as ImagePicker from 'expo-image-picker';
-import "react-native-get-random-values";
-import { getFCAItem, registerItem } from '../../../redux/actions/account';
-import { useSelector, useDispatch } from 'react-redux';
+import * as firebase from "firebase";
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator,
+    Image, KeyboardAvoidingView,
+    ScrollView, Text, TouchableHighlight, TouchableOpacity, View
+} from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { TextInput } from 'react-native-gesture-handler';
+import "react-native-get-random-values";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from "uuid";
+import { itemStatus, PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
+import { registerItem } from '../../../redux/actions/account';
+import { styles } from './style';
 
 
 export default function NewItemModal(props) {
@@ -220,7 +211,7 @@ export default function NewItemModal(props) {
                 // setAlertMessage("Gửi yêu cầu thành công")
                 // setIsErr(false);
                 // showAlert();
-                props.navigation.navigate("ITEM_CATALOG"); 22
+                props.navigation.navigate("ITEM_CATALOG");
             }
 
         } catch (error) {
@@ -410,15 +401,28 @@ export default function NewItemModal(props) {
                                                 style={[styles.uploadButton,]}
                                                 onPress={openImagePickerAsync}
                                             >
-                                                <AntDesign
-                                                    name="plus"
-                                                    size={92}
-                                                    style={{
-                                                        flexDirection: "column",
-                                                        alignSelf: "center",
-                                                        color: StatisticColor.CANCELLATION
-                                                    }}
-                                                />
+                                                {
+                                                    isLoadingImage
+                                                        ? <ActivityIndicator
+                                                            size={25}
+                                                            color="black"
+                                                            style={{
+                                                                alignSelf: "center",
+                                                                width: 100,
+                                                                height: 100
+
+                                                            }} />
+                                                        : (<AntDesign
+                                                            name="plus"
+                                                            size={92}
+                                                            style={{
+                                                                flexDirection: "column",
+                                                                alignSelf: "center",
+                                                                color: StatisticColor.CANCELLATION
+                                                            }}
+                                                        />)
+                                                }
+
                                             </TouchableOpacity>
                                         }
                                     </View>
