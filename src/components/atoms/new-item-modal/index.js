@@ -1,30 +1,21 @@
-import React, { useState } from 'react'
-import {
-    View,
-    Text,
-    Modal,
-    Pressable,
-    Alert,
-    KeyboardAvoidingView,
-    ScrollView,
-    TouchableOpacity,
-    ActivityIndicator,
-    Image,
-    TouchableHighlight
-} from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
-import { styles } from './style';
-import DropDownPicker from 'react-native-dropdown-picker';
-import Icon from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { v4 as uuidv4 } from "uuid";
-import * as firebase from "firebase";
-import { PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
 import * as ImagePicker from 'expo-image-picker';
-import "react-native-get-random-values";
-import { registerItem } from '../../../redux/actions/account';
-import { useSelector, useDispatch } from 'react-redux';
+import * as firebase from "firebase";
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator,
+    Image, KeyboardAvoidingView,
+    ScrollView, Text, TouchableHighlight, TouchableOpacity, View
+} from 'react-native';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { TextInput } from 'react-native-gesture-handler';
+import "react-native-get-random-values";
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from "uuid";
+import { itemStatus, PRIMARY_COLOR, StatisticColor } from '../../../constance/constance';
+import { registerItem } from '../../../redux/actions/account';
+import { styles } from './style';
 
 
 export default function NewItemModal(props) {
@@ -39,6 +30,7 @@ export default function NewItemModal(props) {
     const [itemName, setItemName] = useState("");
     const [alertMessage, setAlertMessage] = useState();
     const [isShowAlert, setIsShowAlert] = useState(false);
+    const [listFcaItem, setListFcaItem] = useState([]);
     const [isErr, setIsErr] = useState(false);
 
     const [imageErr, setImageErr] = useState(null);
@@ -46,31 +38,37 @@ export default function NewItemModal(props) {
     const [itemNameErr, setItemNameErr] = useState(null);
     const [itemGroupErr, setItemGroupErr] = useState(null);
 
-    const itemGroupArr = [
-        {
-            value: "7d3714d3-f026-46af-82dc-8649f40d96ef",
-            label: "Cà phê sữa"
-        },
+    const fcaItems = useSelector(state => state.account.fcaItems)
 
-        {
-            value: "91d94e22-14e9-4955-b5b7-66ef9a4a36d6",
-            label: "Cà phê"
-        },
+    const handleGetFCAItem = async () => {
+        try {
+            if (partner) {
+                const listPartnerItem = [...partner?.items];
+                // console.log("list partner item", listPartnerItem);
+                const activeAndWaitList = listPartnerItem.filter((item) => {
+                    return item?.status == itemStatus.ACTIVE || item?.status == itemStatus.PROCESS;
+                })
+                const activeAndWaitIDList = activeAndWaitList.map((item) => {return item?.fcaItem?.id});
+                console.log("activeAndWaitList: ", activeAndWaitIDList);
+                const filterList = fcaItems.filter((item) => !activeAndWaitIDList.includes(item?.id));
+                console.log("filter list", filterList);
+                const fcaItemList = filterList.map((item) => {
+                    return { label: item.name, value: item.id }
+                })
+                setListFcaItem(fcaItemList);
+                // console.log("fcaItemList: ", fcaItemList);
+            }
 
-        {
-            value: "ce8487fb-7108-40d0-b71e-36b1703043dc",
-            label: "Cam ép",
-        },
-        {
-            value: "3698ea4a-6a22-4691-8ef3-d9b43ffdbc95",
-            label: "Bạc xỉu",
-        },
-
-        {
-            value: "780150fa-185e-41e4-b1ad-c93c39826b29",
-            label: "Chanh đá"
+        } catch (error) {
+            console.error("err get fcaItemList: ", error);
         }
-    ]
+
+    }
+
+    useEffect(() => {
+        // dispatch(getFCAItem(partner?.id));
+        handleGetFCAItem();
+    }, [dispatch])
 
     const showAlert = () => {
         console.log("hien alert len");
@@ -192,8 +190,7 @@ export default function NewItemModal(props) {
 
 
     const handleRegisterItem = async (fcaItemId, partnerId, name, price, imageLink) => {
-
-
+        console.log("name:", name);
         try {
             setIsErr(false);
             setImageErr(null);
@@ -204,21 +201,17 @@ export default function NewItemModal(props) {
 
             const isFcaItemId = checkSelectGroup(fcaItemId);
             const isPrice = checkPrice(price);
-            const isName = checkItemName(name);
+            // const isName = checkItemName(name);
             const isImageLink = checkImage(imageLink);
 
-            console.log("isFcaItemId", fcaItemId);
-            console.log("isPrice", isPrice);
-            console.log("isName", isName);
-            console.log("isImageLink", imageLink);
-
-            if (isFcaItemId && isPrice && isName && isImageLink) {
+            if (isFcaItemId && isPrice && isImageLink) {
                 console.log("tao item");
                 await dispatch(registerItem(fcaItemId, partnerId, name,
                     price, imageLink));
-                setAlertMessage("Gửi yêu cầu thành công")
-                setIsErr(false);
-                showAlert();
+                // setAlertMessage("Gửi yêu cầu thành công")
+                // setIsErr(false);
+                // showAlert();
+                props.navigation.navigate("ITEM_CATALOG");
             }
 
         } catch (error) {
@@ -282,7 +275,7 @@ export default function NewItemModal(props) {
                             </Text>
                             </View>
                             <View style={styles.formContainer}>
-                                <View style={styles.rowContainer}>
+                                {/* <View style={styles.rowContainer}>
                                     <Text style={styles.requireText}>*</Text>
                                     <Text
                                         style={[styles.title, styles.labelTextInput]}
@@ -310,6 +303,39 @@ export default function NewItemModal(props) {
                                         </Text>
                                     </View>)
                                     : null
+                                } */}
+                                <View style={styles.rowContainer}>
+                                    <Text style={styles.requireText}>*</Text>
+                                    <Text style={[styles.title, styles.labelTextInput]}>
+                                        Tên món
+                                </Text>
+                                    <DropDownPicker
+                                        placeholder="Chọn tên món"
+                                        items={listFcaItem}
+                                        // defaultValue={}
+                                        containerStyle={{ height: 40, width: "45%" }}
+                                        style={{ backgroundColor: '#fafafa' }}
+                                        itemStyle={{
+                                            justifyContent: 'flex-start'
+                                        }}
+                                        dropDownStyle={{ backgroundColor: '#fafafa' }}
+                                        onChangeItem={item => {
+                                            setItemGroupErr(null);
+                                            setSelectItem(item.value);
+                                            setItemName(item.label);
+                                        }}
+                                        placeholderStyle={styles.title}
+                                        labelStyle={styles.title}
+                                    />
+                                </View>
+                                {itemGroupErr
+                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
+                                        <View style={{ width: "35%" }}></View>
+                                        <Text style={[styles.errorMessage]}>
+                                            {itemGroupErr}
+                                        </Text>
+                                    </View>)
+                                    : null
                                 }
                                 <View style={styles.rowContainer}>
                                     <Text style={styles.requireText}>*</Text>
@@ -322,52 +348,21 @@ export default function NewItemModal(props) {
                                         style={[
                                             styles.textInput,
                                             styles.title,
-                                            { color: "#000", marginRight: 15, width: "23%" }]}
+                                            { color: "#000", marginRight: 15, width: "30%" }]}
                                         autoCapitalize="none"
                                         onChangeText={(val) => handleChangePrice(val)}
                                     />
                                 </View>
                                 {priceErr
                                     ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                        <View style={{ width: "27%" }}></View>
+                                        <View style={{ width: "35%" }}></View>
                                         <Text style={[styles.errorMessage]}>
                                             {priceErr}
                                         </Text>
                                     </View>)
                                     : null
                                 }
-                                <View style={styles.rowContainer}>
-                                    <Text style={styles.requireText}>*</Text>
-                                    <Text style={[styles.title, styles.labelTextInput]}>
-                                        Danh mục
-                                </Text>
-                                    <DropDownPicker
-                                        placeholder="Chọn một danh mục"
-                                        items={itemGroupArr}
-                                        // defaultValue={}
-                                        containerStyle={{ height: 40, width: "40%" }}
-                                        style={{ backgroundColor: '#fafafa' }}
-                                        itemStyle={{
-                                            justifyContent: 'flex-start'
-                                        }}
-                                        dropDownStyle={{ backgroundColor: '#fafafa' }}
-                                        onChangeItem={item => {
-                                            setItemGroupErr(null);
-                                            setSelectItem(item.value)
-                                        }}
-                                        placeholderStyle={styles.title}
-                                        labelStyle={styles.title}
-                                    />
-                                </View>
-                                {itemGroupErr
-                                    ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                        <View style={{ width: "27%" }}></View>
-                                        <Text style={[styles.errorMessage]}>
-                                            {itemGroupErr}
-                                        </Text>
-                                    </View>)
-                                    : null
-                                }
+
                                 <View style={[styles.rowContainer, { height: 100 }]}>
                                     <Text style={styles.requireText}>*</Text>
                                     <Text style={[styles.title, styles.labelTextInput]}>
@@ -406,15 +401,28 @@ export default function NewItemModal(props) {
                                                 style={[styles.uploadButton,]}
                                                 onPress={openImagePickerAsync}
                                             >
-                                                <AntDesign
-                                                    name="plus"
-                                                    size={92}
-                                                    style={{
-                                                        flexDirection: "column",
-                                                        alignSelf: "center",
-                                                        color: StatisticColor.CANCELLATION
-                                                    }}
-                                                />
+                                                {
+                                                    isLoadingImage
+                                                        ? <ActivityIndicator
+                                                            size={25}
+                                                            color="black"
+                                                            style={{
+                                                                alignSelf: "center",
+                                                                width: 100,
+                                                                height: 100
+
+                                                            }} />
+                                                        : (<AntDesign
+                                                            name="plus"
+                                                            size={92}
+                                                            style={{
+                                                                flexDirection: "column",
+                                                                alignSelf: "center",
+                                                                color: StatisticColor.CANCELLATION
+                                                            }}
+                                                        />)
+                                                }
+
                                             </TouchableOpacity>
                                         }
                                     </View>
@@ -422,7 +430,7 @@ export default function NewItemModal(props) {
                                 </View>
                                 {imageErr
                                     ? (<View style={{ ...styles.rowContainer, marginTop: 2 }}>
-                                        <View style={{ width: "27%" }}></View>
+                                        <View style={{ width: "35%" }}></View>
                                         <Text style={[styles.errorMessage]}>
                                             {imageErr}
                                         </Text>

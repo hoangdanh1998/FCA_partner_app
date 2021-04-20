@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
         // backgroundColor:"red"
     },
     modalView: {
-        width: "80%",
+        width: "70%",
         height: 600,
         marginVertical: 10,
         alignItems: "center",
@@ -58,17 +58,18 @@ export const styles = StyleSheet.create({
         // backgroundColor:"red",
         alignItems: "center",
         alignSelf: "center",
-        marginTop: "4%"
+        marginTop: "4%",
+        // backgroundColor: "red"
     },
     textInput: {
-        width: "50%",
+        width: "66%",
         padding: 10,
         borderWidth: 1,
     },
     labelTextInput: {
         textAlign: "left",
         alignSelf: "center",
-        width: "25%"
+        width: "34%"
     },
     requireText: {
         fontSize: HEADER_FONT_SIZE,

@@ -2,7 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as firebase from "firebase";
 import React, { useRef, useState } from 'react';
 import {
-  ActivityIndicator, Image, KeyboardAvoidingView, ScrollView, Text,
+  ActivityIndicator, Image, KeyboardAvoidingView, ScrollView, Text,Modal,
   TextInput, TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View
 } from 'react-native';
 import "react-native-get-random-values";
@@ -107,7 +107,7 @@ const RegisterAccountScreen = (props) => {
     )
   }
 
-  const checkValuePhoneNumber = async(numberPhone) => {
+  const checkValuePhoneNumber = async (numberPhone) => {
 
     const phoneReg = /^[0-9]+$/;
 
@@ -123,7 +123,7 @@ const RegisterAccountScreen = (props) => {
         console.error("check phone exist err: ", error);
         return true;
       }
-      
+
     }
   }
 
@@ -237,7 +237,7 @@ const RegisterAccountScreen = (props) => {
         if (chars[0] === "0") {
           phone = numberPhone.replace(/^0/, "");
           phone = "+84" + phone;
-          
+
           newAccount = {
             numberPhone: data.numberPhone,
             password: data.password,
@@ -248,7 +248,7 @@ const RegisterAccountScreen = (props) => {
           props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: phone });
         } else {
           console.log("so ko co so 0:", numberPhone);
-          phone = "0" +  numberPhone;
+          phone = "0" + numberPhone;
           newAccount = {
             numberPhone: phone,
             password: data.password,
@@ -354,7 +354,7 @@ const RegisterAccountScreen = (props) => {
                     style={[
                       styles.textInput,
                       styles.titleText,
-                      { color: "#000", marginRight: 15, width:"28%" }]}
+                      { color: "#000", marginRight: 15, width: "28%" }]}
                     autoCapitalize="none"
                     secureTextEntry={true}
                     defaultValue={data.password}
@@ -381,7 +381,7 @@ const RegisterAccountScreen = (props) => {
                     style={[
                       styles.textInput,
                       styles.titleText,
-                      { color: "#000", marginRight: 15, width:"28%" }]}
+                      { color: "#000", marginRight: 15, width: "28%" }]}
                     autoCapitalize="none"
                     // keyboardType="phone-pad"
                     secureTextEntry={true}
@@ -591,7 +591,50 @@ const RegisterAccountScreen = (props) => {
                                     </Text>
               </TouchableHighlight>
             </View>
+            {/* <Modal
+              animationType="slide"
+              transparent={true}
+              visible={true}
+              style={{ alignItems: "flex-end" }}
+            >
+              <View style={{ flex: 1, alignItems: "center", justifyContent: "flex-end" }}>
+                <View style={{
+                  width: "100%",
+                  backgroundColor: "#F0F0F0",
+                  height: 190,
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <View style={styles.modalContainer}>
+                    <TouchableOpacity>
+                      <View style={styles.buttonModal}>
+                        <AntDesign
+                          name="camera"
+                          size={30}
+                          color="#fff"
+                        />
+                        <Text style={[styles.text, styles.boldText, { color: "#fff" }]} >Chụp Ảnh</Text>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <View style={styles.buttonModal}>
+                        <MaterialCommunityIcons
+                          name="folder-image"
+                          size={30}
+                          color="#fff"
+                        />
+                        <Text style={[styles.text, styles.boldText, { color: "#fff" }]} >Chọn Ảnh</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                  <TouchableOpacity>
+                    <Text style={[ styles.boldText, {marginTop:20, color: BACKGROUND_COLOR, fontSize:25}]}>Huỷ</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal> */}
           </View>
+
         </ScrollView>
       </TouchableWithoutFeedback>
 
