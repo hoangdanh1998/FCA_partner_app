@@ -4,8 +4,9 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import {
     Animated, KeyboardAvoidingView, SafeAreaView, Text,
-    TouchableHighlight, TouchableWithoutFeedback, View
+    TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View
 } from "react-native";
+import AwesomeAlert from "react-native-awesome-alerts";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import OTPInput from "react-native-otp-textinput";
 import { useDispatch } from 'react-redux';
@@ -24,12 +25,22 @@ export default function OtpSmsScreen(props) {
 
     // console.log("numberphone value", numberPhoneValue);
 
-    const [duration, setDuration] = useState(10);
+    const [duration, setDuration] = useState(180);
     const [isShowButton, setIsShowButton] = useState(false);
     const [key, setKey] = useState(0);
     const recaptchaVerifier = useRef(null);
     const [verificationId, setVerificationId] = useState();
+    const [isShowAlert, setIsShowAlert] = useState(false);
+    const [visible, setVisible] = useState(false);
 
+    const showAlert = () => {
+        console.log("hien alert len");
+        setIsShowAlert(true);
+    };
+
+    const hideAlert = () => {
+        setIsShowAlert(false);
+    };
 
     const onComplete = () => {
         setIsShowButton(true);
@@ -77,14 +88,15 @@ export default function OtpSmsScreen(props) {
                         newAccount.selectedImage,
                         newAccount.address));
 
-                        alert('Đăng ký thành công');
-                        props.navigation.navigate('LOGIN');
+                    // alert('Đăng ký thành công');
+                    props.navigation.navigate('LOGIN');
                     // console.log(result);
                 }).catch(error => {
                     console.error(error);
                     alert('Mã xác thực không chính xác')
                 });
         } catch (error) {
+            showAlert();
             console.error("confirm code err: ", error);
         }
     }
@@ -95,6 +107,24 @@ export default function OtpSmsScreen(props) {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+            <AwesomeAlert
+                show={isShowAlert}
+                showProgress={false}
+                title="Thông báo"
+                message="Mã xác thực không chính xác"
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showConfirmButton={true}
+                titleStyle={[styles.titleAlert, styles.boldText]}
+                messageStyle={[styles.title_font_size]}
+                confirmText="OK"
+                confirmButtonColor="#DD6B55"
+                onDismiss={() => { hideAlert() }}
+                onConfirmPressed={() => {
+                    hideAlert();
+                }}
+                confirmButtonTextStyle={[styles.title_font_size, styles.boldText]}
+            />
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior="height"
@@ -105,7 +135,8 @@ export default function OtpSmsScreen(props) {
                         <FirebaseRecaptchaVerifierModal
                             ref={recaptchaVerifier}
                             firebaseConfig={firebase.app().options}
-
+                            title="Xác thực số điện thoại"
+                            languageCode = "vi"
                         />
                         <View style={styles.formContainer}>
                             <View>
@@ -134,17 +165,17 @@ export default function OtpSmsScreen(props) {
                             </View>
 
                             <View style={[styles.rowContainer, styles.marginContainer, { justifyContent: "center" }]}>
-                                <Text style={styles.title}>Bạn không nhận được mã ? </Text>
+                                <Text style={[styles.title, { marginTop: 5 }]}>Bạn không nhận được mã ? </Text>
 
                                 {
                                     isShowButton
-                                        ? (<TouchableHighlight
+                                        ? (<TouchableOpacity
                                             onPress={() => { handleReSendOtp() }}
                                             style={{ width: 100, height: 50 }}
                                         >
-                                            <Text style={[[styles.title, { marginRight: 5, color: "#004777" }]]}> Gửi lại</Text>
-                                        </TouchableHighlight>)
-                                        : <Text style={[[styles.title, { marginRight: 5 }]]}> Gửi lại sau</Text>
+                                            <Text style={[[styles.title, { marginRight: 5, color: "#004777", marginTop: 5 }]]}> Gửi lại</Text>
+                                        </TouchableOpacity>)
+                                        : <Text style={[[styles.title, { marginRight: 5, marginTop: 5 }]]}> Gửi lại sau</Text>
                                 }
 
                                 <CountdownCircleTimer
@@ -152,7 +183,7 @@ export default function OtpSmsScreen(props) {
                                     isPlaying
                                     duration={duration}
                                     strokeWidth={0}
-                                    size={28}
+                                    size={38}
                                     onComplete={onComplete}
                                     colors={[
                                         ['#004777', 1],
@@ -169,8 +200,6 @@ export default function OtpSmsScreen(props) {
                                         )
                                     }}
                                 </CountdownCircleTimer>
-
-
 
                             </View>
                         </View>

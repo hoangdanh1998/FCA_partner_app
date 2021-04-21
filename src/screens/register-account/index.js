@@ -116,23 +116,26 @@ const RegisterAccountScreen = (props) => {
     )
   }
 
-  const checkValuePhoneNumber = async (numberPhone) => {
+  const checkValuePhoneNumber = (numberPhone) => {
 
     const phoneReg = /^[0-9]+$/;
 
     if (!numberPhone.match(phoneReg)) {
       setNumberErr("Số điện thoại không hợp lệ");
       return false;
-    } else {
-      try {
-        await checkPhoneExisted(numberPhone);
-        setNumberErr("Số điện thoại đã được đăng ký");
-        return false;
-      } catch (error) {
-        console.error("check phone exist err: ", error);
-        return true;
-      }
+    } 
+    return true;
+  }
 
+  const handleCheckExistPhone = async (numberPhone) => {
+    try {
+      await checkPhoneExisted(numberPhone);
+      setNumberErr("Số điện thoại đã được đăng ký");
+      console.log("so dien thoai da dang ky");
+      return false;
+    } catch (error) {
+      console.error("check phone exist err: ", error);
+      return true;
     }
   }
 
@@ -200,7 +203,7 @@ const RegisterAccountScreen = (props) => {
     })
   }
 
-  const handleRegisterAccount = (
+  const handleRegisterAccount =  async(
     numberPhone,
     password,
     confirmPassword,
@@ -219,6 +222,7 @@ const RegisterAccountScreen = (props) => {
       setPasswordErr(null);
 
       const isNumberPhone = checkValuePhoneNumber(numberPhone);
+      console.log("isNuber phone ", isNumberPhone);
       const isStoreName = checkStoreName(storeName);
       const isPassword = checkPassword(password);
       const isConfirmPass = checkConfirmPassword(confirmPassword);
@@ -247,25 +251,32 @@ const RegisterAccountScreen = (props) => {
           phone = numberPhone.replace(/^0/, "");
           phone = "+84" + phone;
 
-          newAccount = {
-            numberPhone: data.numberPhone,
-            password: data.password,
-            storeName,
-            selectedImage,
-            address
+          const isExist = await handleCheckExistPhone(numberPhone);
+          if (isExist) {
+            newAccount = {
+              numberPhone: data.numberPhone,
+              password: data.password,
+              storeName,
+              selectedImage,
+              address
+            }
+            props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: phone });
           }
-          props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: phone });
         } else {
           console.log("so ko co so 0:", numberPhone);
           phone = "0" + numberPhone;
-          newAccount = {
-            numberPhone: phone,
-            password: data.password,
-            storeName,
-            selectedImage,
-            address
+          const isExist = await handleCheckExistPhone(phone);
+          if (isExist) {
+            newAccount = {
+              numberPhone: phone,
+              password: data.password,
+              storeName,
+              selectedImage,
+              address
+            }
+            props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: numberPhoneValue });
           }
-          props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: numberPhoneValue });
+
         }
       }
     } catch (error) {
@@ -570,8 +581,8 @@ const RegisterAccountScreen = (props) => {
                 activeOpacity={0.9}
                 onPress={
 
-                  () => {
-                    handleRegisterAccount(
+                  async() => {
+                    await handleRegisterAccount(
                       data.numberPhone,
                       data.password,
                       data.confirmPassword,

@@ -12,10 +12,10 @@ export const styles = StyleSheet.create({
     },
 
     rowContainer: {
-        width:"100%",
+        width: "100%",
         flexDirection: "row",
         marginTop: 15,
-        
+
 
     },
 
@@ -31,5 +31,17 @@ export const styles = StyleSheet.create({
 
     marginContainer: {
         marginTop: "5%"
-    }
+    },
+    textButton: {
+        color: "#fff"
+    },
+    boldText: {
+        fontWeight: "bold"
+    },
+    titleAlert: {
+        fontSize: 25
+    },
+    title_font_size: {
+        fontSize: HEADER_FONT_SIZE
+    },
 })
