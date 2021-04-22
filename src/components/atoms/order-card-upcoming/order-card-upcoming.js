@@ -48,7 +48,7 @@ const OrderCardUpComing = (props) => {
 
       if (listenedOrder?.isAutoPrepareOrder == null ||
         (listenedOrder.isAutoPrepareOrder != null && isAutoPrepareOrder == true)) {
-        if (listenedOrder.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL) {
+        if (listenedOrder.status === OrderStatus.PREPARATION && time <= TimeRemainTo.ARRIVAL && !listenedOrder.qrcode) {
           handleUpdateStatus(OrderStatus.WAITING, listenedOrder.id)
         }
       }
