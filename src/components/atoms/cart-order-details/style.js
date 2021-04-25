@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         flex:1
     },
     title: {
-        fontSize: 19,
+        fontSize: 20,
         lineHeight:27
     },
     boldTitle: {
@@ -37,5 +37,12 @@ export const styles = StyleSheet.create({
     },
     backgroundNonSelected: {
         backgroundColor: "#fff"
+    },
+    titleAlert: {
+        fontSize: 25
+    },
+    title_font_size: {
+        fontSize: HEADER_FONT_SIZE
     }
+
 })

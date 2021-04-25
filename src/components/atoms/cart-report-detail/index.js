@@ -1,13 +1,17 @@
 import { Card, CardItem, List } from 'native-base';
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { PRIMARY_COLOR, OrderStatus } from '../../../constance/constance';
 import { styles } from './style';
+import moment from 'moment';
+import NumberFormat from 'react-number-format';
+import {Text} from 'native-base'
 
 export default function CartReportDetails(props) {
     const order = props.item;
     const selectedOrder = props.selectedOrder;
     const [orderStatus, setOrderStatus] = useState("");
+
 
     const handleSetStatus = () => {
         if (order) {
@@ -49,8 +53,6 @@ export default function CartReportDetails(props) {
 
     return (
         <Card style={{ width: "100%", alignSelf: "center" }}>
-            {console.log(selectedOrder.id)}
-            {console.log("Order id", order.id)}
             <CardItem
                 style={
                     selectedOrder?.id == order?.id
@@ -65,12 +67,14 @@ export default function CartReportDetails(props) {
                             styles.title, styles.titleBold,
                             styles.flex1
                         ]}>
-                        {order?.customer?.phone}
+                        {order?.customer?.phone} - {order?.customer?.name}
                     </Text>
                     <Text style={[styles.title, styles.flex1, { textAlign: "center" }]}>
                         {orderStatus}
                     </Text>
-                    <Text style={styles.flex1}></Text>
+                    <Text note style={[styles.flex1, styles.title, { textAlign: "right"}]}>
+                        {moment(order?.createdAt).format("DD/MM/YYYY hh:mm")}
+                    </Text>
 
                 </View>
 
@@ -94,9 +98,16 @@ export default function CartReportDetails(props) {
                             <Text style={[styles.title, styles.flex1, { textAlign: "center" }]}>
                                 {item?.quantity}
                             </Text>
-                            <Text style={[styles.title, styles.flex1, { textAlign: "right" }]}>
-                                {item?.price}
-                            </Text>
+                            <NumberFormat
+                                value={item?.price}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                renderText={(formattedValue) => (
+                                    <Text style={[styles.title, styles.flex1, { textAlign: "right" }]}>
+                                        {formattedValue}
+                                    </Text>
+                                )}
+                            />
 
                         </View>
 
@@ -105,9 +116,9 @@ export default function CartReportDetails(props) {
             />
             <CardItem
                 style={
-                    selectedOrder?.id == order?.id 
-                    ? {backgroundColor: PRIMARY_COLOR}
-                    : {backgroundColor:"#fff"}
+                    selectedOrder?.id == order?.id
+                        ? { backgroundColor: PRIMARY_COLOR }
+                        : { backgroundColor: "#fff" }
                 }
             >
                 <View style={[styles.rowContainer]}>
@@ -118,9 +129,16 @@ export default function CartReportDetails(props) {
                         <Text style={styles.flex1}>
 
                         </Text>
-                        <Text style={[styles.title, styles.flex1, styles.titleBold, { textAlign: "right" }]}>
-                            {order?.total}
-                        </Text>
+                        <NumberFormat
+                            value={order?.total}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            renderText={(formattedValue) => (
+                                <Text style={[styles.title, styles.flex1, styles.titleBold, { textAlign: "right" }]}>
+                                    {formattedValue}
+                                </Text>
+                            )}
+                        />
                     </View>
                 </View>
 

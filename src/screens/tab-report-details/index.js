@@ -1,3 +1,4 @@
+import { SegmentedControl } from '@ant-design/react-native';
 import React, { useState } from 'react'
 import {
     View,
@@ -8,6 +9,9 @@ import {
 } from 'react-native';
 import CartOrderDetails from '../../components/atoms/cart-order-details';
 import CartReportDetails from '../../components/atoms/cart-report-detail';
+import CustomDatePicker from '../../components/atoms/date-picker';
+import { BACKGROUND_COLOR, HEADER_FONT_SIZE } from '../../constance/constance';
+import { styles } from './style';
 
 
 export default function TabReportDetails() {
@@ -786,10 +790,33 @@ export default function TabReportDetails() {
     ]
 
     const [selectedOrder, setSelectedOrder] = useState(listOrders[0]);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [isShowModal, setIsShowModal] = useState(false);
 
 
     return (
-        <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{ flex: 1, backgroundColor: "#fff" }}>
+            <CartOrderDetails
+                isShowModal={isShowModal}
+                setIsShowModal={setIsShowModal}
+                order = {selectedOrder}
+            />
+            <View style={[styles.rowContainer, { marginVertical: 20, justifyContent: "space-evenly" }]}>
+                <SegmentedControl
+                    values={[
+                        <Text style={{ fontSize: HEADER_FONT_SIZE }}>Tất cả</Text>,
+                        <Text style={{ fontSize: HEADER_FONT_SIZE }}>Hoàn tất</Text>,
+                        <Text style={{ fontSize: HEADER_FONT_SIZE }}>Sự cố</Text>,
+                    ]}
+                    tintColor={BACKGROUND_COLOR}
+                    style={{ height: 45, width: 320, }}
+                // onChange={onChange}
+                />
+
+                <CustomDatePicker value={selectedDate} setDate={setSelectedDate} />
+
+            </View>
+
             <FlatList
                 style={{ flex: 1, }}
                 data={listOrders}
@@ -797,10 +824,11 @@ export default function TabReportDetails() {
                 // numColumns = {5}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={{ width: "100%"}}
+                        style={{ width: "90%", alignSelf: "center" }}
                         onPress={
                             () => {
                                 setSelectedOrder(item);
+                                setIsShowModal(true);
                             }
                         }
                     >
@@ -811,14 +839,15 @@ export default function TabReportDetails() {
                     </TouchableOpacity>
                 )}
             />
-            <View
-                style={{ flex: 1 }}
-            >
-                <CartOrderDetails
-                    order={selectedOrder}
-                />
-            </View>
+            {/* <View
+                    style={{ flex: 1 }}
+                >
+                    <CartOrderDetails
+                        order={selectedOrder}
+                    />
+                </View> */}
 
         </View>
+
     )
 }

@@ -51,6 +51,7 @@
     "react-native-screens": "^2.16.1",
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
+    "react-native-timeline-flatlist": "^0.7.3",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "react-native-webview": "^11.3.2",
