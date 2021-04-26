@@ -5,13 +5,16 @@ import { PRIMARY_COLOR, OrderStatus } from '../../../constance/constance';
 import { styles } from './style';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
-import {Text} from 'native-base'
+import { Text } from 'native-base';
+import { useDispatch, useSelector } from 'react-redux'
+import { getFinishOrderByDate } from '../../../redux/actions/order-list';
 
 export default function CartReportDetails(props) {
     const order = props.item;
     const selectedOrder = props.selectedOrder;
     const [orderStatus, setOrderStatus] = useState("");
 
+    const dispatch = useDispatch();
 
     const handleSetStatus = () => {
         if (order) {
@@ -47,6 +50,8 @@ export default function CartReportDetails(props) {
         }
     }
 
+
+
     useEffect(() => {
         handleSetStatus();
     }, [order]);
@@ -72,7 +77,7 @@ export default function CartReportDetails(props) {
                     <Text style={[styles.title, styles.flex1, { textAlign: "center" }]}>
                         {orderStatus}
                     </Text>
-                    <Text note style={[styles.flex1, styles.title, { textAlign: "right"}]}>
+                    <Text note style={[styles.flex1, styles.title, { textAlign: "right" }]}>
                         {moment(order?.createdAt).format("DD/MM/YYYY hh:mm")}
                     </Text>
 

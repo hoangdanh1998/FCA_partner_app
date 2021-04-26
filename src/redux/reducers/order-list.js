@@ -2,9 +2,12 @@ import { OrderStatus } from "../../constance/constance";
 import {
     GET_ACCEPTANCE_ORDERS_TODAY,
     GET_ARRIVAL_ORDER_TODAY,
+    GET_FINISH_ORDER_BY_DAY,
     GET_ORDER_AFTER_UPDATE,
     GET_PREPARATION_ORDERS_TODAY,
     GET_READINESS_ORDERS_TODAY,
+
+    GET_TROUBLE_ORDER_BY_DAY,
 
     SEND_QR_CODE,
 
@@ -23,7 +26,9 @@ const initialState = {
     filterToDoList: [],
     filterDoingList: [],
     filterReadyList: [],
-    filterArrivalList: []
+    filterArrivalList: [],
+    filterFinishOrderList: [],
+    filterTroubleOrderList: [],
 };
 
 const ordersReducer = (state = initialState, action) => {
@@ -116,6 +121,14 @@ const ordersReducer = (state = initialState, action) => {
         case SET_LIST_INIT_ORDER: {
 
             return { ...state, listInitOrder: action.payload.listInit };
+        }
+
+        case GET_FINISH_ORDER_BY_DAY: {
+            return { ...state, filterFinishOrderList: action.payload.orders}
+        }
+
+        case GET_TROUBLE_ORDER_BY_DAY: {
+            return { ...state, filterTroubleOrderList: action.payload.orders};
         }
 
         case UPDATE_LIST_AFTER_CHANGE_STATUS: {

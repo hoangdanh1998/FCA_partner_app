@@ -18,46 +18,65 @@ export default function CartOrderDetails(props) {
 
     const [orderStatus, setOrderStatus] = useState("");
     const [isShowAlert, setIsShowAlert] = useState(false);
+    const [description, setDescription] = useState("");
 
     const handleSetStatus = (status) => {
         if (order) {
             switch (status) {
                 case OrderStatus.ACCEPTANCE:
-                    return("Chấp nhận");
-                    
+                    return ("Chấp nhận");
+
                 case OrderStatus.CANCELLATION:
-                    return("Huỷ");
-                    
+                    return ("Huỷ");
+
                 case OrderStatus.ARRIVAL:
-                    return("Đến nơi");
-                    
+                    return ("Đến nơi");
+
                 case OrderStatus.CLOSURE:
-                    return("Hoàn tất");
-                    
+                    return ("Hoàn tất");
+
                 case OrderStatus.PREPARATION:
-                    return("Đang pha chế");
-                    
+                    return ("Đang pha chế");
+
                 case OrderStatus.RECEPTION:
-                    return("Đã nhận hàng");
-                    
+                    return ("Đã nhận hàng");
+
                 case OrderStatus.REJECTION:
-                    return("Từ chối");
-                    
+                    return ("Từ chối");
+
                 case OrderStatus.READINESS:
-                    return("Sẵn sàng");
+                    return ("Sẵn sàng");
                 case OrderStatus.INITIALIZATION:
-                    return("Mới");
-                
+                    return ("Mới");
+
                 default:
                     break;
             }
         }
     }
 
+    const handleChangeDescription = () => {
+        if (order) {
+            if (order?.status == OrderStatus.CANCELLATION) {
+                order?.transaction.forEach((item) => {
+                    if (item?.toStatus == OrderStatus.CANCELLATION) {
+                        setDescription(item?.description);
+                    }
+                })
+            }
+        }
+    }
 
+    useEffect(() => {
+        handleChangeDescription();
+    }, [order])
     const convertTransaction = () => {
-
-        const result = order?.transaction?.map((transaction) => {
+        const transaction = order?.transaction?.sort((a, b) => {
+            return (
+                new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() < 0
+            );
+        });
+        const result = transaction?.map((transaction) => {
             const status = handleSetStatus(transaction.toStatus);
             return {
                 time: moment(transaction.createdAt).format("HH:mm"),
@@ -86,7 +105,7 @@ export default function CartOrderDetails(props) {
             animationType="slide"
             transparent={true}
         >
-            {console.log(order?.items)}
+
             <AwesomeAlert
                 show={isShowAlert}
                 showProgress={false}
@@ -99,7 +118,7 @@ export default function CartOrderDetails(props) {
                 showConfirmButton={true}
                 cancelText="Huỷ"
                 titleStyle={[styles.titleAlert, styles.boldTitle]}
-                messageStyle={{fontSize: HEADER_FONT_SIZE}}
+                messageStyle={{ fontSize: HEADER_FONT_SIZE }}
                 confirmText="Đồng ý"
                 confirmButtonColor={ButtonColor.REJECTION}
                 // onCancelPressed={
@@ -116,7 +135,7 @@ export default function CartOrderDetails(props) {
                 //     makeCall(order.customer.account.phone);
                 // }}
                 confirmButtonTextStyle={[styles.title_font_size, styles.boldTitle]}
-                cancelButtonTextStyle={[styles.title_font_size, styles.boldTitle, ]}
+                cancelButtonTextStyle={[styles.title_font_size, styles.boldTitle,]}
             />
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <View style={{ height: "90%", backgroundColor: PRIMARY_COLOR, width: "95%", alignSelf: "center", }}>
@@ -169,32 +188,51 @@ export default function CartOrderDetails(props) {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={[styles.flex1, { paddingHorizontal: 10, marginLeft: 30 }]}>
-                            <Text style={[styles.title, styles.boldTitle]}>
-                                Thông tin đơn hàng
-                    </Text>
-                            <View style={[styles.rowContainer]}>
-                                <Text style={[styles.title]}>
-                                    Đánh giá
-                        </Text>
-                                <Rating
-                                    imageSize={22}
-                                    readonly={true}
-                                    // style={{ paddingVertical: 10 }}
-                                    startingValue={3.5}
-                                />
-                            </View>
-                            <View style={[styles.rowContainer]}>
-                                <Text style={{ flex: 2 }}>
-
+                        {
+                            order?.status == OrderStatus.CANCELLATION
+                                ? (<View style={[styles.flex1, { paddingHorizontal: 10, marginLeft: 30 }]}>
+                                    <Text style={[styles.title, styles.boldTitle]}>
+                                        Thông tin đơn hàng
+                                    </Text>
+                                    <View style={[styles.rowContainer]}>
+                                        <Text style={[styles.title, { flex: 3 }]}>
+                                            Lí do huỷ đơn
+                                    </Text>
+                                        <Text style={[styles.title, { flex: 5 }]}>
+                                            {description}
+                                        </Text>
+                                    </View>
+                                </View>
+                                )
+                                : (
+                                    <View style={[styles.flex1, { paddingHorizontal: 10, marginLeft: 30 }]}>
+                                        <Text style={[styles.title, styles.boldTitle]}>
+                                            Thông tin đơn hàng
                                 </Text>
-                                <Text style={[styles.title, { flex: 5 }]}>
-                                    Thức uống ngon, Đóng gói đẹp, Giá hợp lí
-                                    Cho quán 5 sao luôn
-                        </Text>
-                            </View>
-                        </View>
+                                        <View style={[styles.rowContainer]}>
+                                            <Text style={[styles.title]}>
+                                                Đánh giá
+                                    </Text>
+                                            <Rating
+                                                imageSize={22}
+                                                readonly={true}
+                                                // style={{ paddingVertical: 10 }}
+                                                startingValue={3.5}
+                                            />
+                                        </View>
+                                        <View style={[styles.rowContainer]}>
+                                            <Text style={{ flex: 2 }}>
 
+                                            </Text>
+                                            <Text style={[styles.title, { flex: 5 }]}>
+                                                Thức uống ngon, Đóng gói đẹp, Giá hợp lí
+                                                Cho quán 5 sao luôn
+                            </Text>
+                                        </View>
+                                    </View>
+
+                                )
+                        }
                     </View>
                     <View style={[
                         styles.flex1, styles.rowContainer,
@@ -213,7 +251,7 @@ export default function CartOrderDetails(props) {
 
                                         renderRow={(item) => (
                                             <CardItem
-                                                style={[{backgroundColor:PRIMARY_COLOR}]}
+                                                style={[{ backgroundColor: PRIMARY_COLOR }]}
                                             >
                                                 <View style={[styles.rowContainer, styles.flex1,]}>
                                                     <Text style={[styles.title, styles.flex1]}>
@@ -240,7 +278,7 @@ export default function CartOrderDetails(props) {
                                         )}
                                     />
                                     <CardItem
-                                        style={{backgroundColor: PRIMARY_COLOR}}
+                                        style={{ backgroundColor: PRIMARY_COLOR }}
                                     >
                                         <View style={[styles.rowContainer]}>
                                             <View style={[styles.rowContainer, styles.flex1]}>

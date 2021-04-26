@@ -8,6 +8,10 @@ export const GET_READINESS_ORDERS_TODAY = "GET_READINESS_ORDERS_TODAY";
 export const GET_ORDER_AFTER_UPDATE = "GET_ORDER_AFTER_UPDATE";
 export const GET_ARRIVAL_ORDER_TODAY = "GET_ARRIVAL_ORDER_TODAY";
 
+export const GET_FINISH_ORDER_BY_DAY = "GET_FINISH_ORDER_BY_DAY";
+export const GET_ALL_ORDER_BY_DAY = "GET_ALL_ORDER_BY_DAY";
+export const GET_TROUBLE_ORDER_BY_DAY = "GET_TROUBLE_ORDER_BY_DAY";
+
 //Set
 export const SET_RECEPTION_ORDER = "SET_RECEPTION_ORDER";
 export const SET_ACCEPTANCE_ORDER = "SET_ACCEPTANCE_ORDER";
@@ -222,5 +226,80 @@ export const updateListApterChangeStatus = (id, currentStatus) => {
             id,
             currentStatus
         }
+    }
+}
+
+export const getFinishOrderByDate = (partnerId, createdDate) => {
+    return async dispatch => {
+        try {
+            const responseReception = await fca.get('/order', {
+                params: {
+                    partnerId,
+                    status: OrderStatus.RECEPTION,
+                    createdDate
+                }
+            });
+
+            const responseClosure = await fca.get('/order', {
+                params: {
+                    partnerId,
+                    status: OrderStatus.CLOSURE,
+                    createdDate
+                }
+            });
+            // console.log("responseReception: ",responseReception.data.data);
+            
+            // console.log("responseClosure: ",responseClosure.data.data);
+
+            if (responseClosure.data.meta.status !== SUCCESS || responseReception.data.meta.status !== SUCCESS) {
+                throw new Error("Something went wrong");
+            }
+            const listOrder = [...responseClosure.data.data.orders, ...responseReception.data.data.orders]
+            dispatch({
+                type: GET_FINISH_ORDER_BY_DAY,
+                payload: { orders: listOrder }
+            })
+        } catch (error) {
+            throw error;
+        }
+        
+    }
+}
+
+
+export const getTroubleOrderByDay = (partnerId, createdDate) => {
+    return async dispatch => {
+        try {
+            const responseCancellation = await fca.get('/order', {
+                params: {
+                    partnerId,
+                    status: OrderStatus.CANCELLATION,
+                    createdDate
+                }
+            });
+
+            const responseRejection = await fca.get('/order', {
+                params: {
+                    partnerId,
+                    status: OrderStatus.REJECTION,
+                    createdDate
+                }
+            });
+            // console.log("responseCancellation: ",responseCancellation.data.data);
+            
+            // console.log("responseRejection: ",responseRejection.data.data);
+
+            if (responseRejection.data.meta.status !== SUCCESS || responseCancellation.data.meta.status !== SUCCESS) {
+                throw new Error("Something went wrong");
+            }
+            const listOrder = [...responseRejection.data.data.orders, ...responseCancellation.data.data.orders]
+            dispatch({
+                type: GET_TROUBLE_ORDER_BY_DAY,
+                payload: { orders: listOrder }
+            })
+        } catch (error) {
+            throw error;
+        }
+        
     }
 }
