@@ -213,7 +213,7 @@ export default function CartOrderDetails(props) {
                                             <Text style={[styles.title]}>
                                                 Đánh giá
                                     </Text>
-                                            <Rating
+                                            {/* <Rating
                                                 imageSize={22}
                                                 readonly={true}
                                                 // style={{ paddingVertical: 10 }}
@@ -227,7 +227,7 @@ export default function CartOrderDetails(props) {
                                             <Text style={[styles.title, { flex: 5 }]}>
                                                 Thức uống ngon, Đóng gói đẹp, Giá hợp lí
                                                 Cho quán 5 sao luôn
-                            </Text>
+                            </Text> */}
                                         </View>
                                     </View>
 

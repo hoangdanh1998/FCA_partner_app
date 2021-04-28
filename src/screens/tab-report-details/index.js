@@ -44,86 +44,116 @@ export default function TabReportDetails() {
         if (filterFinishOrderList && filterTroubleOrderList) {
             switch (selectIndex) {
                 case 0:
-                    const allList = [...filterFinishOrderList, ...filterTroubleOrderList];
-                    // console.log("allList: ", allList);
-                    return (
-                        <FlatList
-                            style={{ flex: 1, }}
-                            data={allList}
-                            horizontal={false}
-                            // numColumns = {5}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    style={{ width: "90%", alignSelf: "center" }}
-                                    onPress={
-                                        () => {
-                                            setSelectedOrder(item);
-                                            setIsShowModal(true);
-                                        }
-                                    }
-                                >
-                                    <CartReportDetails
-                                        item={item}
-                                        selectedOrder={selectedOrder}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        />
-                    )
+                    if (filterFinishOrderList.length === 0 && filterTroubleOrderList.length === 0) {
+                        return (<View style={{ flex: 1, alignItems: "center", justifyContent:"center" }}>
+                            <Text style={{ alignSelf: "center", fontSize: HEADER_FONT_SIZE }}>
+                                Không có đơn hàng nào
+                            </Text>
+                        </View>)
+                    }
 
-                    break;
+                    else {
+                        const allList = [...filterFinishOrderList, ...filterTroubleOrderList];
+                        // console.log("allList: ", allList);
+                        return (
+                            <FlatList
+                                style={{ flex: 1, }}
+                                data={allList}
+                                horizontal={false}
+                                // numColumns = {5}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={{ width: "90%", alignSelf: "center" }}
+                                        onPress={
+                                            () => {
+                                                setSelectedOrder(item);
+                                                setIsShowModal(true);
+                                            }
+                                        }
+                                    >
+                                        <CartReportDetails
+                                            item={item}
+                                            selectedOrder={selectedOrder}
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        )
+                    }
+
+
                 case 1:
+                    if (filterFinishOrderList.length === 0) {
+                        return (<View style={{ flex: 1, alignItems: "center", justifyContent: "center"}}>
+                            <Text style={{ alignSelf: "center", fontSize: HEADER_FONT_SIZE }}>
+                                Không có đơn hàng nào
+                            </Text>
+                        </View>)
+                    }
+                    else {
+                        return (
+                            <FlatList
+                                style={{ flex: 1, }}
+                                data={filterFinishOrderList}
+                                horizontal={false}
+                                // numColumns = {5}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={{ width: "90%", alignSelf: "center" }}
+                                        onPress={
+                                            () => {
+                                                setSelectedOrder(item);
+                                                setIsShowModal(true);
+                                            }
+                                        }
+                                    >
+                                        <CartReportDetails
+                                            item={item}
+                                            selectedOrder={selectedOrder}
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        )
+                    }
 
-                    return (
-                        <FlatList
-                            style={{ flex: 1, }}
-                            data={filterFinishOrderList}
-                            horizontal={false}
-                            // numColumns = {5}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    style={{ width: "90%", alignSelf: "center" }}
-                                    onPress={
-                                        () => {
-                                            setSelectedOrder(item);
-                                            setIsShowModal(true);
-                                        }
-                                    }
-                                >
-                                    <CartReportDetails
-                                        item={item}
-                                        selectedOrder={selectedOrder}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        />
-                    )
                 case 2: {
-                    return (
-                        <FlatList
-                            style={{ flex: 1, }}
-                            data={filterTroubleOrderList}
-                            horizontal={false}
-                            // numColumns = {5}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    style={{ width: "90%", alignSelf: "center" }}
-                                    onPress={
-                                        () => {
-                                            setSelectedOrder(item);
-                                            setIsShowModal(true);
+                    if (filterTroubleOrderList.length === 0) {
+                        return (<View style={{ flex: 1, alignItems: "center", justifyContent:"center" }}>
+                            <Text style={{ alignSelf: "center", fontSize: HEADER_FONT_SIZE }}>
+                                Không có đơn hàng nào
+                            </Text>
+                        </View>)
+                    }
+
+                    else {
+                        return (
+                            <FlatList
+                                style={{ flex: 1, }}
+                                data={filterTroubleOrderList}
+                                horizontal={false}
+                                // numColumns = {5}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={{ width: "90%", alignSelf: "center" }}
+                                        onPress={
+                                            () => {
+                                                setSelectedOrder(item);
+                                                setIsShowModal(true);
+                                            }
                                         }
-                                    }
-                                >
-                                    <CartReportDetails
-                                        item={item}
-                                        selectedOrder={selectedOrder}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        />
-                    )
+                                    >
+                                        <CartReportDetails
+                                            item={item}
+                                            selectedOrder={selectedOrder}
+                                        />
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        )
+                    }
                 }
+
 
                 default:
                     break;
@@ -163,7 +193,7 @@ export default function TabReportDetails() {
         handleFilterOrderList();
     }, [selectedDate, selectIndex])
 
-    
+
 
     return (
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -189,17 +219,17 @@ export default function TabReportDetails() {
             </View>
 
             {
-                isLoading 
-                ? (
-                    <View style={styles.centered}>
-                        <ActivityIndicator size="large" color={BACKGROUND_COLOR} />
-                    </View>
-                )
-                : renderOrder()
+                isLoading
+                    ? (
+                        <View style={styles.centered}>
+                            <ActivityIndicator size="large" color={BACKGROUND_COLOR} />
+                        </View>
+                    )
+                    : renderOrder()
 
             }
 
-            
+
 
             {/* <View
                     style={{ flex: 1 }}

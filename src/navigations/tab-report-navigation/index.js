@@ -21,9 +21,9 @@ export default function TabReportNavigator() {
                     labelStyle: { fontSize: 20, color: '#603a18', fontWeight: 'bold' },
                     style: { backgroundColor: LIGHT_COLOR },
                 }}                
-                initialRouteName="REPORT">
+                initialRouteName="REPORT_DETAILS">
+                <Tab.Screen options={{tabBarLabel:`ĐƠN HÀNG`}} name="REPORT_DETAILS" component={TabReportDetails} />
                 <Tab.Screen options={{tabBarLabel:`BÁO CÁO`}} name="REPORT" component={OrderStatistic} />
-                <Tab.Screen options={{tabBarLabel:`CHI TIẾT`}} name="REPORT_DETAILS" component={TabReportDetails} />
             </Tab.Navigator>
         // </NavigationContainer>
     );
