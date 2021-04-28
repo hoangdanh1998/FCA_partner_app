@@ -30,9 +30,9 @@ export default function QRCode(props) {
             }
             await dispatch(setOrderStatus(orderId, OrderStatus.RECEPTION));
             props.navigation.navigate("READY") 
-            Alert.alert(TITLE_ALERT,ALERT_SUCCESS_MESSAGE);
+            // Alert.alert(TITLE_ALERT,ALERT_SUCCESS_MESSAGE);
         } catch (error) {
-            Alert.alert(TITLE_ALERT,ALERT_FAIL_MESSAGE);
+            // Alert.alert(TITLE_ALERT,ALERT_FAIL_MESSAGE);
             await new Promise((resolve) => {
                 return setTimeout(() => {
                     resolve()

@@ -21,7 +21,7 @@ const ListCartItem = (props) => {
                 return itemReport.description
             }));
         }
-        
+
     }, [totalStatisticArr])
 
     return (
@@ -44,7 +44,10 @@ const ListCartItem = (props) => {
                                     {element.description ? element.description.map((orderCancel) => {
                                         return (
                                             <View style={{ flex: 1 }}>
-                                                <List style={{ width: 1000, marginHorizontal: 15 }}>
+                                                <List
+                                                    style={{ width: 1000, marginHorizontal: 15 }}
+
+                                                >
                                                     <List.Item style={{ width: "100%", }}>
                                                         <View style={{ ...styles.rowContainer, width: "100%", alignSelf: "center" }}>
                                                             <Text style={[{ flex: 1 }, styles.cancelTextItem]}>{orderCancel.description}</Text>

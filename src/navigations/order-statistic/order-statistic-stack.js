@@ -3,6 +3,7 @@ import React from 'react';
 import { MyHeader } from '../../components/atoms/header/Header';
 import ContactUsScreen from '../../screens/contact-us';
 import OrderStatisticComponent from '../../screens/order-statistic/index';
+import TabReportNavigator from '../tab-report-navigation/index';
 
 
 const OrderStatistic = createStackNavigator();
@@ -19,7 +20,7 @@ function OrderStatisticScreen(props) {
                     )
                 }}
             >
-                <OrderStatistic.Screen name="CONTACT_US_STACK" component={OrderStatisticComponent} />    
+                <OrderStatistic.Screen name="CONTACT_US_STACK" component={TabReportNavigator} />    
             </OrderStatistic.Navigator>
             
         // </NavigationContainer>

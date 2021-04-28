@@ -209,7 +209,7 @@ const UpcomingTab = (props) => {
         </Body>
         <Left></Left>
         {autoAccept ?
-          <Text> Đã tự động tiếp nhận {countOrderAccepted} đơn hàng </Text> : null
+          <Text style = {styles.switch_text}> Đã tự động tiếp nhận <Text style = {{fontSize:24, fontWeight: "bold"}}>{countOrderAccepted}</Text> đơn hàng </Text> : null
         }
         <Right></Right>
 

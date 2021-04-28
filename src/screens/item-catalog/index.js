@@ -53,6 +53,38 @@ export default function ItemCatalogScreen(props) {
         try {
           switch (selectIndex) {
             case 0:
+              if (listItem.length === 0) {
+                return (
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      flex: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontSize: HEADER_FONT_SIZE }}>
+                      Bạn chưa có đồ uống để bán
+                  </Text>
+                  </View>
+                );
+              } else {
+                const listItemSort = listItem.sort((a, b) => {
+                  return (
+                    new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() < 0
+                  );
+                });
+                return (
+                  <List
+                    style={{ marginVertical: 10 }}
+                    dataArray={listItemSort}
+                    keyExtractor={(item) => item?.id}
+                    renderRow={(item) => (
+                      <CartNewItem item={item} selectIndex={selectIndex} />
+                    )}
+                  />
+                );
+              }
+            case 1:
               // const activeList = partner?.items.filter((item) => item?.status == itemStatus.ACTIVE
               // )
               const listactive = listItem.filter((item) => {
@@ -87,7 +119,7 @@ export default function ItemCatalogScreen(props) {
                 );
               }
               break;
-            case 1:
+            case 2:
               const archiveList = listItem.filter((item) => {
                 return item?.status == itemStatus.ARCHIVE;
               });
@@ -119,7 +151,7 @@ export default function ItemCatalogScreen(props) {
                 );
               }
               break;
-            case 2:
+            case 3:
               const processList = listItem.filter((item) => {
                 return item?.status == itemStatus.PROCESS;
               });
@@ -171,12 +203,13 @@ export default function ItemCatalogScreen(props) {
       <View style={styles.buttonContainer}>
         <SegmentedControl
           values={[
+            <Text style={{ fontSize: HEADER_FONT_SIZE }}>Tất cả</Text>,
             <Text style={{ fontSize: HEADER_FONT_SIZE }}>Chấp nhận</Text>,
             <Text style={{ fontSize: HEADER_FONT_SIZE }}>Từ Chối</Text>,
             <Text style={{ fontSize: HEADER_FONT_SIZE }}>Đang chờ</Text>,
           ]}
           tintColor={BACKGROUND_COLOR}
-          style={{ height: 45, width: 320 }}
+          style={{ height: 45, width: 420 }}
           onChange={onChange}
         />
         <Button
