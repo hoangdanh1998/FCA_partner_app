@@ -7,7 +7,8 @@ const { LOGIN,
     REGISTER_ITEM,
     SET_DEVICE_KEY,
     GET_PARTNER,
-    GET_FCA_ITEM
+    GET_FCA_ITEM,
+    BLOCK_CUSTOMER
 } = require("../actions/account");
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,6 +19,7 @@ const initialState = {
     isSignOut: false,
     errMessage: null,
     fcaItems: null,
+    bannedCustomers:[]
 };
 
 const removeToken = async () => {
@@ -58,7 +60,7 @@ const storeToken = async (token, partner) => {
 };
 
 const accountReducer = (state = initialState, action) => {
-    // console.log("action type:", action.type);
+    console.log("action type:", action.type);
     switch (action.type) {
         case LOGIN:
             const data = action.payload.data;
@@ -76,16 +78,19 @@ const accountReducer = (state = initialState, action) => {
         case OPEN_STORE: {
 
             refreshStore(action.payload);
-            return { ...state, partner: action.payload }
+            return { ...state, partner: action.payload };
         } case REGISTER_ITEM: {
             refreshStore(action.payload);
-            return { ...state, partner: action.payload }
+            return { ...state, partner: action.payload };
         } case SET_DEVICE_KEY: {
             return { ...state, deviceKey: action.payload };
         } case GET_PARTNER: {
-            return { ...state, partner: action.payload }
+            return { ...state, partner: action.payload };
         } case GET_FCA_ITEM: {
             return { ...state, fcaItems: action.payload };
+        } case BLOCK_CUSTOMER: {
+            console.log("action.payload.bannedCustomers ", action.payload.bannedCustomers);
+            return { ...state, partner: action.payload,  bannedCustomers: action.payload.bannedCustomers};
         }
         default:
             return state;

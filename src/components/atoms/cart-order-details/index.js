@@ -10,15 +10,24 @@ import TimelineTransaction from '../time-line-transactions';
 import moment from 'moment'
 import NumberFormat from 'react-number-format';
 import { Card, CardItem, List } from 'native-base';
-
+import {blockCustomer} from '../../../redux/actions/account';
+import {useDispatch, useSelector} from 'react-redux';
+import { set } from 'react-native-reanimated';
 
 export default function CartOrderDetails(props) {
+
+    const dispatch = useDispatch();
+    const partner = useSelector(state => state.account.partner);
+    const bannedCustomers = useSelector(state => state.account.bannedCustomers);
 
     const { isShowModal, setIsShowModal, order } = props;
 
     const [orderStatus, setOrderStatus] = useState("");
     const [isShowAlert, setIsShowAlert] = useState(false);
     const [description, setDescription] = useState("");
+    const [isBanner, setIsBanner] = useState();
+    const [message, setMessage] = useState("");
+    
 
     const handleSetStatus = (status) => {
         if (order) {
@@ -56,6 +65,28 @@ export default function CartOrderDetails(props) {
             }
         }
     }
+
+    const checkIsBanner = () => {
+        console.log(123);
+        if (bannedCustomers) {
+            
+            const index = bannedCustomers.findIndex(customer => {
+                return customer.id === order?.customer?.id;
+            });
+            if (index > -1) {
+                setIsBanner(false);
+                setMessage(`Bạn chắc muốn bỏ chặn khách hàng ${order?.customer?.phone}\nNếu bỏ chặn, khách hàng này có thể đặt hàng với cửa hàng của bạn`);
+                console.log("chan");
+            } else {
+                setIsBanner(true);
+                setMessage(`Bạn chắc chắn muốn chặn khách hàng ${order?.customer?.phone}\nNếu chặn, khách hàng này không thể đặt hàng với cửa hàng của bạn`);
+            }
+        }
+        
+    }
+    useEffect(() => {
+        checkIsBanner();
+    }, [isBanner, bannedCustomers, order])
 
     const handleChangeDescription = () => {
         if (order) {
@@ -107,13 +138,11 @@ export default function CartOrderDetails(props) {
             animationType="slide"
             transparent={true}
         >
-
             <AwesomeAlert
                 show={isShowAlert}
                 showProgress={false}
                 title="Xác nhận"
-                message="Bạn chắc chắn muốn chặn khách hàng 098xxxxxx?
-                Nếu chặn, khách hàng này không thể đặt hàng với cửa hàng của bạn"
+                message={message}
                 closeOnTouchOutside={true}
                 closeOnHardwareBackPress={false}
                 showCancelButton={true}
@@ -123,19 +152,19 @@ export default function CartOrderDetails(props) {
                 messageStyle={{ fontSize: HEADER_FONT_SIZE }}
                 confirmText="Đồng ý"
                 confirmButtonColor={ButtonColor.REJECTION}
-                // onCancelPressed={
-                //     async () => {
-                //         hideAlert();
-                //         await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION))
-
-                //     }
-                // }
+                onCancelPressed={
+                    () => {
+                        hideAlert();
+                    }
+                }
                 onDismiss={() => {
                     hideAlert();
                 }}
-                // onConfirmPressed={() => {
-                //     makeCall(order.customer.account.phone);
-                // }}
+                onConfirmPressed={
+                    async () => {
+                    await dispatch(blockCustomer(partner?.id,order?.customer?.id, isBanner));
+                    hideAlert();
+                }}
                 confirmButtonTextStyle={[styles.title_font_size, styles.boldTitle]}
                 cancelButtonTextStyle={[styles.title_font_size, styles.boldTitle,]}
             />
@@ -148,7 +177,6 @@ export default function CartOrderDetails(props) {
                         <AntDesign
                             name="closesquareo"
                             size={40}
-
                             color={ButtonColor.REJECTION}
                         />
                     </TouchableOpacity>
@@ -185,7 +213,7 @@ export default function CartOrderDetails(props) {
                                     }
                                 >
                                     <Text style={[styles.title, styles.boldTitle, { alignSelf: "center", color: "#fff" }]}>
-                                        Chặn
+                                        { isBanner ? "Chặn" : "Bỏ Chặn"}
                             </Text>
                                 </TouchableOpacity>
                             </View>
@@ -250,7 +278,6 @@ export default function CartOrderDetails(props) {
                                     <List
                                         dataArray={order?.items}
                                         keyExtractor={(item) => item?.id}
-
                                         renderRow={(item) => (
                                             <CardItem
                                                 style={[{ backgroundColor: PRIMARY_COLOR }]}

@@ -10,6 +10,7 @@ export const REGISTER_ITEM = "REGISTER_ITEM";
 export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
 export const GET_FCA_ITEM = "GET_FCA_ITEM";
 export const GET_PARTNER = "GET_PARTNER";
+export const BLOCK_CUSTOMER = "BLOCK_CUSTOMER";
 
 import fca from "../../service/fca-api/fca";
 
@@ -160,6 +161,27 @@ export const getFCAItem = () => {
             })
         } catch (error) {
             console.error(error);
+        }
+    }
+}
+
+export const blockCustomer = (id, customerId, isBan) => {
+    return async dispatch => {
+        try {
+            const response = await fca.put(`/partner/${id}/none-serve`,
+                {
+                    customerId,
+                    isBan
+                }
+            );
+            
+            // console.log("response open store", response.data.data.partner);
+            dispatch({
+                type:BLOCK_CUSTOMER,
+                payload: response.data.data.partner
+            })
+        } catch (error) {
+            console.error("err block customer error");
         }
     }
 }

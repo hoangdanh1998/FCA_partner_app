@@ -34,6 +34,31 @@ export default function TabReportDetails() {
 
     const partner = useSelector(state => state.account.partner);
 
+    const renderTotalOrder = () => {
+        try {
+            if (isLoading) {
+                return 0;
+            }
+            else {
+                switch (selectIndex) {
+                    case 0:
+                        let total = [...filterFinishOrderList, ...filterTroubleOrderList];
+                        return total.length;
+                    case 1:
+    
+                        return filterFinishOrderList.length;
+                    case 2:
+                        return filterTroubleOrderList.length;
+    
+                    default:
+                        break;
+                }
+            }
+        } catch (error) {
+            console.log("err render total order", error);
+        }
+    }
+
     const onChange = (e) => {
         setSelectIndex(e.nativeEvent.selectedSegmentIndex);
         // console.log(e.nativeEvent.selectedSegmentIndex);
@@ -221,7 +246,7 @@ export default function TabReportDetails() {
                     <Text
                         style={{ fontSize: 25, alignSelf:"center"}}
                     >
-                        Tổng: <Text style={{ fontWeight:"bold"}}>{totalOrder}</Text> đơn
+                        Tổng: <Text style={{ fontWeight:"bold"}}>{renderTotalOrder()}</Text> đơn
                     </Text>
                 </View>
                 <CustomDatePicker value={selectedDate} setDate={setSelectedDate} />
