@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { StatisticColor } from "../../../constance/constance";
+import { BACKGROUND_COLOR, HEADER_FONT_SIZE, StatisticColor } from "../../../constance/constance";
 export const styles = StyleSheet.create({
   card: {
     flex: 1,
@@ -49,6 +49,19 @@ export const styles = StyleSheet.create({
   },
   listDelay: {
     width: "100%",
-    backgroundColor:"#E8E8E8"
-  }
+    backgroundColor: "#E8E8E8"
+  },
+  titleAlert: {
+    fontSize: 25
+  },
+  title_font_weight: {
+    fontWeight: "bold",
+  },
+  title_font_size: {
+    fontSize: HEADER_FONT_SIZE
+  },
+  button: {
+    backgroundColor:BACKGROUND_COLOR,
+    marginLeft: 10
+},
 });

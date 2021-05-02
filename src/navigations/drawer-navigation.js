@@ -13,6 +13,7 @@ import ProfileDrawerContent from './drawer-content/index';
 import HomeStackScreen from './home-stack-screen';
 import ItemCatalogStackScreen from './item-catalog';
 import OrderStatisticScreen from './order-statistic/order-statistic-stack';
+import BlockCustomerStackScreen from './block-customer';
 const Drawer = createDrawerNavigator();
 
 const MenuDrawer = (props) => {
@@ -44,7 +45,7 @@ const MenuDrawer = (props) => {
                     "Thông báo",
                     "Tài khoản được đăng nhập từ thiết bị khác",
                     [
-                        { text: "OK"}
+                        { text: "OK" }
                     ]
                 );
                 // alert("Tài khoản được đăng nhập từ thiết bị khác");
@@ -108,6 +109,13 @@ const MenuDrawer = (props) => {
                 name="ITEM_CATALOG"
                 component={ItemCatalogStackScreen} />
             <Drawer.Screen
+                initialParams={{ handleLogOut }}
+                options={{
+                    title: "DANH SÁCH CHẶN",
+                }}
+                name="BLOCK_CUSTOMER"
+                component={BlockCustomerStackScreen} />
+            <Drawer.Screen
                 name="CONTACT_US"
                 initialParams={{ handleLogOut }}
                 component={ContactUsStackScreen}
@@ -116,6 +124,7 @@ const MenuDrawer = (props) => {
 
                 }}
             />
+
 
 
         </Drawer.Navigator>

@@ -50,6 +50,14 @@ const OrderCardReady = (props) => {
         }
     }
 
+    const renderCustomerName = () => {
+        if(order){
+            let arrName = order?.customer?.name.split(' ');
+            console.log("arr name", arrName);
+            let name = arrName[arrName.length - 1];
+            return name;
+        }
+    }
 
     const showAlert = () => {
         setIsShowAlert(true);
@@ -128,7 +136,7 @@ const OrderCardReady = (props) => {
                         <Text style={[
                             styles.title_font_weight,
                             styles.title_font_size
-                        ]}>{order.customer.account.phone}</Text>
+                        ]}>{order.customer.account.phone} - {renderCustomerName()}</Text>
                     </Left>
                     <Body>
                         <Text

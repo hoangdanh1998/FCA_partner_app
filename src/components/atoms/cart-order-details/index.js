@@ -48,6 +48,8 @@ export default function CartOrderDetails(props) {
                     return ("Sẵn sàng");
                 case OrderStatus.INITIALIZATION:
                     return ("Mới");
+                case OrderStatus.WAITING: 
+                return ("Đợi")
 
                 default:
                     break;

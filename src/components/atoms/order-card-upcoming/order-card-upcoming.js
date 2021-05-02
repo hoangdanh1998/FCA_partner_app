@@ -2,11 +2,13 @@ import { withNavigation } from '@react-navigation/compat';
 import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
-import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
+import { BACKGROUND_COLOR, ButtonColor, OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import * as firebase from '../../../firebase/firebase-realtime';
-import { sendQRCode } from '../../../redux/actions/order-list';
+import { sendQRCode, setOrderStatus } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { Linking } from 'react-native';
 
 const OrderCardUpComing = (props) => {
 
@@ -19,6 +21,8 @@ const OrderCardUpComing = (props) => {
   const [status, setStatus] = useState();
   const [listenedOrder, setListenedOrder] = useState();
   const [isAutoPrepareOrder, setIsAutoPrepareOrder] = useState(null);
+  const [isShowAlert, setIsShowAlert] = useState(false);
+
 
   useEffect(() => {
     firebase.listenOrder(order.id, (orderListened) => {
@@ -33,6 +37,27 @@ const OrderCardUpComing = (props) => {
     })
   }, []);
 
+  const showAlert = () => {
+    setIsShowAlert(true);
+  };
+
+  const hideAlert = () => {
+    setIsShowAlert(false);
+  };
+
+  const makeCall = (numberPhone) => {
+    let phoneNumber = `tel:${numberPhone}`;
+    hideAlert();
+    return Linking.openURL(phoneNumber);
+  }
+
+  const renderCustomerName = () => {
+    if(order){
+        let arrName = order?.customer?.name.split(' ');
+        let name = arrName[arrName.length - 1];
+        return name;
+    }
+}
 
   useEffect(() => {
     if (listenedOrder) {
@@ -65,6 +90,36 @@ const OrderCardUpComing = (props) => {
 
   return (
     <Content>
+      <AwesomeAlert
+        show={isShowAlert}
+        showProgress={false}
+        title="Xác nhận"
+        message="Bạn chắc chắn muốn giao hàng?"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="Đồng ý"
+        titleStyle={[styles.titleAlert, styles.title_font_weight]}
+        messageStyle={[styles.title_font_size]}
+        confirmText="Gọi điện"
+        confirmButtonColor={ButtonColor.ACCESSS}
+        onCancelPressed={
+          async () => {
+            hideAlert();
+            await dispatch(setOrderStatus(order.id, OrderStatus.RECEPTION))
+
+          }
+        }
+        onDismiss={() => {
+          hideAlert();
+        }}
+        onConfirmPressed={() => {
+          makeCall(order?.customer?.account?.phone);
+        }}
+        confirmButtonTextStyle={[styles.title_font_size, styles.title_font_weight]}
+        cancelButtonTextStyle={[styles.title_font_size, styles.title_font_weight]}
+      />
       <Card style={
         styles.card
 
@@ -75,7 +130,7 @@ const OrderCardUpComing = (props) => {
             : styles.cardHeader
         } header bordered>
           <Left>
-            <Text style={styles.title}>{order.customer.account.phone}</Text>
+      <Text style={styles.title}>{order.customer.account.phone} - {renderCustomerName()}</Text>
           </Left>
           <Text
             style={
@@ -128,27 +183,40 @@ const OrderCardUpComing = (props) => {
               )}
             />
           </Left>
-          <Right>
-            {status ? (<Button
-              style={styles.button}
-              onPress={() => {
-                dispatch(sendQRCode(order.id));
-                props.navigation.navigate("QRCODE");
-              }}
-              rounded>
-              <Text>Gửi mã QR</Text>
-            </Button>) : (<Icon
-              button
-              onPress={() => handleUpdateStatus(props.status, order.id)}
-              android={
-                order.status == "acceptance"
-                  ? "md-arrow-forward"
-                  : "chevron-forward"
-              }
-              name="arrow-forward"
-              style={styles.icon}
-            />)}
-          </Right>
+          {
+            status ?
+              (<Right style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+                <Button
+                  style={{ borderColor: BACKGROUND_COLOR }}
+                  onPress={showAlert}
+                  bordered>
+                  <Text style={{ color: BACKGROUND_COLOR }}>Giao hàng</Text>
+                </Button>
+                <Button
+                  style={styles.button}
+                  onPress={() => {
+                    dispatch(sendQRCode(order.id));
+                    props.navigation.navigate("QRCODE", {nameScreen: "card-upcoming"});
+                  }}
+                >
+                  <Text>Gửi mã QR</Text>
+                </Button>
+              </Right>)
+              :
+              <Right>
+                <Icon
+                  button
+                  onPress={() => handleUpdateStatus(props.status, order.id)}
+                  android={
+                    order.status == "acceptance"
+                      ? "md-arrow-forward"
+                      : "chevron-forward"
+                  }
+                  name="arrow-forward"
+                  style={styles.icon}
+                />
+              </Right>
+          }
         </CardItem>
       </Card>
     </Content>
