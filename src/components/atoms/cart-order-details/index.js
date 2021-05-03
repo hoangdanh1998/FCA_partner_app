@@ -12,7 +12,7 @@ import NumberFormat from 'react-number-format';
 import { Card, CardItem, List } from 'native-base';
 import {blockCustomer} from '../../../redux/actions/account';
 import {useDispatch, useSelector} from 'react-redux';
-import { set } from 'react-native-reanimated';
+
 
 export default function CartOrderDetails(props) {
 
@@ -186,7 +186,7 @@ export default function CartOrderDetails(props) {
                             <Text style={[styles.title, styles.boldTitle]}>
                                 Thông tin khách hàng
                     </Text>
-                            <View style={[styles.rowContainer]}>
+                            <View style={[styles.rowContainer, {width:"80%", alignSelf:"center"}]}>
                                 <Text style={[styles.title, styles.leftTitle]}>
                                     Tên
                         </Text >
@@ -195,7 +195,7 @@ export default function CartOrderDetails(props) {
                                 </Text>
 
                             </View>
-                            <View style={[styles.rowContainer]}>
+                            <View style={[styles.rowContainer, {width:"80%", alignSelf:"center"}]}>
                                 <Text style={[styles.title, styles.leftTitle]}>
                                     Số điện thoại
                         </Text>
@@ -239,25 +239,30 @@ export default function CartOrderDetails(props) {
                                         <Text style={[styles.title, styles.boldTitle]}>
                                             Thông tin đơn hàng
                                 </Text>
-                                        <View style={[styles.rowContainer]}>
-                                            <Text style={[styles.title]}>
+                                        <View style={[styles.rowContainer, {width:"80%", alignSelf:"center"}]}>
+                                            <Text style={[styles.title, {flex:2 }]}>
                                                 Đánh giá
                                     </Text>
-                                            {/* <Rating
-                                                imageSize={22}
-                                                readonly={true}
-                                                // style={{ paddingVertical: 10 }}
-                                                startingValue={3.5}
-                                            />
+                                    {
+                                        order?.feedback?.star
+                                        ? (<Rating
+                                            imageSize={22}
+                                            readonly={true}
+                                            // style={{ paddingVertical: 10 }}
+                                            startingValue={order?.feedback?.star}
+                                        />)
+                                        : null
+                                    }
+                                            
+                                            
                                         </View>
-                                        <View style={[styles.rowContainer]}>
-                                            <Text style={{ flex: 2 }}>
+                                        <View style={[styles.rowContainer,{width:"80%", alignSelf:"center"}]}>
+                                            <Text style={{ flex: 3 }}>
 
                                             </Text>
-                                            <Text style={[styles.title, { flex: 5 }]}>
-                                                Thức uống ngon, Đóng gói đẹp, Giá hợp lí
-                                                Cho quán 5 sao luôn
-                            </Text> */}
+                                            <Text style={[styles.title, { flex: 5, textAlign: "right"}]}>
+                                                {order?.feedback?.description}
+                            </Text>
                                         </View>
                                     </View>
 

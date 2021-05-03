@@ -47,11 +47,11 @@ export default function TabReportDetails() {
                         let total = [...filterFinishOrderList, ...filterTroubleOrderList];
                         return total.length;
                     case 1:
-    
+
                         return filterFinishOrderList.length;
                     case 2:
                         return filterTroubleOrderList.length;
-    
+
                     default:
                         break;
                 }
@@ -60,7 +60,7 @@ export default function TabReportDetails() {
             console.log("err render total order", error);
         }
     }
-    
+
 
     const onChange = (e) => {
         setSelectIndex(e.nativeEvent.selectedSegmentIndex);
@@ -72,10 +72,10 @@ export default function TabReportDetails() {
     const renderOrder = () => {
         if (filterFinishOrderList && filterTroubleOrderList) {
             switch (selectIndex) {
-                
+
                 case 0:
                     if (filterFinishOrderList.length === 0 && filterTroubleOrderList.length === 0) {
-                        return (<View style={{ flex: 1, alignItems: "center", justifyContent:"center" }}>
+                        return (<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             <Text style={{ alignSelf: "center", fontSize: HEADER_FONT_SIZE }}>
                                 Không có đơn hàng nào
                             </Text>
@@ -85,11 +85,17 @@ export default function TabReportDetails() {
                     else {
                         const allList = [...filterFinishOrderList, ...filterTroubleOrderList];
                         // console.log("allList: ", allList);
-                        
+                        const listSort = allList.sort((a, b) => {
+                            return (
+                                new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() < 0
+                            );
+                        });
+
                         return (
+
                             <FlatList
                                 style={{ flex: 1, }}
-                                data={allList}
+                                data={listSort}
                                 horizontal={false}
                                 // numColumns = {5}
                                 renderItem={({ item }) => (
@@ -114,17 +120,22 @@ export default function TabReportDetails() {
 
                 case 1:
                     if (filterFinishOrderList.length === 0) {
-                        return (<View style={{ flex: 1, alignItems: "center", justifyContent: "center"}}>
+                        return (<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             <Text style={{ alignSelf: "center", fontSize: HEADER_FONT_SIZE }}>
                                 Không có đơn hàng nào
                             </Text>
                         </View>)
                     }
                     else {
+                        const listFinishSort = filterFinishOrderList.sort((a, b) => {
+                            return (
+                                new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() < 0
+                            );
+                        });
                         return (
                             <FlatList
                                 style={{ flex: 1, }}
-                                data={filterFinishOrderList}
+                                data={listFinishSort}
                                 horizontal={false}
                                 // numColumns = {5}
                                 renderItem={({ item }) => (
@@ -149,7 +160,7 @@ export default function TabReportDetails() {
 
                 case 2: {
                     if (filterTroubleOrderList.length === 0) {
-                        return (<View style={{ flex: 1, alignItems: "center", justifyContent:"center" }}>
+                        return (<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                             <Text style={{ alignSelf: "center", fontSize: HEADER_FONT_SIZE }}>
                                 Không có đơn hàng nào
                             </Text>
@@ -157,10 +168,15 @@ export default function TabReportDetails() {
                     }
 
                     else {
+                        const listTroubleSort = filterTroubleOrderList.sort((a, b) => {
+                            return (
+                                new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() < 0
+                            );
+                        });
                         return (
                             <FlatList
                                 style={{ flex: 1, }}
-                                data={filterTroubleOrderList}
+                                data={listTroubleSort}
                                 horizontal={false}
                                 // numColumns = {5}
                                 renderItem={({ item }) => (
@@ -249,14 +265,14 @@ export default function TabReportDetails() {
                     style={{ height: 45, width: 320, }}
                     onChange={onChange}
                 />
-                <View 
-                    style={{width:300, justifyContent: "center"}}
-                    
+                <View
+                    style={{ width: 300, justifyContent: "center" }}
+
                 >
                     <Text
-                        style={{ fontSize: 25, alignSelf:"center"}}
+                        style={{ fontSize: 25, alignSelf: "center" }}
                     >
-                        Tổng: <Text style={{ fontWeight:"bold"}}>{renderTotalOrder()}</Text> đơn
+                        Tổng: <Text style={{ fontWeight: "bold" }}>{renderTotalOrder()}</Text> đơn
                     </Text>
                 </View>
                 <CustomDatePicker value={selectedDate} setDate={setSelectedDate} />
