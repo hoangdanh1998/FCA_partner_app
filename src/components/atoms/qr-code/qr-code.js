@@ -29,7 +29,12 @@ export default function QRCode(props) {
                 throw new Error();
             }
             await dispatch(setOrderStatus(orderId, OrderStatus.RECEPTION));
-            props.navigation.navigate("READY") 
+            if (!props?.route?.params?.nameScreen) {
+                props.navigation.navigate("READY");
+            } else {
+                props.navigation.navigate("UPCOMING");
+            }
+            
             // Alert.alert(TITLE_ALERT,ALERT_SUCCESS_MESSAGE);
         } catch (error) {
             // Alert.alert(TITLE_ALERT,ALERT_FAIL_MESSAGE);

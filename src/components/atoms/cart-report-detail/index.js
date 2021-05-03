@@ -43,6 +43,9 @@ export default function CartReportDetails(props) {
                 case OrderStatus.READINESS:
                     setOrderStatus("Sẵn sàng");
                     break;
+                case OrderStatus.WAITING:
+                    setOrderStatus("Đợi");
+                    break;
 
                 default:
                     break;
@@ -50,6 +53,13 @@ export default function CartReportDetails(props) {
         }
     }
 
+    const renderCustomerName = () => {
+        if(order){
+            let arrName = order?.customer?.name.split(' ');
+            let name = arrName[arrName.length - 2] + ' ' + arrName[arrName.length - 1];
+            return name;
+        }
+    }
 
 
     useEffect(() => {
@@ -72,7 +82,7 @@ export default function CartReportDetails(props) {
                             styles.title, styles.titleBold,
                             styles.flex1
                         ]}>
-                        {order?.customer?.phone} - {order?.customer?.name}
+                        {order?.customer?.phone} - {renderCustomerName()}
                     </Text>
                     <Text style={[styles.title, styles.flex1, { textAlign: "center" }]}>
                         {orderStatus}

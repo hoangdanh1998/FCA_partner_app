@@ -27,11 +27,37 @@ export default function TabReportDetails() {
     const [isShowModal, setIsShowModal] = useState(false);
     const [selectIndex, setSelectIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const [totalOrder, setTotalOrder] = useState(0);
 
     const filterFinishOrderList = useSelector(state => state.orderList.filterFinishOrderList);
     const filterTroubleOrderList = useSelector(state => state.orderList.filterTroubleOrderList);
 
     const partner = useSelector(state => state.account.partner);
+
+    const renderTotalOrder = () => {
+        try {
+            if (isLoading) {
+                return 0;
+            }
+            else {
+                switch (selectIndex) {
+                    case 0:
+                        let total = [...filterFinishOrderList, ...filterTroubleOrderList];
+                        return total.length;
+                    case 1:
+    
+                        return filterFinishOrderList.length;
+                    case 2:
+                        return filterTroubleOrderList.length;
+    
+                    default:
+                        break;
+                }
+            }
+        } catch (error) {
+            console.log("err render total order", error);
+        }
+    }
 
     const onChange = (e) => {
         setSelectIndex(e.nativeEvent.selectedSegmentIndex);
@@ -43,6 +69,7 @@ export default function TabReportDetails() {
     const renderOrder = () => {
         if (filterFinishOrderList && filterTroubleOrderList) {
             switch (selectIndex) {
+                
                 case 0:
                     if (filterFinishOrderList.length === 0 && filterTroubleOrderList.length === 0) {
                         return (<View style={{ flex: 1, alignItems: "center", justifyContent:"center" }}>
@@ -55,6 +82,7 @@ export default function TabReportDetails() {
                     else {
                         const allList = [...filterFinishOrderList, ...filterTroubleOrderList];
                         // console.log("allList: ", allList);
+                        
                         return (
                             <FlatList
                                 style={{ flex: 1, }}
@@ -80,7 +108,6 @@ export default function TabReportDetails() {
                             />
                         )
                     }
-
 
                 case 1:
                     if (filterFinishOrderList.length === 0) {
@@ -153,8 +180,6 @@ export default function TabReportDetails() {
                         )
                     }
                 }
-
-
                 default:
                     break;
             }
@@ -163,21 +188,22 @@ export default function TabReportDetails() {
 
     const handleFilterOrderList = async () => {
         try {
+            setTotalOrder(0);
             setIsLoading(true);
             switch (selectIndex) {
-
                 case 0:
                     await dispatch(getFinishOrderByDate(partner?.id, moment(selectedDate).format('YYYY-MM-DD')));
                     await dispatch(getTroubleOrderByDay(partner?.id, moment(selectedDate).format('YYYY-MM-DD')));
-
+                    let total = [...filterFinishOrderList, ...filterTroubleOrderList];
+                    setTotalOrder(total.length);
                     break;
                 case 1:
                     await dispatch(getFinishOrderByDate(partner?.id, moment(selectedDate).format('YYYY-MM-DD')));
-                    console.log("get filterFinishOrderList");
+                    setTotalOrder(filterFinishOrderList.length);
                     break;
                 case 2:
                     await dispatch(getTroubleOrderByDay(partner?.id, moment(selectedDate).format('YYYY-MM-DD')));
-                    console.log("get filterTroubleOrderList");
+                    setTotalOrder(filterTroubleOrderList.length);
                     break;
 
                 default:
@@ -213,7 +239,16 @@ export default function TabReportDetails() {
                     style={{ height: 45, width: 320, }}
                     onChange={onChange}
                 />
-
+                <View 
+                    style={{width:300, justifyContent: "center"}}
+                    
+                >
+                    <Text
+                        style={{ fontSize: 25, alignSelf:"center"}}
+                    >
+                        Tổng: <Text style={{ fontWeight:"bold"}}>{renderTotalOrder()}</Text> đơn
+                    </Text>
+                </View>
                 <CustomDatePicker value={selectedDate} setDate={setSelectedDate} />
 
             </View>
@@ -228,9 +263,6 @@ export default function TabReportDetails() {
                     : renderOrder()
 
             }
-
-
-
             {/* <View
                     style={{ flex: 1 }}
                 >

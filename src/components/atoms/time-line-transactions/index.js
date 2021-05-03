@@ -9,7 +9,7 @@ const TimelineTransaction = (props) => {
 
     const date = props.date;
     const transactions = props.transactions;
-    console.log('child', transactions);
+    // console.log('child', transactions);
     return (
         <View style={{ flex: 1, marginLeft:"40%", justifyContent: "center",}}>
 
