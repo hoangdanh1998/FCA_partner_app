@@ -1,14 +1,14 @@
 import { withNavigation } from '@react-navigation/compat';
 import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
+import { Linking } from 'react-native';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useDispatch } from 'react-redux';
 import { BACKGROUND_COLOR, ButtonColor, OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import * as firebase from '../../../firebase/firebase-realtime';
 import { sendQRCode, setOrderStatus } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
-import AwesomeAlert from 'react-native-awesome-alerts';
-import { Linking } from 'react-native';
 
 
 const OrderCardUpComing = (props) => {
@@ -140,11 +140,7 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {status ?
-              'đang đợi' :
-              (isAutoPrepareOrder === null || isAutoPrepareOrder == true) ?
-                (timeRemain ? timeRemain + ' phút' : '') : ''
-            }
+            {status ? 'đang đợi' : (timeRemain ? timeRemain + ' phút' : '')}
           </Text>
           <Right>
             {
