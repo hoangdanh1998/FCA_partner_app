@@ -4,7 +4,6 @@
     "slug": "FCA_Partner",
     "version": "1.0.0",
     "orientation": "landscape",
-  
     "icon": "./assets/fast-coffee-img-logo.png",
     "splash": {
       "image": "./assets/fast-coffee-img-logo.png",
@@ -25,7 +24,8 @@
         "foregroundImage": "./assets/fast-coffee-img-logo.png",
         "backgroundColor": "#FFFFFF"
       },
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "package": "com.hoangdanh1998.FCA_Partner"
     },
     "notification": {
       "icon": "./assets/fast-coffee-img-logo.png"
