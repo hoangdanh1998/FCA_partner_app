@@ -15,9 +15,12 @@ import { DrawerActions } from '@react-navigation/native';
 import { TouchableOpacity } from "react-native";
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { getPartner } from "../../../redux/actions/account";
+import { getFinishOrderByDate, getTroubleOrderByDay } from "../../../redux/actions/order-list";
+import moment from 'moment';
 
 
 export const MyHeader = (props) => {
+    // console.log("props: ", props.scene.route);
     const partner = useSelector(state => state.account.partner);
     
     const handleLogOut = props.handleLogOut;
@@ -28,6 +31,8 @@ export const MyHeader = (props) => {
 
     useEffect(() => {
         dispatch(getPartner(partner?.id));
+        dispatch(getFinishOrderByDate(partner?.id));
+        dispatch(getTroubleOrderByDay(partner?.id));
     }, [isRefresh] )
     return (
         <Header

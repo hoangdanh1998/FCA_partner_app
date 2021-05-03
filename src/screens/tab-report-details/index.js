@@ -15,12 +15,13 @@ import { getFinishOrderByDate, getTroubleOrderByDay } from '../../redux/actions/
 import { styles } from './style';
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment';
+import { useIsFocused } from '@react-navigation/native';
 
 
 export default function TabReportDetails() {
 
+    const isFocused = useIsFocused();
     const dispatch = useDispatch();
-
 
     const [selectedOrder, setSelectedOrder] = useState();
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,6 +34,7 @@ export default function TabReportDetails() {
     const filterTroubleOrderList = useSelector(state => state.orderList.filterTroubleOrderList);
 
     const partner = useSelector(state => state.account.partner);
+
 
     const renderTotalOrder = () => {
         try {
@@ -58,6 +60,7 @@ export default function TabReportDetails() {
             console.log("err render total order", error);
         }
     }
+    
 
     const onChange = (e) => {
         setSelectIndex(e.nativeEvent.selectedSegmentIndex);
@@ -186,6 +189,13 @@ export default function TabReportDetails() {
         }
     }
 
+
+    // if(isFocused) {
+    //     renderOrder();
+    //     console.log("focus");
+    // }
+
+
     const handleFilterOrderList = async () => {
         try {
             setTotalOrder(0);
@@ -217,7 +227,7 @@ export default function TabReportDetails() {
 
     useEffect(() => {
         handleFilterOrderList();
-    }, [selectedDate, selectIndex])
+    }, [selectedDate, selectIndex, isFocused])
 
 
 

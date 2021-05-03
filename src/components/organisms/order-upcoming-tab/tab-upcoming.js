@@ -120,11 +120,11 @@ const UpcomingTab = (props) => {
       setTitleAlert(`Đơn hàng của ${order.customer.account.phone}`)
       if (realtimeStatus === OrderStatus.CANCELLATION) {
         setAlertMessage(
-          `Đã được nhân viên huỷ thành công`
+          `Đã được huỷ thành công`
         )
       } else if (realtimeStatus === OrderStatus.RECEPTION) {
         setAlertMessage(
-          `Đã được nhân viên xác nhận thành công`
+          `Đã được xác nhận thành công`
         )
       }
 

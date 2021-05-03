@@ -17,7 +17,7 @@ function ContactUsStackScreen(props) {
                     )
                 }}
             >
-                <ContactUsStack.Screen name="ODER_STATISTIC_STACK" component={ContactUsScreen} />    
+                <ContactUsStack.Screen name="CONTACT_US_STACK" component={ContactUsScreen} />    
             </ContactUsStack.Navigator>
             
         // </NavigationContainer>

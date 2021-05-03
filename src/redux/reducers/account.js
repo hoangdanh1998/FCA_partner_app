@@ -60,7 +60,7 @@ const storeToken = async (token, partner) => {
 };
 
 const accountReducer = (state = initialState, action) => {
-    console.log("action type:", action.type);
+    // console.log("action type:", action.type);
     switch (action.type) {
         case LOGIN:
             const data = action.payload.data;
@@ -85,7 +85,7 @@ const accountReducer = (state = initialState, action) => {
         } case SET_DEVICE_KEY: {
             return { ...state, deviceKey: action.payload };
         } case GET_PARTNER: {
-            return { ...state, partner: action.payload };
+            return { ...state, partner: action.payload, bannedCustomers: action.payload.bannedCustomers };
         } case GET_FCA_ITEM: {
             return { ...state, fcaItems: action.payload };
         } case BLOCK_CUSTOMER: {

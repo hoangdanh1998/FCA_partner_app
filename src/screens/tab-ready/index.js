@@ -69,12 +69,12 @@ const TabReadyScreen = () => {
             if (realtimeStatus === OrderStatus.CANCELLATION) {
                 console.log("huy don nha");
                 setAlertMessage(
-                    `Đã được nhân viên huỷ thành công`
+                    `Đã được huỷ thành công`
                 )
             } else if (realtimeStatus === OrderStatus.RECEPTION) {
                 console.log("nay la nhan don nha");
                 setAlertMessage(
-                    `Đã được nhân viên xác nhận thành công`
+                    `Đã được xác nhận thành công`
                 )
             }
 

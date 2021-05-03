@@ -20,7 +20,7 @@ function OrderStatisticScreen(props) {
                     )
                 }}
             >
-                <OrderStatistic.Screen name="CONTACT_US_STACK" component={TabReportNavigator} />    
+                <OrderStatistic.Screen name="ODER_STATISTIC_STACK" component={TabReportNavigator} />    
             </OrderStatistic.Navigator>
             
         // </NavigationContainer>

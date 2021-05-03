@@ -18,7 +18,7 @@ function BlockCustomerStackScreen(props) {
                     )
                 }}
             >
-                <BlockCustomer.Screen name="ITEM_CATALOG" component={BlockUserScreen} />  
+                <BlockCustomer.Screen name="BLOCK_CUSTOMER" component={BlockUserScreen} />  
             </BlockCustomer.Navigator>
             
         // </NavigationContainer>

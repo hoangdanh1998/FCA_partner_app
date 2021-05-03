@@ -8,5 +8,18 @@ export const styles = StyleSheet.create({
     },
     title: {
         fontSize: HEADER_FONT_SIZE
+    },
+    backgroundSelectedCart: {
+        backgroundColor: LIGHT_COLOR
+    },
+    backgroundNonSelected: {
+        backgroundColor: "#fff"
+    },
+    titleAlert: {
+        fontSize: 25
+    },
+    title_font_size: {
+        fontSize: HEADER_FONT_SIZE
     }
+
 })
