@@ -1,12 +1,12 @@
 import { withNavigation } from '@react-navigation/compat';
 import { Button, Card, CardItem, Content, Icon, Left, List, Right, Text } from "native-base";
 import React, { useEffect, useState } from "react";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { useDispatch } from 'react-redux';
 import { OrderStatus, TimeRemainTo } from '../../../constance/constance';
 import * as firebase from '../../../firebase/firebase-realtime';
 import { sendQRCode } from '../../../redux/actions/order-list';
 import { styles } from "./styles";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
 const OrderCardUpComing = (props) => {
 
@@ -84,7 +84,11 @@ const OrderCardUpComing = (props) => {
                 : styles.earlyEstimation
             }
           >
-            {status ? 'đang đợi' : (timeRemain ? timeRemain + ' phút' : '')}
+            {status ?
+              'đang đợi' :
+              (isAutoPrepareOrder === null || isAutoPrepareOrder == true) ?
+                (timeRemain ? timeRemain + ' phút' : '') : ''
+            }
           </Text>
           <Right>
             {
