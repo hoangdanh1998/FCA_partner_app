@@ -51,7 +51,7 @@ const OrderCardReady = (props) => {
     }
 
     const renderCustomerName = () => {
-        if(order){
+        if (order) {
             let arrName = order?.customer?.name.split(' ');
             console.log("arr name", arrName);
             let name = arrName[arrName.length - 1];
@@ -66,6 +66,14 @@ const OrderCardReady = (props) => {
     const hideAlert = () => {
         setIsShowAlert(false);
     };
+
+    const renderOrderID = () => {
+        if (order) {
+            let subID = order?.id?.substr(order?.id?.length - 4, 4);
+            // console.log("sub id: " , subID);
+            return subID;
+        }
+    }
 
     const makeCall = (numberPhone) => {
         let phoneNumber = `tel:${numberPhone}`;
@@ -138,7 +146,7 @@ const OrderCardReady = (props) => {
                             styles.title_font_size
                         ]}>{order.customer.account.phone} - {renderCustomerName()}</Text>
                     </Left>
-                    <Body>
+                    <Body style={{alignItems: "center"}}>
                         <Text
                             style={[
                                 styles.status_order,
@@ -148,6 +156,16 @@ const OrderCardReady = (props) => {
                             {status ? "đã đến" : timeRemain}
                         </Text>
                     </Body>
+                    <Right>
+                        <Text
+                            style={[
+                                styles.title_font_weight,
+                                styles.title_font_size
+                            ]}
+                        >
+                        {renderOrderID()}
+                        </Text>
+                    </Right>
 
 
 
@@ -178,7 +196,7 @@ const OrderCardReady = (props) => {
                                                         <Text style={styles.itemText}>{formattedValue}</Text>
                                                     )}
                                                 />
-                                                
+
                                             </Right>
                                         </Right>
                                     </CardItem>
@@ -195,15 +213,15 @@ const OrderCardReady = (props) => {
                                         <Text></Text>
                                     </Left>
                                     <Right>
-                                    <NumberFormat
-                                                    value={order.total}
-                                                    displayType={"text"}
-                                                    thousandSeparator={true}
-                                                    renderText={(formattedValue) => (
-                                                        <Text style={[styles.itemText, styles.title_font_weight]}>{formattedValue}</Text>
-                                                    )}
-                                                />
-                                        
+                                        <NumberFormat
+                                            value={order.total}
+                                            displayType={"text"}
+                                            thousandSeparator={true}
+                                            renderText={(formattedValue) => (
+                                                <Text style={[styles.itemText, styles.title_font_weight]}>{formattedValue}</Text>
+                                            )}
+                                        />
+
                                     </Right>
                                 </Right>
                             </CardItem>

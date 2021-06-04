@@ -60,6 +60,14 @@ const OrderCardUpComing = (props) => {
     }
 }
 
+const renderOrderID = () => {
+  if (order) {
+    let subID = order?.id?.substr(order?.id?.length - 4, 4);
+    // console.log("sub id: " , subID);
+    return subID;
+  }
+}
+
   useEffect(() => {
     if (listenedOrder) {
       console.log('id order', listenedOrder.id)
@@ -142,7 +150,10 @@ const OrderCardUpComing = (props) => {
           >
             {status ? 'đang đợi' : (timeRemain ? timeRemain + ' phút' : '')}
           </Text>
-          <Right>
+          <Right style={{flexDirection: "row", justifyContent: "flex-end"}}>
+            <Text style={[styles.title, {marginRight:20}]}>
+            {renderOrderID()}
+            </Text>
             {
               (isAutoPrepareOrder != null && isAutoPrepareOrder == false)
                 ? <AntDesign
